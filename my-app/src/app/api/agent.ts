@@ -5,12 +5,18 @@ import { Offer } from "../models/Menu/Offer";
 import { Restaurant } from "../models/Menu/Restaurant";
 import { Role } from "../models/Role/Role";
 
+import { LogIn } from "../models/User/LogIn";
+import { User } from "../models/User/User";
+import { SignUp } from "../models/User/SignUp";
+
+
 
 axios.defaults.baseURL = "http://localhost:7017/api";
 
 const responseBody = (response: AxiosResponse) => response.data;
 
 const request = {
+
     get: <T>(url: string) => axios.get<T>(url).then(responseBody),
     post: <T>(url: string, body: {}) =>
     axios.post<T>(url, body).then(responseBody),
@@ -19,7 +25,7 @@ const request = {
   };
 
 
-const Menuu = {
+const Menus = {
     list: () => request.get<Menu[]>("/Menu"),
     details: (id: string) => request.get<Menu>(`/Menu/${id}`),
     create: (menu: Menu) => axios.post<void>("/Menu", menu),
@@ -57,20 +63,31 @@ const Roles = {
     update: (role: Role) => axios.put<void>(`/Role/${role.id}`, role),
     delete: (id: string) => axios.delete<void>(`/Role/${id}`),
     };
-    
+    const Users = {
+        list: () => request.get<User[]>("User/GetAllUsers"),
+        details: (id: string) => request.get<User>(`User/GetUser/${id}`),
+        create: (user: SignUp) => axios.post<void>("/User/SignUp", user),
+        update: (user: User) => axios.put<void>(`/User/EditUser/`, user),
+        delete: (id: string) => axios.delete<void>(`/User/${id}`),
+        logIn: (user: LogIn) => axios.post<void>("/User/LogIn", user)
+    }
 
 
 
 
 
   const agent = {
-    Menuu,
+    Menus,
     MenuItems,
     Offers,
     Restaurants,
     Roles,
-
+    Users
 
   };
   
   export default agent;
+
+    
+
+

@@ -1,6 +1,6 @@
-export { type Menu };
+
 import { type Restaurant } from './Restaurant';
-interface Menu {
+export interface Menu {
     id: string;
     name: string;
     description: string;
