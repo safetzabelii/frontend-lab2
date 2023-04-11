@@ -1,7 +1,6 @@
-export {};
 import { Menu } from './Menu';
-interface Offer {
-    id: number;
+export interface Offer {
+    id: string;
     name: string;
     description: string;
     image: string;

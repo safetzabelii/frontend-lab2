@@ -1,7 +1,7 @@
-export {};
+
 import { Menu } from './Menu';
-interface MenuItem {
-    id: number;
+export interface MenuItem {
+    id: string;
     name: string;
     description: string;
     price: number;

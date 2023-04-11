@@ -1,7 +1,7 @@
 export { type Menu };
 import { type Restaurant } from './Restaurant';
 interface Menu {
-    id: number;
+    id: string;
     name: string;
     description: string;
     image: string;
