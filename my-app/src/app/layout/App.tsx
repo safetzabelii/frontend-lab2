@@ -1,9 +1,19 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Login from './Login';
 
 function App() {
   return (
+   <BrowserRouter>
+      <Routes>
+        <Route  path="/" element={<Login/>} />
+        <Route  path="/app" element={<App/>} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
     <div className="bg-gray-100">
       <nav className="bg-white shadow-lg">
         <div className="container mx-auto px-4">
@@ -128,7 +138,6 @@ facilisi. Sed in magna in metus facilisis imperdiet.
 </div>
 </footer>
 </div>
-);
-};
+
 
 export default App;
