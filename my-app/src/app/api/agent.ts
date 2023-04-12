@@ -5,7 +5,7 @@ import { Offer } from "../models/Menu/Offer";
 import { Restaurant } from "../models/Menu/Restaurant";
 import { Role } from "../models/Role/Role";
 
-import { LogIn } from "../models/User/LogIn";
+import { LogInResponseObject } from "../models/User/LogIn";
 import { User } from "../models/User/User";
 import { SignUp } from "../models/User/SignUp";
 
@@ -18,8 +18,7 @@ const responseBody = (response: AxiosResponse) => response.data;
 const request = {
 
     get: <T>(url: string) => axios.get<T>(url).then(responseBody),
-    post: <T>(url: string, body: {}) =>
-    axios.post<T>(url, body).then(responseBody),
+    post: <T>(url: string, body: {}) =>axios.post<T>(url, body).then(responseBody),
     put: <T>(url: string, body: {}) => axios.put<T>(url, body).then(responseBody),
     del: <T>(url: string) => axios.delete<T>(url).then(responseBody),
   };
@@ -69,7 +68,7 @@ const Roles = {
         create: (user: SignUp) => axios.post<void>("/User/SignUp", user),
         update: (user: User) => axios.put<void>(`/User/EditUser/`, user),
         delete: (id: string) => axios.delete<void>(`/User/${id}`),
-        logIn: (user: LogIn) => axios.post<void>("/User/LogIn", user)
+        logIn: (user: LogInResponseObject) => request.post<LogInResponseObject>("/User/LogIn", user)
     }
 
 
