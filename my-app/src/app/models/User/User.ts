@@ -9,5 +9,5 @@ export interface User{
     gender: EnumType,
     email: string,
     roleId : number,
-    role: Role
+    role: Role,
 }
