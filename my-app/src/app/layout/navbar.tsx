@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaHome, FaEllipsisV, FaSignInAlt, FaUserPlus } from "react-icons/fa";
+import { FaHome, FaEllipsisV, FaSignInAlt, FaUserPlus, FaLanguage } from "react-icons/fa";
 
 const Navbar = () => {
   const [isLanguageOpen, setIsLanguageOpen] = useState(false);
@@ -9,10 +9,13 @@ const Navbar = () => {
     
     <nav className="flex justify-between items-center text-green-900 px-8 py-4 border border-gray-300">
       <div className="flex items-center">
-        <a href="/" className="flex items-center mr-8">
-          <FaHome className="mr-2" />
-          Home
-        </a>
+      <a href="/" className="mr-8">
+  <button className="flex items-center bg-green-700 hover:bg-green-800 text-white font-bold py-4 px-8 rounded-full shadow-lg transition duration-300">
+    <FaHome className="mr-2" />
+    Home
+  </button>
+</a>
+
 
         <div className="relative">
           <button
@@ -24,16 +27,16 @@ const Navbar = () => {
           </button>
 
           {isMoreOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl z-10">
+            <div className="absolute left mt-8 w-48 bg-white rounded-lg shadow-xl z-10">
               <a
                 href="/"
-                className="block px-4 py-2 text-gray-800 hover:bg-gray-100 hover:text-gray-900"
+                className="flex items-center hover:bg-green-50 bg-white text-green-800 font-bold py-4 px-8  shadow-lg transition duration-300"
               >
                 About Us
               </a>
               <a
                 href="/"
-                className="block px-4 py-2 text-gray-800 hover:bg-gray-100 hover:text-gray-900"
+                className="flex items-center hover:bg-green-50 bg-white text-green-800 font-bold py-4 px-8  shadow-lg transition duration-300"
               >
                 Contact Us
               </a>
@@ -48,32 +51,23 @@ const Navbar = () => {
             className="flex items-center"
             onClick={() => setIsLanguageOpen(!isLanguageOpen)}
           >
+            <FaLanguage className="mr-2" />
             <span className="mr-2">EN</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fillRule="evenodd"
-                d="M17.225 8.661c.267.267.266.697-.003.964L13.23 13.23a.689.689 0 0 1-.974 0l-.806-.805-.806.805a.689.689 0 0 1-.974 0l-3.991-3.99c-.267-.267-.266-.697.003-.964.268-.267.697-.266.964.003l3.19 3.189V1.379c0-.38.308-.688.688-.688h1.379c.38 0 .688.308.688.688v10.475l3.19-3.189c.268-.269.697-.27.965-.003z"
-                clipRule="evenodd"
-              />
-            </svg>
+            
+            
           </button>
 
           {isLanguageOpen && (
             <div className="absolute right-0 mt-2 w-24 bg-white rounded-lg shadow-xl z-10">
               <a
                 href="/"
-                className="block px-4 py-2 text-gray-800 hover:bg-gray-100 hover:text-gray-900"
+                className="flex items-center hover:bg-green-50 bg-white text-green-800 font-bold py-4 px-8  shadow-lg transition duration-300"
               >
                 EN
               </a>
               <a
                 href="/"
-                className="block px-4 py-2 text-gray-800 hover:bg-gray-100 hover:text-gray-900"
+                className="flex items-center hover:bg-green-50 bg-white text-green-800 font-bold py-4 px-8  shadow-lg transition duration-300"
               >
                 AL
                 </a>
@@ -82,8 +76,10 @@ const Navbar = () => {
     </div>
 
     <a href="/" className="flex items-center mr-8">
+      <button className="flex items-center bg-green-700 hover:bg-green-800 text-white font-bold py-4 px-8 rounded-full shadow-lg transition duration-300">
       <FaSignInAlt className="mr-2" />
       Login
+      </button>
     </a>
 
     <a href="/" className="flex items-center">

@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { FaCoffee } from 'react-icons/fa';
 import Navbar from './navbar';
+import Footer from './footer';
 
 
 const validationSchema = Yup.object().shape({
@@ -126,7 +127,9 @@ const Login = () => {
       </Formik>
     </div>
   </div>
-</div>    </div>
+</div> 
+ </div>
+ <Footer/>
   </div>
     
 );
