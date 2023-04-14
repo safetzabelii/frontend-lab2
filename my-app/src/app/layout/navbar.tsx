@@ -29,13 +29,13 @@ const Navbar = () => {
           {isMoreOpen && (
             <div className="absolute left mt-8 w-48 bg-white rounded-lg shadow-xl z-10">
               <a
-                href="/"
+                href="/aboutus"
                 className="flex items-center hover:bg-green-50 bg-white text-green-800 font-bold py-4 px-8  shadow-lg transition duration-300"
               >
                 About Us
               </a>
               <a
-                href="/"
+                href="/contactus"
                 className="flex items-center hover:bg-green-50 bg-white text-green-800 font-bold py-4 px-8  shadow-lg transition duration-300"
               >
                 Contact Us
@@ -75,14 +75,14 @@ const Navbar = () => {
       )}
     </div>
 
-    <a href="/" className="flex items-center mr-8">
+    <a href="/login" className="flex items-center mr-8">
       <button className="flex items-center bg-green-700 hover:bg-green-800 text-white font-bold py-4 px-8 rounded-full shadow-lg transition duration-300">
       <FaSignInAlt className="mr-2" />
       Login
       </button>
     </a>
 
-    <a href="/" className="flex items-center">
+    <a href="/signup" className="flex items-center">
       <FaUserPlus className="mr-2" />
       Sign Up
     </a>
