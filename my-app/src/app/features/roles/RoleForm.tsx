@@ -24,7 +24,7 @@ export default observer(function RoleForm(){
    let newRole = {
       ...role,
    }
-      createRole(newRole).catch(); 
+      createRole(newRole).then(()=>navigate('/roleList')); 
   }
   return(
        <Segment>
