@@ -11,7 +11,7 @@ import { SignUp } from "../models/User/SignUp";
 
 
 
-axios.defaults.baseURL = "http://localhost:7017/api";
+axios.defaults.baseURL = "https://localhost:7017/api";
 
 const responseBody = (response: AxiosResponse) => response.data;
 
@@ -56,9 +56,9 @@ const Restaurants = {
     delete: (id: string) => axios.delete<void>(`/Restaurant/${id}`),
     };
 const Roles = {
-    list: () => request.get<Role[]>("/Role"),
+    list: () => request.get<Role[]>("/Role/GetAllRoles"),
     details: (id: string) => request.get<Role>(`/Role/${id}`),
-    create: (role: Role) => axios.post<void>("/Role", role),
+    create: (role: Role) => axios.post<void>("/Role/CreateRole", role),
     update: (role: Role) => axios.put<void>(`/Role/${role.id}`, role),
     delete: (id: string) => axios.delete<void>(`/Role/${id}`),
     };

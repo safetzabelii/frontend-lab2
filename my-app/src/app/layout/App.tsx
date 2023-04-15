@@ -8,7 +8,9 @@ import HomePage from './Homepage';
 import AboutUs from './Aboutus';
 import ContactUs from './Contactus';
 import LoginForm from '../features/users/LoginForm';
-import RoleForm from '../../features/RoleForm';
+import RoleForm from '../features/roles/RoleForm';
+import RoleList from '../features/roles/RoleList';
+
 
 function App() {
   return (
@@ -20,6 +22,7 @@ function App() {
         <Route  path="/aboutus" element={<AboutUs/>} />
         <Route  path="/contactus" element={<ContactUs/>} />
         <Route  path="/roleform" element={<RoleForm/>} />
+        <Route path="/roleList" element={<RoleList/>}/>
       </Routes>
     </BrowserRouter>
   );

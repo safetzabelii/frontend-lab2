@@ -65,6 +65,37 @@ export default class roleStore{
             
         }
     }
+    get RoleByName(){
+        return Array.from(this.roleRegistry.values()).sort((a,b) =>{
+            let fa = a.name.toLowerCase(),
+                fb = b.name.toLowerCase();
+
+                if(fa<fb){
+                    return -1;
+                }
+                if(fa>fb){
+                    return 1;
+                }
+                return 0;
+        });
+    }
+
+    loadKlasat = async () => {
+        try{
+            const roles = await agent.Roles.list();
+            roles.forEach((role:Role)=>{
+                this.setRole(role);
+            })
+            this.setLoadingInitial(false);
+        }catch(error){
+            
+            this.setLoadingInitial(false);
+           
+            
+            console.log(error);
+            
+        }
+    }
 //     updateKlasa = async (klasa:Klasa)=>{
 //         this.loading= true;
 //         try{
@@ -129,7 +160,7 @@ export default class roleStore{
 //         return this.klasaRegistry.get(id);
 //     }
 
-//     private setKlasa = (klasa:Klasa)=>{
-//         this.klasaRegistry.set(klasa.id!,klasa);
-//     }
+   private setRole = (role:Role)=>{
+        this.roleRegistry.set(role.id!,role);
+     }
 }
