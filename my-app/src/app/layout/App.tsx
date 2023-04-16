@@ -6,15 +6,23 @@ import Login from './Login';
 import Signup from './Signup';
 import HomePage from './Homepage';
 import AboutUs from './Aboutus';
+import ContactUs from './Contactus';
+import LoginForm from '../features/users/LoginForm';
+import RoleForm from '../features/roles/RoleForm';
+import RoleList from '../features/roles/RoleList';
+
 
 function App() {
   return (
    <BrowserRouter>
       <Routes>
-        <Route  path="/login" element={<Login/>} />
+        <Route  path="/login" element={<LoginForm/>} />
         <Route  path="/" element={<HomePage/>} />
         <Route  path="/signup" element={<Signup/>} />
         <Route  path="/aboutus" element={<AboutUs/>} />
+        <Route  path="/contactus" element={<ContactUs/>} />
+        <Route  path="/roleform" element={<RoleForm/>} />
+        <Route path="/roleList" element={<RoleList/>}/>
       </Routes>
     </BrowserRouter>
   );

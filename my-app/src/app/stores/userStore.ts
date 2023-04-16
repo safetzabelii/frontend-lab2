@@ -17,7 +17,7 @@ export default class UserStore {
     login = async (creds: LogInResponseObject)=>{
         try{
             const user = await agent.Users.logIn(creds);
-            const token = user.data.token;
+            const token = user.token;
             store.commonStore.setToken(token);
             runInAction(()=>{
             this.user = user;
