@@ -4,8 +4,7 @@ import Footer from "./footer";
 
 const HomePage = () => {
   return (
-    <div style={{ fontFamily: "'Poppins', sans-serif" }}>
-      <Navbar />
+    <div>
       <div
         className="min-h-screen bg-cover bg-center flex flex-col items-center"
         style={{ backgroundImage: `url(hommmmme_2.png)` }}
@@ -29,9 +28,10 @@ const HomePage = () => {
               24/7 customer support available
             </p>
           </div>
+          
         </div>
-      </div>
-      <Footer />
+    </div>
+    <Footer/>
     </div>
     
 
