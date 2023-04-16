@@ -42,8 +42,6 @@ const Signup = () => {
   };
 
   return ( 
-    <div>
-    <Navbar />
     
 
     <div style={{backgroundImage: "url('backgroundlogin.png')", backgroundSize: 'cover', backgroundRepeat: 'no-repeat', height: '100vh'}}  className="min-h-screen flex flex-col justify-center py-0 px-4 sm:px-6 lg:px-8">
@@ -187,7 +185,7 @@ const Signup = () => {
         </div>
         </div>
         </div>
-        </div>
+        
     );
     };
 
