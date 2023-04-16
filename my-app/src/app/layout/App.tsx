@@ -11,6 +11,9 @@ import List from '../../features/admin/role/list';
 import Navbar from './navbar';
 import Footer from './footer';
 import RoleForm from '../../features/admin/role/roleForm';
+import ChangePassword from '../../features/user/changePassword';
+import ForgotPassword from '../../features/user/forgotPassword';
+import VerifyAccount from '../../features/user/verifyAccount';
 
 
 function App() {
@@ -27,8 +30,11 @@ function App() {
           <Route  path="/aboutus" element={<AboutUs/>} />
           <Route  path="/contactus" element={<ContactUs/>} />
           <Route  path="/roleform" element={<RoleForm/>} />
-          <Route path="/list" element={<List/>}/>
-          <Route path="/roleform" element={<RoleForm/>}/>
+          <Route  path="/list" element={<List/>}/>
+          <Route  path="/roleform" element={<RoleForm/>}/>
+          <Route  path="/changepw" element={<ChangePassword/>}/>
+          <Route  path="/forgotpw" element={<ForgotPassword/>}/>
+          <Route  path="/verifyaccount" element={<VerifyAccount/>}/>
           </Routes>
 
         </div>
