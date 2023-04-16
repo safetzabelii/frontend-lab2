@@ -34,10 +34,10 @@ const Menus = {
 
 const MenuItems = {
     list: () => request.get<MenuItem[]>("/MenuItem/GetAllMenuItems"),
-    details: (id: string) => request.get<MenuItem>(`/MenuItem/GetMenuItem${id}`),
-    create: (menuItem: MenuItem) => axios.post<void>("/MenuItem/CreateMenuItem", menuItem),
-    update: (menuItem: MenuItem) => axios.put<void>(`/MenuItem/EditMenuItem${menuItem.id}`, menuItem),
-    delete: (id: string) => axios.delete<void>(`/MenuItem/DeleteMenu${id}`),
+    details: (id: string) => request.get<MenuItem>(`/MenuItem/${id}`),
+    create: (menuItem: MenuItem) => axios.post<void>("/MenuItem/", menuItem),
+    update: (menuItem: MenuItem) => axios.put<void>(`/MenuItem/${menuItem.id}`, menuItem),
+    delete: (id: string) => axios.delete<void>(`/MenuItem/${id}`),
     };
 
 const Offers = {
@@ -70,11 +70,7 @@ const Roles = {
         delete: (id: string) => axios.delete<void>(`/User/${id}`),
         logIn: (user: LogInResponseObject) => request.post<LogInResponseObject>("/User/LogIn", user)
     }
-
-
-
-
-
+        
   const agent = {
     Menus,
     MenuItems,
