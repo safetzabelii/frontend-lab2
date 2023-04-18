@@ -77,7 +77,9 @@ const Roles = {
     list: () => request.get<Role[]>("/Role/GetAllRoles"),
     details: (id: string) => request.get<Role>(`/Role/GetRole/${id}`),
     create: (role: Role) => axios.post<void>("/Role/CreateRole", role),
-    update: (role: Role) => axios.put<void>(`/Role/EditRole/${role.id}`, role),
+
+    update: (role: Role) => axios.put<void>("/Role/EditRole", role),
+
     delete: (id: string) => axios.delete<void>(`/Role/DeleteRole/${id}`),
     };
     const Users = {
