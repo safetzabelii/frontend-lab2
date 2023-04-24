@@ -9,13 +9,12 @@ const Navbar = () => {
     
     <nav className="flex justify-between items-center text-green-900 px-8 py-4 border border-gray-300">
       <div className="flex items-center">
-      <a href="/" className="mr-8">
-  <button className="flex items-center bg-green-700 hover:bg-green-800 text-white font-bold py-4 px-8 rounded-full shadow-lg transition duration-300">
-    <FaHome className="mr-2" />
-    Home
-  </button>
-</a>
-
+        <a href="/" className="mr-8">
+          <button className="flex items-center bg-green-700 hover:bg-green-800 text-white font-bold py-4 px-8 rounded-full shadow-lg transition duration-300">
+            <FaHome className="mr-2" />
+            Home
+          </button>
+        </a>
 
         <div className="relative">
           <button
@@ -53,8 +52,6 @@ const Navbar = () => {
           >
             <FaLanguage className="mr-2" />
             <span className="mr-2">EN</span>
-            
-            
           </button>
 
           {isLanguageOpen && (
@@ -70,20 +67,20 @@ const Navbar = () => {
                 className="flex items-center hover:bg-green-50 bg-white text-green-800 font-bold py-4 px-8  shadow-lg transition duration-300"
               >
                 AL
-                </a>
+              </a>
+            </div>
+          )}
         </div>
-      )}
-    </div>
 
-    <a href="/login" className="flex items-center mr-8">
-      <button className="flex items-center bg-green-700 hover:bg-green-800 text-white font-bold py-4 px-8 rounded-full shadow-lg transition duration-300">
-      <FaSignInAlt className="mr-2" />
-      Login
-      </button>
-    </a>
+        <a href="/login" className="flex items-center mr-8">
+          <button className="flex items-center bg-green-700 hover:bg-green-800 text-white font-bold py-4 px-8 rounded-full shadow-lg transition duration-300">
+            <FaSignInAlt className="mr-2" />
+            Login
+          </button>
+        </a>
 
-    <a href="/signup" className="flex items-center">
-      <FaUserPlus className="mr-2" />
+        <a href="/signup" className="flex items-center">
+          <FaUserPlus className="mr-2" />
       Sign Up
     </a>
   </div>
