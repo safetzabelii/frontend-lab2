@@ -15,6 +15,7 @@ import ChangePassword from '../../features/user/changePassword';
 import ForgotPassword from '../../features/user/forgotPassword';
 import VerifyAccount from '../../features/user/verifyAccount';
 import LoggedInUserRoute from './LoggedInUserRoute';
+import AdminNavbar from '../../features/admin/features/adminNavbar';
 
 
 function App() {
@@ -23,20 +24,24 @@ function App() {
       <Routes>
         <Route  path={"/*"} element={<>
         <Navbar/>
+        {/* <AdminNavbar/> */}
         <div>
           <Routes>
           <Route  path="/login" element={<LoginForm/>} />
           <Route  path="/signup" element={<Signup/>} />
-
-          <Route element={<LoggedInUserRoute/>}>
+          <Route  path="/" element={<HomePage/>} />
           <Route  path="/aboutus" element={<AboutUs/>} />
           <Route  path="/contactus" element={<ContactUs/>} />
+          {/* <Route path="/adminNavbar" element={<AdminNavbar/>} /> */}
+          <Route  path="/verifyaccount" element={<VerifyAccount/>}/>
+          <Route  path="/changepw" element={<ChangePassword/>}/>
+          <Route  path="/forgotpw" element={<ForgotPassword/>}/>
+
+          <Route element={<LoggedInUserRoute/>}>
           <Route  path="/roleform" element={<RoleForm/>} />
           <Route  path="/list" element={<List/>}/>
           <Route  path="/roleform" element={<RoleForm/>}/>
-          <Route  path="/changepw" element={<ChangePassword/>}/>
-          <Route  path="/forgotpw" element={<ForgotPassword/>}/>
-          <Route  path="/verifyaccount" element={<VerifyAccount/>}/>
+        
           <Route path="/list" element={<List/>}/>
           <Route path="/roleform" element={<RoleForm/>}/>
           </Route>
