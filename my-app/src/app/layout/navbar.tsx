@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { FaHome, FaEllipsisV, FaSignInAlt, FaUserPlus, FaLanguage } from "react-icons/fa";
+import { useStore } from "../stores/store";
 
 const Navbar = () => {
   const [isLanguageOpen, setIsLanguageOpen] = useState(false);
+  const {userStore} = useStore();
+  const {logout} = userStore;
   const [isMoreOpen, setIsMoreOpen] = useState(false);
 
   return (
@@ -83,6 +86,7 @@ const Navbar = () => {
           <FaUserPlus className="mr-2" />
       Sign Up
     </a>
+   
   </div>
 </nav>
 );

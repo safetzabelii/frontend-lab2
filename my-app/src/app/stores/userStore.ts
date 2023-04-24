@@ -12,7 +12,13 @@ export default class UserStore {
         makeAutoObservable(this)
     }
     get isLoggedIn(){
-        return !!this.user;
+        const token = window.localStorage.getItem('jwt');
+        if(token){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
     login = async (creds: LogInResponseObject)=>{
         try{
@@ -32,30 +38,4 @@ export default class UserStore {
         this.user = null;
         
     }
-    // getUser = async () =>{
-    //     try{
-    //         const user = await agent.Account.current();
-    //         runInAction(()=> this.user=user);
-    //     }catch(error){
-    //         console.log(error);
-    //     }
-    // }
-    // registerStudentin = async (creds:StudentiFormValues)=>{
-    //     try{
-    //          await agent.Account.register(creds);
-            
-    //     }catch(error){
-    //         throw error;
-    //     }
-    // }
-    // registerProfesorin = async (creds:ProfesoriFormValues)=>{
-    //     try{
-    //          await agent.AccountProfesori.register(creds);
-            
-            
-            
-    //     }catch(error){
-    //         throw error;
-    //     }
-    // }
 }
