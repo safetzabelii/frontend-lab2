@@ -10,6 +10,8 @@ import { User } from "../models/User/User";
 import { SignUp } from "../models/User/SignUp";
 import { Order } from "../models/Order/Order";
 import { OrderItem } from "../models/Order/OrderItem";
+import { ForgotPassword } from "../models/User/Dto/ForgotPassword";
+import { ChangePassword } from "../models/User/Dto/ChangePassword";
 
 
 
@@ -77,9 +79,7 @@ const Roles = {
     list: () => request.get<Role[]>("/Role/GetAllRoles"),
     details: (id: string) => request.get<Role>(`/Role/GetRole/${id}`),
     create: (role: Role) => axios.post<void>("/Role/CreateRole", role),
-
     update: (role: Role) => axios.put<void>("/Role/EditRole", role),
-
     delete: (id: string) => axios.delete<void>(`/Role/DeleteRole/${id}`),
     };
     const Users = {
@@ -88,7 +88,11 @@ const Roles = {
         create: (user: SignUp) => axios.post<void>("/User/SignUp", user),
         update: (user: User) => axios.put<void>(`/User/EditUser/`, user),
         delete: (id: string) => axios.delete<void>(`/User/DeleteUser/${id}`),
-        logIn: (user: LogInResponseObject) => request.post<LogInResponseObject>("/User/LogIn", user)
+        logIn: (user: LogInResponseObject) => request.post<LogInResponseObject>("/User/LogIn", user),
+        forgotPassword: (user: ForgotPassword)=> request.put<ForgotPassword>("/User/ForgotPassword",user),
+        verifyEmail: (token:string) => request.put<void>(`User/VerifyEmail/${token}`,token),
+        changePassword : (user: ChangePassword)=> request.put<void>("User/ChangePassword",user),
+        sendForgotPasswordEmail : (email: string) => request.post<void>("User/SendForgotPasswordEmail",email),
     }
         
   const agent = {

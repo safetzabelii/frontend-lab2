@@ -16,9 +16,12 @@ import ForgotPassword from '../../features/user/forgotPassword';
 import VerifyAccount from '../../features/user/verifyAccount';
 import LoggedInUserRoute from './LoggedInUserRoute';
 import AdminNavbar from '../../features/admin/features/adminNavbar';
+import { store } from '../stores/store';
 
 
 function App() {
+  const verificationToken = store.commonStore.verificationToken;
+  
   return (
    <BrowserRouter>
       <Routes>
@@ -34,6 +37,7 @@ function App() {
           <Route  path="/contactus" element={<ContactUs/>} />
           {/* <Route path="/adminNavbar" element={<AdminNavbar/>} /> */}
           <Route  path="/verifyaccount" element={<VerifyAccount/>}/>
+
           <Route  path="/changepw" element={<ChangePassword/>}/>
           <Route  path="/forgotpw" element={<ForgotPassword/>}/>
 

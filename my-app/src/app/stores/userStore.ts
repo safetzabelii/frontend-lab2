@@ -3,6 +3,7 @@ import agent from "../api/agent";
 
 import { store } from "./store";
 import { LogInResponseObject } from "../models/User/LogIn";
+import { SignUp } from "../models/User/SignUp";
 
 export default class UserStore {
     user: LogInResponseObject | null=null;
@@ -29,6 +30,31 @@ export default class UserStore {
             this.user = user;
             })
         }catch(error){
+            throw error;
+        }
+    }
+    signup = async (creds: SignUp)=>{
+        try{
+            const user = await agent.Users.create(creds);
+            if(user.data != null){
+            store.commonStore.setVerificationToken(user.data);
+            }
+        }
+        catch(error){
+            console.log(error);
+            throw error;
+        }
+    }
+    verifyAccount = async (token: string)=>{
+        try{
+            const result = await agent.Users.verifyEmail(token);
+            if(result != null){
+                console.log(result);
+            }
+            
+        }
+        catch(error){
+            console.log(error);
             throw error;
         }
     }
