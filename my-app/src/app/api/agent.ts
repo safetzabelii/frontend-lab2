@@ -12,6 +12,7 @@ import { Order } from "../models/Order/Order";
 import { OrderItem } from "../models/Order/OrderItem";
 import { ForgotPassword } from "../models/User/Dto/ForgotPassword";
 import { ChangePassword } from "../models/User/Dto/ChangePassword";
+import { ForgotPasswordEmailDto } from "../models/User/Dto/ForgotPasswordEmailDto";
 
 
 
@@ -90,9 +91,9 @@ const Roles = {
         delete: (id: string) => axios.delete<void>(`/User/DeleteUser/${id}`),
         logIn: (user: LogInResponseObject) => request.post<LogInResponseObject>("/User/LogIn", user),
         forgotPassword: (user: ForgotPassword)=> request.put<ForgotPassword>("/User/ForgotPassword",user),
-        verifyEmail: (token:string) => request.put<void>(`User/VerifyEmail/${token}`,token),
-        changePassword : (user: ChangePassword)=> request.put<void>("User/ChangePassword",user),
-        sendForgotPasswordEmail : (email: string) => request.post<void>("User/SendForgotPasswordEmail",email),
+        verifyEmail: (token:string) => request.put<void>(`/User/VerifyEmail/${token}`,token),
+        changePassword : (user: ChangePassword)=> request.put<void>("/User/ChangePassword",user),
+        sendForgotPasswordEmail : (email: ForgotPasswordEmailDto) => request.post<void>("/User/SendForgotPasswordEmail",email),
     }
         
   const agent = {

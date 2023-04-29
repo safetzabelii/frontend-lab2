@@ -11,7 +11,7 @@ import Navbar from './navbar';
 import Footer from './footer';
 import RoleForm from '../../features/admin/role/roleForm';
 import ChangePassword from '../../features/user/changePassword';
-import ForgotPassword from '../../features/user/forgotPassword';
+
 import VerifyAccount from '../../features/user/verifyAccount';
 import LoggedInUserRoute from './ProtectedRoutes/LoggedInUserRoute';
 import AdminNavbar from '../../features/admin/features/adminNavbar';
@@ -21,11 +21,12 @@ import Restaurants from '../../features/user/Restaurant/Restaurants';
 import AccountVerified from '../../features/user/accountVerified';
 import UserAlreadyLoggedInRoute from './ProtectedRoutes/UserAlreadyLoggedInRoute';
 import SendEmailForgetPassword from '../../features/user/sendEmailForgetPassword';
+import ForgotPassword from '../../features/user/forgotPassword';
 
 function App() {
   const verificationToken = store.commonStore.verificationToken;
   const userId = store.commonStore.userId;
-
+  const changePasswordToken = store.commonStore.changePasswordToken;
   
   return (
    <BrowserRouter>
@@ -62,10 +63,12 @@ function App() {
               element={<AccountVerified verificationToken={verificationToken} />}
             />
           ) : null}
-          <Route  path="/changepw" element={<ChangePassword/>}/>
-          <Route  path="/forgotpw" element={<ForgotPassword/>}/>
-          <Route  path="/sendEmail" element={<SendEmailForgetPassword/>}/>
 
+          <Route  path="/sendEmail" element={<SendEmailForgetPassword/>}/>
+            <Route  path="/changepw" element={<ChangePassword/>}/>
+          {changePasswordToken && userId ?(
+          <Route  path={`/forgotPassword/${changePasswordToken}/${userId}`} element={<ForgotPassword/>}/>
+          ):null}
           <Route element={<LoggedInUserRoute/>}>
           <Route  path="/roleform" element={<RoleForm/>} />
           <Route  path="/list" element={<List/>}/>
