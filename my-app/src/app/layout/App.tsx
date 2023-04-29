@@ -33,23 +33,6 @@ function App() {
   const verificationToken = store.commonStore.verificationToken;
   const userId = store.commonStore.userId;
   const pathname = window.location.pathname;
-
-  // const [isAdmin, setIsAdmin] = React.useState(false);
-
-  // const checkAdminRole = async () => {
-  //   try {
-  //     const roles = await agent.Roles.list();
-  //     const adminRole = roles.find((role: any) => role.name === 'admin');
-  //     setIsAdmin(adminRole !== undefined);
-  //   } catch (error) {
-  //     console.error('Error checking admin role:', error);
-  //   }
-  // };
-
-  // React.useEffect(() => {
-  //   checkAdminRole();
-  // }, []);
-
   const changePasswordToken = store.commonStore.changePasswordToken;
   
   const renderHeader = (pathname:any) => {
@@ -86,15 +69,6 @@ function App() {
           <Route  path="/menu" element={<MenuItem/>} />
           <Route  path="/restaurants" element={<Restaurants/>} />
 
-          {
-          // isAdmin && (
-          //     <Route element={<AdminNavbar />}>
-          //      <Route path="/admin" element={<AdminPanel />} />
-          //       {/* Add more admin routes here */}
-          //     </Route>
-            // )
-          }
-
           <Route path="/adminNavbar" element={<AdminNavbar/>} />
           <Route  path="/verifyaccount" element={<VerifyAccount/>}/>
           {verificationToken ? (
@@ -126,6 +100,7 @@ function App() {
 
       </Routes>
     </BrowserRouter>
+    
   );
 }
 export default App;
