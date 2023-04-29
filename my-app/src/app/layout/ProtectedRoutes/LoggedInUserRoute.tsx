@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 
-import { useStore } from "../stores/store";
-import LoginForm from "./LoginForm";
+import { useStore } from "../../stores/store";
+import LoginForm from "../LoginForm";
 
 
 

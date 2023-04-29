@@ -10,9 +10,11 @@ import { useStore } from '../../app/stores/store';
 
 
 export default observer(function ChangePassword(){
-  const {userStore} = useStore();
+  const {userStore,commonStore} = useStore();
   const navigate = useNavigate();
+  const userId = commonStore.userId;
   const initialValues = {
+    userId :userId,
     newPassword: '',
     confirmPassword: '',
   };
@@ -36,7 +38,7 @@ export default observer(function ChangePassword(){
   
   const onSubmit = (values: any, { setSubmitting }: any) => {
     console.log(values);
-    userStore.login(values).then(()=>navigate('/'))
+    userStore.changeForgotenPassword(values).then(()=>navigate('/login'))
     
     setSubmitting(false);
   };

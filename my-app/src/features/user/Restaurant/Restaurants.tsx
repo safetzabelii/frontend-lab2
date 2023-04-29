@@ -6,7 +6,7 @@ import { SyntheticEvent, useEffect, useState } from "react";
 
 export default observer(function Restaurants (){
     const {restaurantStore} = useStore();
-    const {loadRestaurants, deleteRestaurant, getRestaurants} = restaurantStore;
+    const {loadRestaurants, deleteRestaurant,getRestaurants} = restaurantStore;
     const [target, setTarget] = useState('');
 
     function handleRestaurantDelete(e: SyntheticEvent<HTMLButtonElement>, id: string) {
@@ -19,8 +19,9 @@ export default observer(function Restaurants (){
     },[loadRestaurants]);
 
     return(
-        {getRestaurants.map((restaurant) =>(
-        
+        <>
+        {getRestaurants.map((restaurant) => {
+            
             <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                 <a href="#">
                     <img className="p-8 rounded-t-lg" src="/docs/images/products/apple-watch.png" alt="product image" />
@@ -41,7 +42,7 @@ export default observer(function Restaurants (){
                         <span className="text-3xl font-bold text-gray-900 dark:text-white">Adresa</span>
                     </div>
                 </div>
-            </div> ) )}
-    
+            </div> })}
+            </>
     );
 })

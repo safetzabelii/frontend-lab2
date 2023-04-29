@@ -2,24 +2,19 @@ import { observer } from "mobx-react";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useStore } from "../../app/stores/store";
+interface AccountVerifiedProps {
+  verificationToken: string;
+}
 
-type params = {
-    token:string;
-} 
-export default observer(function AccountVerified({token}:params){
+export default observer(function AccountVerified(props:AccountVerifiedProps){
 
   const navigate = useNavigate();
   const {userStore} = useStore();
   useEffect(()=>{
-    userStore.verifyAccount(token);
+    userStore.verifyAccount(props.verificationToken);
   },[userStore]);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // TODO: Add logic to verify the account using the verificationCode
-    // and navigate to the home page if successful
-    navigate("/");
-  };
+ 
 
 
   return (
@@ -35,6 +30,7 @@ export default observer(function AccountVerified({token}:params){
             You can log into the site now!
           </p>
         </div>
+        
       </div>
     </div>
   );
