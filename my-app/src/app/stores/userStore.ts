@@ -5,6 +5,7 @@ import { store } from "./store";
 import { LogInResponseObject } from "../models/User/LogIn";
 import { SignUp } from "../models/User/SignUp";
 import { ForgotPassword } from "../models/User/Dto/ForgotPassword";
+import { ForgotPasswordEmailDto } from "../models/User/Dto/ForgotPasswordEmailDto";
 
 export default class UserStore {
     user: LogInResponseObject | null=null;
@@ -58,11 +59,11 @@ export default class UserStore {
             throw error;
         }
     }
-    sendForgotPasswordEmail = async (email: string)=>{
+    sendForgotPasswordEmail = async (email: ForgotPasswordEmailDto)=>{
         try{
             const result = await agent.Users.sendForgotPasswordEmail(email);
             store.commonStore.setChangePasswordToken(result.token);
-            store.commonStore.setUserId(result.userId);
+            store.commonStore.setUserId(result.id);
         }catch(error){
             console.log(error);
             throw error;
