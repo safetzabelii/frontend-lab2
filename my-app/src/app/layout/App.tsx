@@ -21,6 +21,7 @@ import Restaurants from '../../features/user/Restaurant/Restaurants';
 import AccountVerified from '../../features/user/accountVerified';
 import UserAlreadyLoggedInRoute from './ProtectedRoutes/UserAlreadyLoggedInRoute';
 import SendEmailForgetPassword from '../../features/user/sendEmailForgetPassword';
+import PageNotFound from './PageNotFound';
 
 function App() {
   const verificationToken = store.commonStore.verificationToken;
@@ -28,61 +29,41 @@ function App() {
 
   
   return (
-   <BrowserRouter>
-      <Routes>
-        <Route  path={"/*"} element={<>
-        <Navbar/>
-        {/* <AdminNavbar/> */}
-        <div>
-          <Routes>
-          {
-          /*
-            Route me posht nuk lejon useri qe eshte i bam logged in 
-            me shku ne routes te login edhe signup.
-            Mos e fshi ose komento.
-          */
-        } 
-          <Route element={<UserAlreadyLoggedInRoute/>}>
-          <Route  path="/login" element={<LoginForm/>} />
-          <Route  path="/signup" element={<Signup/>} />
-          </Route>
-          <Route  path="/" element={<HomePage/>} />
-          <Route  path="/aboutus" element={<AboutUs/>} />
-          <Route  path="/contactus" element={<ContactUs/>} />
-
-          <Route  path="/menu" element={<MenuItem/>} />
-          <Route  path="/restaurants" element={<Restaurants/>} />
-
-
-          {/* <Route path="/adminNavbar" element={<AdminNavbar/>} /> */}
-          <Route  path="/verifyaccount" element={<VerifyAccount/>}/>
-          {verificationToken ? (
-            <Route
-              path={`/verifyAccount/${verificationToken}`}
-              element={<AccountVerified verificationToken={verificationToken} />}
-            />
-          ) : null}
-          <Route  path="/changepw" element={<ChangePassword/>}/>
-          <Route  path="/forgotpw" element={<ForgotPassword/>}/>
-          <Route  path="/sendEmail" element={<SendEmailForgetPassword/>}/>
-
-          <Route element={<LoggedInUserRoute/>}>
-          <Route  path="/roleform" element={<RoleForm/>} />
-          <Route  path="/list" element={<List/>}/>
-          <Route  path="/roleform" element={<RoleForm/>}/>
-        
-          <Route path="/list" element={<List/>}/>
-          <Route path="/roleform" element={<RoleForm/>}/>
-          </Route>
-          
-          </Routes>
-
-        </div>
-        </>} />
-       
-
-      </Routes>
-    </BrowserRouter>
+    <BrowserRouter>
+    <Navbar />
+    <Routes>
+      {/* User not logged in */}
+      <Route element={<UserAlreadyLoggedInRoute />}>
+        <Route path="/login" element={<LoginForm />} />
+        <Route path="/signup" element={<Signup />} />
+      </Route>
+  
+      {/* User logged in */}
+      <Route element={<LoggedInUserRoute />}>
+        <Route path="/roleform" element={<RoleForm />} />
+        <Route path="/list" element={<List />} />
+      </Route>
+  
+      {/* Public Routes */}
+      <Route path="/" element={<HomePage />} />
+      <Route path="/pagenotfound" element={<PageNotFound />} />
+      <Route path="/aboutus" element={<AboutUs />} />
+      <Route path="/contactus" element={<ContactUs />} />
+      <Route path="/menu" element={<MenuItem />} />
+      <Route path="/restaurants" element={<Restaurants />} />
+      <Route path="/verifyaccount" element={<VerifyAccount />} />
+      {verificationToken ? (
+        <Route
+          path={`/verifyAccount/${verificationToken}`}
+          element={<AccountVerified verificationToken={verificationToken} />}
+        />
+      ) : null}
+      <Route path="/changepw" element={<ChangePassword />} />
+      <Route path="/forgotpw" element={<ForgotPassword />} />
+      <Route path="/sendEmail" element={<SendEmailForgetPassword />} />
+    </Routes>
+  </BrowserRouter>
+  
   );
 }
 export default App;

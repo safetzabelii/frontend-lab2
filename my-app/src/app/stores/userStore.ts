@@ -15,13 +15,10 @@ export default class UserStore {
     }
     get isLoggedIn(){
         const token = window.localStorage.getItem('jwt');
-        if(token){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return !!token;
     }
+    
+
     login = async (creds: LogInResponseObject)=>{
         try{
             const user = await agent.Users.logIn(creds);

@@ -26,9 +26,9 @@ export default observer(function LoginForm(){
     setShowPassword((prev) => !prev);
   };
   const onSubmit = (values: any, { setSubmitting }: any) => {
-    userStore.login(values).then(()=>navigate('/'))
-    
+    userStore.login(values).then(()=>navigate('/'))    
     setSubmitting(false);
+
   };
 
   return(
