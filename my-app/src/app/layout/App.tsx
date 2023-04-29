@@ -20,6 +20,7 @@ import MenuItem from '../../features/user/Menu/MenuItem/MenuItem';
 import Restaurants from '../../features/user/Restaurant/Restaurants';
 import AccountVerified from '../../features/user/accountVerified';
 import UserAlreadyLoggedInRoute from './ProtectedRoutes/UserAlreadyLoggedInRoute';
+import SendEmailForgetPassword from '../../features/user/sendEmailForgetPassword';
 
 function App() {
   const verificationToken = store.commonStore.verificationToken;
@@ -63,6 +64,7 @@ function App() {
           ) : null}
           <Route  path="/changepw" element={<ChangePassword/>}/>
           <Route  path="/forgotpw" element={<ForgotPassword/>}/>
+          <Route  path="/sendEmail" element={<SendEmailForgetPassword/>}/>
 
           <Route element={<LoggedInUserRoute/>}>
           <Route  path="/roleform" element={<RoleForm/>} />
