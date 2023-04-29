@@ -17,6 +17,8 @@ import VerifyAccount from '../../features/user/verifyAccount';
 import LoggedInUserRoute from './LoggedInUserRoute';
 import AdminNavbar from '../../features/admin/features/adminNavbar';
 import { store } from '../stores/store';
+import MenuItem from '../../features/user/Menu/MenuItem/MenuItem';
+import Restaurants from '../../features/user/Restaurant/Restaurants';
 
 
 function App() {
@@ -35,6 +37,8 @@ function App() {
           <Route  path="/" element={<HomePage/>} />
           <Route  path="/aboutus" element={<AboutUs/>} />
           <Route  path="/contactus" element={<ContactUs/>} />
+          <Route  path="/menu" element={<MenuItem/>} />
+          <Route  path="/restaurants" element={<Restaurants/>} />
           {/* <Route path="/adminNavbar" element={<AdminNavbar/>} /> */}
           <Route  path="/verifyaccount" element={<VerifyAccount/>}/>
 

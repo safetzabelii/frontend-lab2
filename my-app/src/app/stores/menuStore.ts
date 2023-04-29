@@ -3,6 +3,10 @@ import agent from "../api/agent";
 import { Menu } from "../models/Menu/Menu";
 
 export default class MenuStore{
+  static isMenuOpen: JSX.Element;
+  static selectedMenu(arg0: string): void {
+    throw new Error("Method not implemented.");
+  }
 menuRegistry = new Map<string,Menu>();
     selectedMenu:Menu |undefined = undefined;
     editMode =false;
@@ -60,6 +64,11 @@ menuRegistry = new Map<string,Menu>();
             
         }
     }
+
+    selectMenu = (menu: Menu) => {
+        this.selectedMenu = menu;
+      };
+
     updateMenu = async (menu:Menu)=>{
         this.loading= true;
         try{
