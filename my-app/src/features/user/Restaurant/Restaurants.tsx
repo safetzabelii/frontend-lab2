@@ -22,7 +22,7 @@ export default observer(function Restaurants (){
         <>
         {getRestaurants.map((restaurant) => {
             
-            <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            <div key={restaurant.id} className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                 <a href="#">
                     <img className="p-8 rounded-t-lg" src="/docs/images/products/apple-watch.png" alt="product image" />
                 </a>
@@ -39,7 +39,7 @@ export default observer(function Restaurants (){
                         <span className="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-3">5.0</span>
                     </div>
                     <div className="flex items-center justify-between">
-                        <span className="text-3xl font-bold text-gray-900 dark:text-white">Adresa</span>
+                        <span className="text-3xl font-bold text-gray-900 dark:text-white">{restaurant.address}</span>
                     </div>
                 </div>
             </div> })}
