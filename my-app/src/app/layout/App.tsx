@@ -16,6 +16,7 @@ import ForgotPassword from '../../features/user/forgotPassword';
 import VerifyAccount from '../../features/user/verifyAccount';
 import LoggedInUserRoute from './LoggedInUserRoute';
 import AdminNavbar from '../../features/admin/features/adminNavbar';
+import SendEmailForgetPassword from '../../features/user/sendEmailForgetPassword';
 
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
           <Route  path="/verifyaccount" element={<VerifyAccount/>}/>
           <Route  path="/changepw" element={<ChangePassword/>}/>
           <Route  path="/forgotpw" element={<ForgotPassword/>}/>
+          <Route  path="/sendEmail" element={<SendEmailForgetPassword/>}/>
 
           <Route element={<LoggedInUserRoute/>}>
           <Route  path="/roleform" element={<RoleForm/>} />

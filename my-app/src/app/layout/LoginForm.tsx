@@ -100,7 +100,7 @@ export default observer(function LoginForm(){
               </div>
 
               <div className="text-sm">
-                <Link to="/" className="font-medium text-primary-600 hover:text-primary-500">
+                <Link to="/sendEmail" className="font-medium text-primary-600 hover:text-primary-500">
                   Forgot your password?
                 </Link>
               </div>
