@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaHome, FaEllipsisV, FaSignInAlt, FaUserPlus, FaLanguage, FaListAlt } from "react-icons/fa";
 import { useStore } from "../stores/store";
 
@@ -7,6 +7,10 @@ const Navbar = () => {
   const {userStore} = useStore();
   const {logout} = userStore;
   const [isMoreOpen, setIsMoreOpen] = useState(false);
+
+
+ 
+  
 
   return (
     
@@ -86,20 +90,30 @@ const Navbar = () => {
             </div>
           )}
         </div>
+        {userStore.isLoggedIn ? (
+  <>
+    <button onClick={logout} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-8">
+      Log out
+    </button>
 
-        <a href="/login" className="flex items-center mr-8">
-          <button className="flex items-center bg-green-700 hover:bg-green-800 text-white font-bold py-4 px-8 rounded-full shadow-lg transition duration-300">
-            <FaSignInAlt className="mr-2" />
-            Login
-          </button>
-        </a>
-
-        <a href="/signup" className="flex items-center">
-          <FaUserPlus className="mr-2" />
-      Sign Up
+   
+     
+  </>
+) : (
+  <>
+    <a href="/login" className="flex items-center mr-8">
+      <button className="flex items-center bg-green-700 hover:bg-green-800 text-white font-bold py-4 px-8 rounded-full shadow-lg transition duration-300">
+        <FaSignInAlt className="mr-2" />
+        Login
+      </button>
     </a>
 
-    
+    <a href="/signup" className="flex items-center">
+      <FaUserPlus className="mr-2" />
+      Sign Up
+    </a>
+  </>
+)}
    
   </div>
 </nav>

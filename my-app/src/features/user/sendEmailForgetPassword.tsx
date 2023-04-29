@@ -1,23 +1,42 @@
 import { observer } from "mobx-react";
 import { useState } from "react";
+import { useStore } from "../../app/stores/store";
+import { useNavigate } from "react-router-dom";
+import { Field, Form, Formik, useFormik } from "formik";
 
 export default observer(function SendEmailForgetPassword(){
-    const [email, setEmail] = useState("");
+    const {userStore} = useStore(); 
+    const navigate = useNavigate();
+  const initialValues={
+    email: ''
+  }
     const [error, setError] = useState("");
     const [success, setSuccess] = useState(false);
-  
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
+    const onSubmit = (values: any, { setSubmitting }: any) => {
+      
       try {
         // Send password reset email using email input
-        setSuccess(true);
-        setError("");
+        userStore.sendForgotPasswordEmail(values)
+  .then(() => {
+    setSuccess(true);
+    setError("");
+    setTimeout(() => {
+      navigate("/login");
+    }, 10000);
+
+  })
+  setSubmitting(false);
       } catch (error) {
         setSuccess(false);
         setError("Unable to send password reset email. Please try again later.");
       }
+
     };
-  
+    
+    const formik = useFormik({
+      initialValues,
+      onSubmit,
+      });
     return (
       <div className="min-h-screen bg-gray-100 flex flex-col py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md mt-20">
@@ -26,20 +45,22 @@ export default observer(function SendEmailForgetPassword(){
   
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-            <form className="space-y-6" onSubmit={handleSubmit}>
+          <Formik initialValues={initialValues} form onSubmit={onSubmit}>
+            {({ isSubmitting, errors, touched }) => (
+              <Form className="space-y-6" onSubmit={formik.handleSubmit}>
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                   Email address
                 </label>
                 <div className="mt-1">
-                  <input
+                  <Field
                     id="email"
                     name="email"
                     type="email"
+                    onChange={formik.handleChange}
                     autoComplete="email"
                     required
-                    value={email}
-                    onChange={(event) => setEmail(event.target.value)}
+                    value={formik.values.email}
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-600 focus:border-green-600 sm:text-sm"
                   />
                 </div>
@@ -93,7 +114,9 @@ export default observer(function SendEmailForgetPassword(){
                      Send password reset email
                    </button>
                  </div>
-               </form>
+                 </Form>
+                 )}
+               </Formik>
              </div>
            </div>
          </div>

@@ -9,19 +9,19 @@ import { observer } from 'mobx-react';
 import { useStore } from '../../app/stores/store';
 
 
-export default observer(function ChangePassword(){
+export default observer(function ForgotPassword(){
   const {userStore,commonStore} = useStore();
   const navigate = useNavigate();
   const userId = commonStore.userId;
   const initialValues = {
     userId :userId,
     newPassword: '',
-    confirmPassword: '',
+    repeatPassword: '',
   };
   const validationSchema = Yup.object().shape({
 
     newPassword: Yup.string().required('New Password is required'),
-    confirmPassword: Yup.string()
+    repeatPassword: Yup.string()
       .required('Confirm Password is required')
       .oneOf([Yup.ref('newPassword')], 'Passwords must match'),
   });
@@ -92,12 +92,12 @@ export default observer(function ChangePassword(){
                   </label>
                   <div className="mt-1 relative">
                     <Field
-                      id="confirmPassword"
-                      name="confirmPassword"
+                      id="repeatPassword"
+                      name="repeatPassword"
                       type={showPassword2 ? 'text' : 'password'}
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
-                      value={formik.values.confirmPassword}
+                      value={formik.values.repeatPassword}
                       autoComplete="confirm-password"
                       className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
                     />
@@ -105,8 +105,8 @@ export default observer(function ChangePassword(){
                       {showPassword2 ? <FaEyeSlash className="h-5 w-5 text-gray-400" /> : <FaEye className="h-5 w-5 text-gray-400" />}
                     </span>
                   </div>
-                  {formik.touched.newPassword && formik.errors.confirmPassword && (
-      <div className="text-red-500">{formik.errors.confirmPassword}</div>
+                  {formik.touched.newPassword && formik.errors.repeatPassword && (
+      <div className="text-red-500">{formik.errors.repeatPassword}</div>
     )}
                   <ErrorMessage name="password" component="div" className="text-red-500 text-sm mt-1" />
                 </div>
