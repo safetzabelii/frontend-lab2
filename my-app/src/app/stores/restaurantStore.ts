@@ -19,7 +19,7 @@ restaurantRegistry = new Map<string,Restaurant>();
         return Array.from(this.restaurantRegistry.values()).sort((a, b)=> Number(a.id) - Number(b.id) );
     }
     
-    get restaurants(){
+    get getRestaurants(){
         return Array.from(this.restaurantRegistry.values());
     }
 

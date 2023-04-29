@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaHome, FaEllipsisV, FaSignInAlt, FaUserPlus, FaLanguage } from "react-icons/fa";
+import { FaHome, FaEllipsisV, FaSignInAlt, FaUserPlus, FaLanguage, FaListAlt } from "react-icons/fa";
 import { useStore } from "../stores/store";
 
 const Navbar = () => {
@@ -41,6 +41,18 @@ const Navbar = () => {
                 className="flex items-center hover:bg-green-50 bg-white text-green-800 font-bold py-4 px-8  shadow-lg transition duration-300"
               >
                 Contact Us
+              </a>
+              <a
+                href="/menu"
+                className="flex items-center hover:bg-green-50 bg-white text-green-800 font-bold py-4 px-8  shadow-lg transition duration-300"
+              >
+                Menu
+              </a>
+              <a
+                href="/restaurants"
+                className="flex items-center hover:bg-green-50 bg-white text-green-800 font-bold py-4 px-8  shadow-lg transition duration-300"
+              >
+                Restaurants
               </a>
             </div>
           )}
@@ -86,6 +98,8 @@ const Navbar = () => {
           <FaUserPlus className="mr-2" />
       Sign Up
     </a>
+
+    
    
   </div>
 </nav>

@@ -1,10 +1,11 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaCoffee, FaEye, FaEyeSlash } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Navbar from './navbar';
 import { FaFacebook, FaTwitter, FaGoogle } from 'react-icons/fa';
+import { useStore } from '../stores/store';
 
 
 const validationSchema = Yup.object().shape({
@@ -17,9 +18,12 @@ const validationSchema = Yup.object().shape({
   
 
 const Signup = () => {
+  const {userStore} = useStore();
+  const {signup}=userStore;
+  const navigate = useNavigate();
+  
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
   const toggleShowPassword = () => {
     setShowPassword((prev) => !prev);
   };
@@ -29,15 +33,19 @@ const Signup = () => {
   };
 
   const initialValues = {
-    firstname: '',
-    lastname: '',
+    name: '',
+    surname: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    roleId: 1,
+    isEmailVerified:false,
+    accountVerificationToken: '',
   };
 
   const onSubmit = (values: any, { setSubmitting }: any) => {
+    console.log('hello');
     console.log(values);
+    signup(values).then(()=>navigate("/verifyaccount"));
     setSubmitting(false);
   };
 
@@ -69,26 +77,26 @@ const Signup = () => {
 </div>
         
 
-          <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
+          <Formik initialValues={initialValues}  onSubmit={onSubmit}>
             {({ isSubmitting, errors, touched }) => (
               <Form className="space-y-6">
                 <div>
-                  <label htmlFor="firstname" className="block text-sm font-medium text-gray-700">
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                     First name
                   </label>
                   <div className="mt-1">
-                    <Field id="firstname" name="firstname" type="text" autoComplete="firstname" className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" />
+                    <Field id="name" name="name" type="text" autoComplete="name" className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" />
                   </div>
-                  <ErrorMessage name="firstname" component="div" className="text-red-500 text-sm mt-1" />
+                  <ErrorMessage name="name" component="div" className="text-red-500 text-sm mt-1" />
                 </div>
                 <div>
-                  <label htmlFor="lastname" className="block text-sm font-medium text-gray-700">
+                  <label htmlFor="surname" className="block text-sm font-medium text-gray-700">
                     Last name
                   </label>
                   <div className="mt-1">
-                    <Field id="lastname" name="lastname" type="text" autoComplete="email" className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" />
+                    <Field id="surname" name="surname" type="text" autoComplete="surname" className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" />
                   </div>
-                  <ErrorMessage name="lastname" component="div" className="text-red-500 text-sm mt-1" />
+                  <ErrorMessage name="surname" component="div" className="text-red-500 text-sm mt-1" />
                 </div>
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium text-gray-700">
