@@ -26,8 +26,11 @@ restaurantRegistry = new Map<string,Restaurant>();
     loadRestaurants = async () => {
         try{
             const restaurants = await agent.Restaurants.list();
+            
             restaurants.forEach((restaurant: Restaurant)=>{
+                
                 this.setRestaurant(restaurant);
+                
             })
             this.setLoadingInitial(false);
         }catch(error){
@@ -125,5 +128,6 @@ restaurantRegistry = new Map<string,Restaurant>();
 
     private setRestaurant = (restaurant:Restaurant)=>{
         this.restaurantRegistry.set(restaurant.id!,restaurant);
+        console.log(this.restaurantRegistry);
     }
 }
