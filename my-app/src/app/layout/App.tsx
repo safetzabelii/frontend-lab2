@@ -21,12 +21,42 @@ import Restaurants from '../../features/user/Restaurant/Restaurants';
 import AccountVerified from '../../features/user/accountVerified';
 import UserAlreadyLoggedInRoute from './ProtectedRoutes/UserAlreadyLoggedInRoute';
 import SendEmailForgetPassword from '../../features/user/sendEmailForgetPassword';
+import React from 'react';
+import agent from '../api/agent';
+
+// Admin
+import Sidebar from '../../features/admin/components/Sidebar';
+
 
 function App() {
   const verificationToken = store.commonStore.verificationToken;
   const userId = store.commonStore.userId;
+  const pathname = window.location.pathname;
+
+  // const [isAdmin, setIsAdmin] = React.useState(false);
+
+  // const checkAdminRole = async () => {
+  //   try {
+  //     const roles = await agent.Roles.list();
+  //     const adminRole = roles.find((role: any) => role.name === 'admin');
+  //     setIsAdmin(adminRole !== undefined);
+  //   } catch (error) {
+  //     console.error('Error checking admin role:', error);
+  //   }
+  // };
+
+  // React.useEffect(() => {
+  //   checkAdminRole();
+  // }, []);
 
   
+  const renderHeader = (pathname:any) => {
+    if (pathname.includes('/dashboard')) {
+      return <Sidebar />;
+    }
+  };
+
+
   return (
    <BrowserRouter>
       <Routes>
@@ -34,6 +64,7 @@ function App() {
         <Navbar/>
         {/* <AdminNavbar/> */}
         <div>
+        {renderHeader(pathname)}
           <Routes>
           {
           /*
@@ -53,8 +84,16 @@ function App() {
           <Route  path="/menu" element={<MenuItem/>} />
           <Route  path="/restaurants" element={<Restaurants/>} />
 
+          {
+          // isAdmin && (
+          //     <Route element={<AdminNavbar />}>
+          //      <Route path="/admin" element={<AdminPanel />} />
+          //       {/* Add more admin routes here */}
+          //     </Route>
+            // )
+          }
 
-          {/* <Route path="/adminNavbar" element={<AdminNavbar/>} /> */}
+          <Route path="/adminNavbar" element={<AdminNavbar/>} />
           <Route  path="/verifyaccount" element={<VerifyAccount/>}/>
           {verificationToken ? (
             <Route
