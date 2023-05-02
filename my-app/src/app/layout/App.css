@@ -44,3 +44,11 @@
   justify-content: center;
   flex-direction: column;
 }
+
+.restaurants {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  margin-left: 400px;
+}

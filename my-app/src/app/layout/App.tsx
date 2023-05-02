@@ -26,6 +26,7 @@ import agent from '../api/agent';
 
 // Admin
 import Sidebar from '../../features/admin/components/Sidebar';
+import RestaurantsCrud from '../../features/admin/pages/RestaurantsCrud';
 
 import ForgotPassword from '../../features/user/forgotPassword';
 
@@ -70,6 +71,8 @@ function App() {
           <Route  path="/restaurants" element={<Restaurants/>} />
 
           <Route path="/adminNavbar" element={<AdminNavbar/>} />
+          <Route path="/dashboard/restaurants" element={<RestaurantsCrud />} />
+
           <Route  path="/verifyaccount" element={<VerifyAccount/>}/>
           {verificationToken ? (
             <Route

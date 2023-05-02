@@ -1,0 +1,17 @@
+.restaurants {
+  width: 83.7%;
+  padding: 10px 30px;
+  display: inline-flex;
+  align-items: flex-end;
+  justify-content: left;
+  flex-direction: column;
+  }
+  .modal{
+    display: table;
+    height:100%;
+  }
+  
+  
+  
+  
+    
