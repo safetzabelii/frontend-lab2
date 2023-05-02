@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import agent from '../../../app/api/agent'; 
 import { Restaurant } from '../../../app/models/Menu/Restaurant';
-
+import '../assets/restaurants.css'; // Import the CSS file
 
 const RestaurantsCrud: React.FC = () => {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
@@ -47,43 +47,74 @@ const RestaurantsCrud: React.FC = () => {
     await agent.Restaurants.delete(id);
     fetchRestaurants();
   };
-
   return (
     <div className='restaurants'>
       <h2>Restaurants</h2>
       <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Enter name"
-          value={name}
-          onChange={(event) => setName(event.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Enter address"
-          value={address}
-          onChange={(event) => setAddress(event.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Enter phone number"
-          value={phoneNumber}
-          onChange={(event) => setPhoneNumber(event.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Enter image URL"
-          value={image}
-          onChange={(event) => setImage(event.target.value)}
-        />
-        <button type="submit">{selectedRestaurant ? 'Update' : 'Create'}</button>
+        <div className="form-group">
+          <label htmlFor="name">Name</label>
+          <input
+            id="name"
+            type="text"
+            className="form-control"
+            placeholder="Enter name"
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="address">Address</label>
+          <input
+            id="address"
+            type="text"
+            className="form-control"
+            placeholder="Enter address"
+            value={address}
+            onChange={(event) => setAddress(event.target.value)}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="phoneNumber">Phone Number</label>
+          <input
+            id="phoneNumber"
+            type="text"
+            className="form-control"
+            placeholder="Enter phone number"
+            value={phoneNumber}
+            onChange={(event) => setPhoneNumber(event.target.value)}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="image">Image URL</label>
+          <input
+            id="image"
+            type="text"
+            className="form-control"
+            placeholder="Enter image URL"
+            value={image}
+            onChange={(event) => setImage(event.target.value)}
+          />
+        </div>
+        <button type="submit" className="btn btn-primary">
+          {selectedRestaurant ? 'Update' : 'Create'}
+        </button>
       </form>
-      <ul>
+      <ul className="restaurant-list">
         {restaurants.map((restaurant) => (
           <li key={restaurant.id}>
-            {restaurant.name} - {restaurant.address} - {restaurant.phoneNumber}
-            <button onClick={() => handleEdit(restaurant)}>Edit</button>
-            <button onClick={() => handleDelete(restaurant.id)}>Delete</button>
+            <div className="restaurant-info">
+              <div className="restaurant-name">{restaurant.name}</div>
+              <div className="restaurant-address">{restaurant.address}</div>
+              <div className="restaurant-phone">{restaurant.phoneNumber}</div>
+            </div>
+            <div className="restaurant-actions">
+              <button onClick={() => handleEdit(restaurant)} className="btn btn-primary">
+                Edit
+              </button>
+              <button onClick={() => handleDelete(restaurant.id)} className="btn btn-danger">
+                Delete
+              </button>
+            </div>
           </li>
         ))}
       </ul>
