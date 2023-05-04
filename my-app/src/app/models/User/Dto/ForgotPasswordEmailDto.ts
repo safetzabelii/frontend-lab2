@@ -1,5 +1,5 @@
 
 
 export interface ForgotPasswordEmailDto{
-    email:string;
+    email:string,
 }

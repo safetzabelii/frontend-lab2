@@ -15,13 +15,13 @@ import ChangePassword from '../../features/user/changePassword';
 import VerifyAccount from '../../features/user/verifyAccount';
 import LoggedInUserRoute from './ProtectedRoutes/LoggedInUserRoute';
 import AdminNavbar from '../../features/admin/features/adminNavbar';
-import { store } from '../stores/store';
+import { store, useStore } from '../stores/store';
 import MenuItem from '../../features/user/Menu/MenuItem/MenuItem';
 import Restaurants from '../../features/user/Restaurant/Restaurants';
 import AccountVerified from '../../features/user/accountVerified';
 import UserAlreadyLoggedInRoute from './ProtectedRoutes/UserAlreadyLoggedInRoute';
 import SendEmailForgetPassword from '../../features/user/sendEmailForgetPassword';
-import React from 'react';
+import React, { useEffect } from 'react';
 import agent from '../api/agent';
 
 // Admin
@@ -32,9 +32,16 @@ import ForgotPassword from '../../features/user/forgotPassword';
 
 function App() {
   const verificationToken = store.commonStore.verificationToken;
-  const userId = store.commonStore.userId;
   const pathname = window.location.pathname;
-  const changePasswordToken = store.commonStore.changePasswordToken;
+  
+  const {commonStore} = useStore();
+  const cookies = commonStore.getCookies();
+  let token = null;
+  if (cookies) {
+    token = cookies.token;  
+  }
+ 
+
   
   const renderHeader = (pathname:any) => {
     if (pathname.includes('/dashboard')) {
@@ -83,8 +90,8 @@ function App() {
 
           <Route  path="/sendEmail" element={<SendEmailForgetPassword/>}/>
             <Route  path="/changepw" element={<ChangePassword/>}/>
-          {changePasswordToken && userId ?(
-          <Route  path={`/forgotPassword/${changePasswordToken}/${userId}`} element={<ForgotPassword/>}/>
+          {token ?(
+          <Route  path={`/forgotPassword/${token}`} element={<ForgotPassword/>}/>
           ):null}
           <Route element={<LoggedInUserRoute/>}>
           <Route  path="/roleform" element={<RoleForm/>} />

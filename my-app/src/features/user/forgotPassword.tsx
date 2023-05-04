@@ -12,7 +12,11 @@ import { useStore } from '../../app/stores/store';
 export default observer(function ForgotPassword(){
   const {userStore,commonStore} = useStore();
   const navigate = useNavigate();
-  const userId = commonStore.userId;
+  const cookies = commonStore.getCookies();
+  let userId = null;
+  if(cookies){
+    userId = cookies.userId;
+  }
   const initialValues = {
     userId :userId,
     newPassword: '',
@@ -37,8 +41,7 @@ export default observer(function ForgotPassword(){
 
   
   const onSubmit = (values: any, { setSubmitting }: any) => {
-    console.log(values);
-    userStore.changeForgotenPassword(values).then(()=>navigate('/login'))
+    userStore.changeForgotenPassword(values).then(()=>navigate('/login'));
     
     setSubmitting(false);
   };
