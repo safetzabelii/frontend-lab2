@@ -28,6 +28,7 @@ import agent from '../api/agent';
 import Sidebar from '../../features/admin/components/Sidebar';
 
 import ForgotPassword from '../../features/user/forgotPassword';
+import AdminPanel from '../../features/admin/features/adminPanel';
 
 function App() {
   const verificationToken = store.commonStore.verificationToken;
@@ -61,12 +62,17 @@ function App() {
 
   return (
    <BrowserRouter>
+    <div className="flex flex-row h-screen">
       <Routes>
         <Route  path={"/*"} element={<>
-        <Navbar/>
-        {/* <AdminNavbar/> */}
-        <div>
+          
+            <AdminNavbar/>
+            {/* <AdminNavbar/> */}
+            <div className="flex-1">
+         
+       
         {renderHeader(pathname)}
+        <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
           <Routes>
           {
           /*
@@ -95,7 +101,7 @@ function App() {
             // )
           }
 
-          <Route path="/adminNavbar" element={<AdminNavbar/>} />
+          <Route path="/sidebar" element={<Sidebar/>} />
           <Route  path="/verifyaccount" element={<VerifyAccount/>}/>
           {verificationToken ? (
             <Route
@@ -109,22 +115,27 @@ function App() {
           {changePasswordToken && userId ?(
           <Route  path={`/forgotPassword/${changePasswordToken}/${userId}`} element={<ForgotPassword/>}/>
           ):null}
+          
           <Route element={<LoggedInUserRoute/>}>
+          </Route>
           <Route  path="/roleform" element={<RoleForm/>} />
-          <Route  path="/list" element={<List/>}/>
+          <Route  path="/listRoles" element={<List/>}/>
           <Route  path="/roleform" element={<RoleForm/>}/>
         
           <Route path="/list" element={<List/>}/>
           <Route path="/roleform" element={<RoleForm/>}/>
-          </Route>
+          
           
           </Routes>
+         
 
+        </div>
         </div>
         </>} />
        
 
       </Routes>
+      </div>
     </BrowserRouter>
   );
 }

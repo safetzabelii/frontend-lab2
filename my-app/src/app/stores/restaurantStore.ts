@@ -24,24 +24,23 @@ restaurantRegistry = new Map<string,Restaurant>();
     }
 
     loadRestaurants = async () => {
+        this.setLoadingInitial(true);
         try{
             const restaurants = await agent.Restaurants.list();
-            
             restaurants.forEach((restaurant: Restaurant)=>{
-                
                 this.setRestaurant(restaurant);
-                
             })
-            this.setLoadingInitial(false);
-        }catch(error){
-            
-            this.setLoadingInitial(false);
-           
-            
+            runInAction(() => {
+                this.setLoadingInitial(false);
+            });
+        } catch(error){
             console.log(error);
-            
+            runInAction(() => {
+                this.setLoadingInitial(false);
+            });
         }
     }
+    
 
     setLoadingInitial = (state: boolean)=>{
         this.loadingInitial=state;

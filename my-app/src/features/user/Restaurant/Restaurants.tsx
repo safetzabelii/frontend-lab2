@@ -20,9 +20,9 @@ export default observer(function Restaurants (){
 
     return(
         <>
-        {getRestaurants.map((restaurant) => {
+        {getRestaurants.map((restaurant) => (
             
-            <div key={restaurant.id} className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            <div key={restaurant.id} className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-400 dark:border-gray-700">
                 <a href="#">
                     <img className="p-8 rounded-t-lg" src="/docs/images/products/apple-watch.png" alt="product image" />
                 </a>
@@ -42,7 +42,7 @@ export default observer(function Restaurants (){
                         <span className="text-3xl font-bold text-gray-900 dark:text-white">{restaurant.address}</span>
                     </div>
                 </div>
-            </div> })}
+            </div> ))}
             </>
     );
 })

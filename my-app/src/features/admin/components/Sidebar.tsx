@@ -15,13 +15,10 @@ const Sidebar = () => {
     <>
       <IconContext.Provider value={{color: '#fff'}}>
         <div className="icon-container">
-          <Link to="#" className="menu-bars">
-            {/* <FaIcons.FaBars onClick={showSidebar} /> */}
-            <h1>Food Delivery Company</h1>
-          </Link>
+         
           <div className="admin-info">
               <h4>Welcome Admin</h4>
-              <FaIcons.FaSignOutAlt />
+              
           </div>
         </div>
         <nav className="sidebar">
