@@ -1,11 +1,12 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
-
 import { store } from "./store";
 import { LogInResponseObject } from "../models/User/LogIn";
 import { SignUp } from "../models/User/SignUp";
 import { ForgotPassword } from "../models/User/Dto/ForgotPassword";
 import { ForgotPasswordEmailDto } from "../models/User/Dto/ForgotPasswordEmailDto";
+
+
 
 export default class UserStore {
     user: LogInResponseObject | null=null;
@@ -62,13 +63,21 @@ export default class UserStore {
     sendForgotPasswordEmail = async (email: ForgotPasswordEmailDto)=>{
         try{
             const result = await agent.Users.sendForgotPasswordEmail(email);
-            store.commonStore.setChangePasswordToken(result.token);
-            store.commonStore.setUserId(result.id);
+            if(result !=null){
+                store.commonStore.setCookies(result.userId,result.encryptedToken,result.key,result.iv);
+        }
+        else{
+            console.log("The email was not sent");
+        }
+
         }catch(error){
             console.log(error);
             throw error;
         }
     }
+    
+    
+      
     changeForgotenPassword = async (forgotPassword: ForgotPassword)=>{
         try{
             const result = await agent.Users.forgotPassword(forgotPassword);

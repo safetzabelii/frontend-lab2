@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { Menu } from "../models/Menu/Menu";
 import { MenuItem } from "../models/Menu/MenuItem";
 import { Offer } from "../models/Menu/Offer";
@@ -13,17 +13,19 @@ import { OrderItem } from "../models/Order/OrderItem";
 import { ForgotPassword } from "../models/User/Dto/ForgotPassword";
 import { ChangePassword } from "../models/User/Dto/ChangePassword";
 import { ForgotPasswordEmailDto } from "../models/User/Dto/ForgotPasswordEmailDto";
+import { config } from "process";
+import { ForgotPasswordEmailResponseDto } from "../models/User/Dto/ForgotPasswordEmailResponseDto";
 
 
 
-axios.defaults.baseURL = "https://localhost:7017/api";
+axios.defaults.baseURL = "http://localhost:7017/api";
 
 const responseBody = (response: AxiosResponse) => response.data;
 
 const request = {
 
     get: <T>(url: string) => axios.get<T>(url).then(responseBody),
-    post: <T>(url: string, body: {}) =>axios.post<T>(url, body).then(responseBody),
+    post: <T>(url: string, body: {},config?:AxiosRequestConfig) =>axios.post<T>(url, body,config).then(responseBody),
     put: <T>(url: string, body: {}) => axios.put<T>(url, body).then(responseBody),
     del: <T>(url: string) => axios.delete<T>(url).then(responseBody),
   };
@@ -93,7 +95,7 @@ const Roles = {
         forgotPassword: (user: ForgotPassword)=> request.put<ForgotPassword>("/User/ForgotPassword",user),
         verifyEmail: (token:string) => request.put<void>(`/User/VerifyEmail/${token}`,token),
         changePassword : (user: ChangePassword)=> request.put<void>("/User/ChangePassword",user),
-        sendForgotPasswordEmail : (email: ForgotPasswordEmailDto) => request.post<void>("/User/SendForgotPasswordEmail",email),
+        sendForgotPasswordEmail : (email: ForgotPasswordEmailDto) => request.post<ForgotPasswordEmailResponseDto>("/User/SendForgotPasswordEmail",email),
     }
         
   const agent = {
