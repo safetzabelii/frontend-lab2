@@ -11,7 +11,7 @@ import RoleEditForm from './roleEditForm';
 export default observer(function ListRoles() {
   const { roleStore,modalStore } = useStore();
   const [target, setTarget] = useState('');
-  const { RoleByName, loading, loadRolet } = roleStore;
+  const { RoleByName, loading, loadRolet,deleteRole } = roleStore;
 
   useEffect(() => {
     loadRolet().catch((error) => console.log(error));
@@ -19,6 +19,10 @@ export default observer(function ListRoles() {
 function openCreateForm(){
   modalStore.closeModal();
   modalStore.openModal("Create Role",<RoleCreateForm/>);
+}
+function handleRoleDelete(e:SyntheticEvent<HTMLButtonElement>,id:string){
+  setTarget(e.currentTarget.name);
+  deleteRole(id);
 }
   return (
     <div className="flex flex-col items-center bg-white min-h-screen w-full max-w-screen-xl">
@@ -60,14 +64,14 @@ function openCreateForm(){
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <div className="flex items-center justify-center space-x-10">
-                        <a className="text-indigo-600  hover:text-indigo-900" onClick={()=> modalStore.openModal("Edit Role",<RoleEditForm id={role.id}/>)}>
+                        <button className="text-indigo-600  hover:text-indigo-900" onClick={()=> modalStore.openModal("Edit Role",<RoleEditForm id={role.id}/>)}>
                           <span className="sr-only">Edit</span>
                           <PencilIcon className="h-5 w-5" aria-hidden="true" />
-                        </a>
-                        <a href="#" className="text-red-600 hover:text-red-900">
+                        </button>
+                        <button className="text-red-600 hover:text-red-900" onClick={(e)=>handleRoleDelete(e,role.id!)}>
                           <span className="sr-only">Delete</span>
                           <TrashIcon className="h-5 w-5" aria-hidden="true" />
-                        </a>
+                        </button>
                       </div>
                     </td>
                   </tr>

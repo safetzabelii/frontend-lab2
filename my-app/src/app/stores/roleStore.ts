@@ -134,7 +134,6 @@ export default class roleStore{
     }
     loadRole = async (id:string)=>{
         let role = this.getRole(id);
-        console.log(role);
         if(role){
             this.selectedRole = role;
             return role;
@@ -146,7 +145,7 @@ export default class roleStore{
                 if(role != null){
                 this.setRole(role);
                 runInAction(()=>{
-                    this.selectedRole=role;
+                    this.selectedRole=role!;
                 })
                 this.setLoadingInitial(false);
                 return role;
