@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useStore } from "../../app/stores/store";
+import { useStore } from "../../../app/stores/store";
 interface AccountVerifiedProps {
   verificationToken: string;
 }

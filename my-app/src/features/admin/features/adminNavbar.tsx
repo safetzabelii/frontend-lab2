@@ -8,13 +8,7 @@ const adminNavbar = () => {
         id="view"
         className="h-full flex flex-row"
         x-data="{ sidenav: true }"
-        style={{
-          position: "fixed",
-          width: "100%",
-          top: 0,
-          zIndex: 100,
-          boxShadow: "0 0 10px rgba(0, 0, 0, 0.2)",
-        }}
+        
       >
       <button
         
@@ -136,7 +130,7 @@ const adminNavbar = () => {
               <span className="">Reports</span>
             </a>
             <a
-              href="/listRoles"
+              href="/dashboard/listRoles"
               className="text-sm font-medium text-gray-700 py-2 px-2 hover:bg-teal-500 hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
             >
               <svg

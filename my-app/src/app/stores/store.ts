@@ -8,6 +8,7 @@ import roleStore from "./roleStore";
 import OrderStore from "./orderStore";
 import OrderItemStore from "./orderItemStore";
 import CommonStore from "./commonStore";
+import ModalStore from "./modalStore";
 
 
 
@@ -23,6 +24,7 @@ interface Store{
     roleStore:roleStore;
     orderStore: OrderStore;
     orderItemStore: OrderItemStore;
+    modalStore: ModalStore;
 
 
 }
@@ -37,7 +39,8 @@ export const store:Store={
     offerStore: new OfferStore(),
     roleStore: new roleStore(),
     orderStore: new OrderStore(),
-    orderItemStore: new OrderItemStore()
+    orderItemStore: new OrderItemStore(),
+    modalStore: new ModalStore(),
 
 }
 

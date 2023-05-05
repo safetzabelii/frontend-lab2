@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import { useState } from "react";
-import { useStore } from "../../app/stores/store";
+import { useStore } from "../../../app/stores/store";
 import { useNavigate } from "react-router-dom";
 import { Field, Form, Formik, useFormik } from "formik";
 

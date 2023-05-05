@@ -6,30 +6,30 @@ import HomePage from './Homepage';
 import AboutUs from './Aboutus';
 import ContactUs from './Contactus';
 import LoginForm from './LoginForm';
-import List from '../../features/admin/role/list';
+
 import Navbar from './navbar';
 import Footer from './footer';
-import RoleForm from '../../features/admin/role/roleForm';
-import ChangePassword from '../../features/user/changePassword';
 
-import VerifyAccount from '../../features/user/verifyAccount';
 import LoggedInUserRoute from './ProtectedRoutes/LoggedInUserRoute';
-import AdminNavbar from '../../features/admin/features/adminNavbar';
+
 import { store, useStore } from '../stores/store';
 import MenuItem from '../../features/user/Menu/MenuItem/MenuItem';
 import Restaurants from '../../features/user/Restaurant/Restaurants';
-import AccountVerified from '../../features/user/accountVerified';
 import UserAlreadyLoggedInRoute from './ProtectedRoutes/UserAlreadyLoggedInRoute';
-import SendEmailForgetPassword from '../../features/user/sendEmailForgetPassword';
 import React, { useEffect } from 'react';
 import agent from '../api/agent';
-
 // Admin
-import Sidebar from '../../features/admin/components/Sidebar';
 import RestaurantsCrud from '../../features/admin/pages/RestaurantsCrud';
-
-import ForgotPassword from '../../features/user/forgotPassword';
-import AdminPanel from '../../features/admin/features/adminPanel';
+import ListRoles from '../../features/admin/role/listRoles';
+import RoleCreateForm from '../../features/admin/role/roleCreateForm';
+import RoleEditForm from '../../features/admin/role/roleEditForm';
+import ModalContainer from './common/ModalContainer';
+import AccountVerified from '../../features/user/User/accountVerified';
+import SendEmailForgetPassword from '../../features/user/User/sendEmailForgetPassword';
+import ForgotPassword from '../../features/user/User/forgotPassword';
+import VerifyAccount from '../../features/user/User/verifyAccount';
+import ChangePassword from '../../features/user/User/changePassword';
+import AdminNavbar from '../../features/admin/features/adminNavbar';
 
 function App() {
   const verificationToken = store.commonStore.verificationToken;
@@ -41,28 +41,19 @@ function App() {
   if (cookies) {
     token = cookies.token;  
   }
- 
 
-  
-  const renderHeader = (pathname:any) => {
-    if (pathname.includes('/dashboard')) {
-      return <Sidebar />;
-    }
-  };
 
 
   return (
    <BrowserRouter>
+   <ModalContainer/>
     <div className="flex flex-row h-screen">
       <Routes>
         <Route  path={"/*"} element={<>
           
             <AdminNavbar/>
-            {/* <AdminNavbar/> */}
             <div className="flex-1">
          
-       
-        {renderHeader(pathname)}
         <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
           <Routes>
           {
@@ -92,7 +83,7 @@ function App() {
             // )
           }
 
-          <Route path="/sidebar" element={<Sidebar/>} />
+          
           <Route  path="/verifyaccount" element={<VerifyAccount/>}/>
           {verificationToken ? (
             <Route
@@ -109,12 +100,10 @@ function App() {
           
           <Route element={<LoggedInUserRoute/>}>
           </Route>
-          <Route  path="/roleform" element={<RoleForm/>} />
-          <Route  path="/listRoles" element={<List/>}/>
-          <Route  path="/roleform" element={<RoleForm/>}/>
-        
-          <Route path="/list" element={<List/>}/>
-          <Route path="/roleform" element={<RoleForm/>}/>
+          <Route  path="/dashboard/listRoles" element={<ListRoles/>}/>
+          <Route  path="/dashboard/roleCreateForm" element={<RoleCreateForm/>}/>
+          <Route path="/dashboard/roleEditForm" element={<RoleEditForm/>}/>
+          
           
           
           </Routes>

@@ -80,7 +80,7 @@ export default class roleStore{
         });
     }
 
-    loadKlasat = async () => {
+    loadRolet = async () => {
         try{
             const roles = await agent.Roles.list();
             roles.forEach((role:Role)=>{
@@ -96,69 +96,74 @@ export default class roleStore{
             
         }
     }
-//     updateKlasa = async (klasa:Klasa)=>{
-//         this.loading= true;
-//         try{
-//             await agent.Klasat.update(klasa);
-//             runInAction(()=>{
-//                 this.klasaRegistry.set(klasa.id!,klasa);
-//                 this.selectedKlasa=klasa;
-//                 this.editMode=false;
-//                 this.loading=false;
+    updateRole = async (role:Role)=>{
+        this.loading= true;
+        try{
+            await agent.Roles.update(role);
+            runInAction(()=>{
+                this.roleRegistry.set(role.id!,role);
+                this.selectedRole=role;
+                this.editMode=false;
+                this.loading=false;
                 
-//             })
-//         }catch(error){
-//             console.log(error);
-//             runInAction(()=>{
-//                 this.loading=false;
-//             })
+            })
+        }catch(error){
+            console.log(error);
+            runInAction(()=>{
+                this.loading=false;
+            })
             
-//         }
-//     }
-//     deleteKlasa = async(id:string)=>{
-//         this.loading=true;
-//         try{
-//             await agent.Klasat.delete(id);
-//             runInAction(()=>{
-//                 this.klasaRegistry.delete(id);
-//                 this.loading=false;
-//             })
+        }
+    }
+    deleteRole = async(id:string)=>{
+        this.loading=true;
+        try{
+            await agent.Roles.delete(id);
+            runInAction(()=>{
+                this.roleRegistry.delete(id);
+                this.loading=false;
+            })
 
-//         }catch(error){
-//             console.log(error);
-//             runInAction(()=>{
-//                 this.loading=false;
-//             })
+        }catch(error){
+            console.log(error);
+            runInAction(()=>{
+                this.loading=false;
+            })
             
-//         }
-//     }
-//     loadKlasa = async (id:string)=>{
-//         let klasa = this.getKlasa(id);
-//         if(klasa){
-//             this.selectedKlasa = klasa;
-//             return klasa;
-//         }
-//         else{
-//             this.loadingInitial=true;
-//             try{
-//                 klasa = await  agent.Klasat.details(id);
-//                 this.setKlasa(klasa);
-//                 runInAction(()=>{
-//                     this.selectedKlasa=klasa;
-//                 })
-//                 this.setLoadingInitial(false);
-//                 return klasa;
-//             }catch(error){
-//                 console.log(error);
-//                 this.setLoadingInitial(false);
-//             }
-//         }
-//     }
+        }
+    }
+    loadRole = async (id:string)=>{
+        let role = this.getRole(id);
+        console.log(role);
+        if(role){
+            this.selectedRole = role;
+            return role;
+        }
+        else{
+            this.loadingInitial=true;
+            try{
+                role = await  agent.Roles.details(id);
+                if(role != null){
+                this.setRole(role);
+                runInAction(()=>{
+                    this.selectedRole=role;
+                })
+                this.setLoadingInitial(false);
+                return role;
+            }else{
+                return console.log("No role was retrived");
+            }
+            }catch(error){
+                console.log(error);
+                this.setLoadingInitial(false);
+            }
+        }
+    }
     
 
-//     private getKlasa = (id:string)=>{
-//         return this.klasaRegistry.get(id);
-//     }
+    private getRole = (id:string)=>{
+        return this.roleRegistry.get(id);
+    }
 
    private setRole = (role:Role)=>{
         this.roleRegistry.set(role.id!,role);
