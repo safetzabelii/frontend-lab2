@@ -14,6 +14,10 @@ restaurantRegistry = new Map<string,Restaurant>();
     constructor(){
         makeAutoObservable(this)
     }
+
+    get restaurantsByName() {
+        return Array.from(this.restaurantRegistry.values()).sort((a, b) => a.name.localeCompare(b.name));
+    }
     
     get restaurantById(){
         return Array.from(this.restaurantRegistry.values()).sort((a, b)=> Number(a.id) - Number(b.id) );
