@@ -3,6 +3,7 @@ import { SyntheticEvent, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useStore } from '../../../app/stores/store';
 import { RiDeleteBinLine as TrashIcon, RiPencilLine as PencilIcon } from 'react-icons/ri';
+import RestaurantCreateForm from './restaurantCreateForm';
 
 export default observer(function ListRestaurants() {
   const { restaurantStore, modalStore } = useStore();
@@ -15,7 +16,7 @@ export default observer(function ListRestaurants() {
 
   function openCreateForm() {
     modalStore.closeModal();
-    // modalStore.openModal("Create Restaurant", <RestaurantCreateForm />);
+    modalStore.openModal("Create Restaurant", <RestaurantCreateForm />);
   }
 
   function handleRestaurantDelete(e: SyntheticEvent<HTMLButtonElement>, id: string) {
