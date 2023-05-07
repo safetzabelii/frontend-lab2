@@ -16,7 +16,7 @@ export default observer(function OffersCreateForm(){
 
   const{createOffer}=offerStore;
 
-  const [offer, setOffer] = useState<OfferDto>({
+  const [offerDto, setOffer] = useState<OfferDto>({
     id: '',
     name: '',
     description: '',
@@ -40,7 +40,7 @@ export default observer(function OffersCreateForm(){
   return (
     
         <Formik
-          initialValues={offer}
+          initialValues={offerDto}
           onSubmit={handleFormSubmit}
           validationSchema={validationSchema}
         >
@@ -106,7 +106,7 @@ export default observer(function OffersCreateForm(){
               placeholder="Enter discount percent"
             />
             <ErrorMessage
-              name="image"
+              name="discountpercent"
               component="div"
               className="text-red-500 text-sm mt-1"
             />
