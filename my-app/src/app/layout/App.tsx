@@ -31,6 +31,7 @@ import VerifyAccount from '../../features/user/User/verifyAccount';
 import ChangePassword from '../../features/user/User/changePassword';
 import AdminNavbar from '../../features/admin/features/adminNavbar';
 import ListRestaurants from '../../features/admin/pages/listRestaurants';
+import ListOffers from '../../features/admin/offers/listOffers';
 
 function App() {
   const verificationToken = store.commonStore.verificationToken;
@@ -104,8 +105,8 @@ function App() {
           <Route  path="/dashboard/listRoles" element={<ListRoles/>}/>
           <Route  path="/dashboard/roleCreateForm" element={<RoleCreateForm/>}/>
           <Route path="/dashboard/roleEditForm" element={<RoleEditForm/>}/>
-
           <Route path="/dashboard/listRestaurants" element={<ListRestaurants/>}/>
+          <Route path="/dashboard/listOffers" element={<ListOffers/>}/>
           
           </Routes>
          

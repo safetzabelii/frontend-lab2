@@ -15,6 +15,9 @@ offerRegistry = new Map<string,Offer>();
     constructor(){
         makeAutoObservable(this)
     }
+    get offersByName() {
+        return Array.from(this.offerRegistry.values()).sort((a, b) => a.name.localeCompare(b.name));
+    }
     
     get offerById(){
         return Array.from(this.offerRegistry.values()).sort((a, b)=> Number(a.id) - Number(b.id) );
