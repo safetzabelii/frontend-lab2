@@ -90,7 +90,7 @@ function handleUserDelete(e:SyntheticEvent<HTMLButtonElement>,id:string){
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <div className="flex items-center justify-center space-x-10">
-                        <button className="text-indigo-600  hover:text-indigo-900" onClick={()=>navigate("/dashboard/userDetails") }>
+                        <button className="text-indigo-600  hover:text-indigo-900" onClick={() => navigate(`/dashboard/userDetails/${user.id}`)}>
                           <span className="sr-only">Edit</span>
                           <PencilIcon className="h-5 w-5" aria-hidden="true" />
                         </button>

@@ -108,7 +108,7 @@ function App() {
           <Route path="/dashboard/roleEditForm" element={<RoleEditForm/>}/>
           <Route path="/dashboard/listRestaurants" element={<ListRestaurants/>}/>
           <Route path="/dashboard/listOffers" element={<ListOffers/>}/>
-          <Route path="/dashboard/userDetails" element={<UserDetails/>}/>
+          <Route path="/dashboard/userDetails/:id" element={<UserDetails/>}/>
           <Route path="/dashboard/listUsers" element={<ListUsers/>}/>
 
           

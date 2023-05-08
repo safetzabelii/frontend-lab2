@@ -1,4 +1,3 @@
-import { Role } from "../Role/Role";
 
 export interface User{
     id: string,
