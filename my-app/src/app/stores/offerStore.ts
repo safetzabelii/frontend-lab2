@@ -2,10 +2,11 @@ import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
 import { Offer } from "../models/Menu/Offer";
 import { off } from "process";
+import { OfferDto } from "../models/Menu/OfferDto";
 
 export default class OfferStore{
-offerRegistry = new Map<string,Offer>();
-    selectedOffer:Offer |undefined = undefined;
+offerRegistry = new Map<string,OfferDto>();
+    selectedOffer:OfferDto |undefined = undefined;
     editMode =false;
     loading = false;
     loadingInitial = false;
@@ -43,7 +44,7 @@ offerRegistry = new Map<string,Offer>();
     setLoadingInitial = (state: boolean)=>{
         this.loadingInitial=state;
     }
-    createOffer = async (offer:Offer)=>{
+    createOffer = async (offer:OfferDto)=>{
         this.loading=true;
         try{
             await agent.Offers.create(offer);
@@ -119,7 +120,7 @@ offerRegistry = new Map<string,Offer>();
         return this.offerRegistry.get(id);
     }
 
-    private setOffer = (offer:Offer)=>{
+    private setOffer = (offer:OfferDto)=>{
         this.offerRegistry.set(offer.id!,offer);
     }
 }

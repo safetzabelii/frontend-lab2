@@ -24,7 +24,7 @@ export default observer(function OffersCreateForm(){
     discountPercent: 0,
     startDate: new Date(),
     endDate: new Date(),
-  });``
+  });
 
   const validationSchema = Yup.object({
     name: Yup.string().required('Name is required'),

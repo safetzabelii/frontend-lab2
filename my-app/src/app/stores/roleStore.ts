@@ -10,41 +10,25 @@ export default class roleStore{
     editMode =false;
     loading = false;
     loadingInitial = false;
-    createLendaForm = false;
-    
+
 
     constructor(){
         makeAutoObservable(this)
     }
-    
-    // get rolebyId(){
-    //     return Array.from(this.roleRegistry.values()).sort((a, b)=> Number(a.id) - Number(b.id) );
-    // }
-    // get lastItem(){
-    //     return this.rolebyId.at(-1);
-    // }
-    // get rolet(){
-    //     return Array.from(this.roleRegistry.values());
-    // }
-   
+    get RoleByName(){
+        return Array.from(this.roleRegistry.values()).sort((a,b) =>{
+            let fa = a.name.toLowerCase(),
+                fb = b.name.toLowerCase();
 
-    // loadRolet = async () => {
-    //     try{
-    //         const klasat = await agent.Klasat.list();
-    //         klasat.forEach(klasa=>{
-    //             this.setKlasa(klasa);
-    //         })
-    //         this.setLoadingInitial(false);
-    //     }catch(error){
-            
-    //         this.setLoadingInitial(false);
-           
-            
-    //         console.log(error);
-            
-    //     }
-    // }
-
+                if(fa<fb){
+                    return -1;
+                }
+                if(fa>fb){
+                    return 1;
+                }
+                return 0;
+        });
+    }
     setLoadingInitial = (state: boolean)=>{
         this.loadingInitial=state;
     }
@@ -65,20 +49,7 @@ export default class roleStore{
             
         }
     }
-    get RoleByName(){
-        return Array.from(this.roleRegistry.values()).sort((a,b) =>{
-            let fa = a.name.toLowerCase(),
-                fb = b.name.toLowerCase();
-
-                if(fa<fb){
-                    return -1;
-                }
-                if(fa>fb){
-                    return 1;
-                }
-                return 0;
-        });
-    }
+   
 
     loadRolet = async () => {
         try{
@@ -166,5 +137,5 @@ export default class roleStore{
 
    private setRole = (role:Role)=>{
         this.roleRegistry.set(role.id!,role);
-     }
+ }
 }

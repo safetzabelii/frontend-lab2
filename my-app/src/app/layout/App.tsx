@@ -19,7 +19,6 @@ import UserAlreadyLoggedInRoute from './ProtectedRoutes/UserAlreadyLoggedInRoute
 import React, { useEffect } from 'react';
 import agent from '../api/agent';
 // Admin
-import RestaurantsCrud from '../../features/admin/pages/RestaurantsCrud';
 import ListRoles from '../../features/admin/role/listRoles';
 import RoleCreateForm from '../../features/admin/role/roleCreateForm';
 import RoleEditForm from '../../features/admin/role/roleEditForm';
@@ -32,10 +31,12 @@ import ChangePassword from '../../features/user/User/changePassword';
 import AdminNavbar from '../../features/admin/features/adminNavbar';
 import ListRestaurants from '../../features/admin/pages/listRestaurants';
 import ListOffers from '../../features/admin/offers/listOffers';
+import ListUsers from '../../features/admin/users/listUsers';
+import UserDetails from '../../features/admin/users/userDetails';
+
 
 function App() {
   const verificationToken = store.commonStore.verificationToken;
-  const pathname = window.location.pathname;
   
   const {commonStore} = useStore();
   const cookies = commonStore.getCookies();
@@ -107,6 +108,9 @@ function App() {
           <Route path="/dashboard/roleEditForm" element={<RoleEditForm/>}/>
           <Route path="/dashboard/listRestaurants" element={<ListRestaurants/>}/>
           <Route path="/dashboard/listOffers" element={<ListOffers/>}/>
+          <Route path="/dashboard/userDetails" element={<UserDetails/>}/>
+          <Route path="/dashboard/listUsers" element={<ListUsers/>}/>
+
           
           </Routes>
          

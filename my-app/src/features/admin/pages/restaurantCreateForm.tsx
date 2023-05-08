@@ -22,7 +22,7 @@ export default observer(function RestaurantCreateForm(){
     address: '',
     phoneNumber: '',
     image: '',
-  });``
+  });
 
   const validationSchema = Yup.object({
     name: Yup.string().required('Name is required'),

@@ -15,6 +15,7 @@ import { ChangePassword } from "../models/User/Dto/ChangePassword";
 import { ForgotPasswordEmailDto } from "../models/User/Dto/ForgotPasswordEmailDto";
 import { config } from "process";
 import { ForgotPasswordEmailResponseDto } from "../models/User/Dto/ForgotPasswordEmailResponseDto";
+import { OfferDto } from "../models/Menu/OfferDto";
 
 
 
@@ -48,10 +49,10 @@ const MenuItems = {
     };
 
 const Offers = {
-    list: () => request.get<Offer[]>("/Offer"),
+    list: () => request.get<OfferDto[]>("/Offer"),
     details: (id: string) => request.get<Offer>(`/Offer/${id}`),
-    create: (offer: Offer) => axios.post<void>("/Offer", offer),
-    update: (offer: Offer) => axios.put<void>(`/Offer/${offer.id}`, offer),
+    create: (offer: OfferDto) => axios.post<void>("/Offer", offer),
+    update: (offer: OfferDto) => axios.put<void>(`/Offer/${offer.id}`, offer),
     delete: (id: string) => axios.delete<void>(`/Offer/${id}`),
     };
     
@@ -96,6 +97,7 @@ const Roles = {
         verifyEmail: (token:string) => request.put<void>(`/User/VerifyEmail/${token}`,token),
         changePassword : (user: ChangePassword)=> request.put<void>("/User/ChangePassword",user),
         sendForgotPasswordEmail : (email: ForgotPasswordEmailDto) => request.post<ForgotPasswordEmailResponseDto>("/User/SendForgotPasswordEmail",email),
+        getAllUsersForAdminDashboardDisplay: () => request.get<User[]>("User/GetAllUsersForAdminDashboardDisplay"),
     }
         
   const agent = {

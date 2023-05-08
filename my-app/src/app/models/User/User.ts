@@ -6,6 +6,6 @@ export interface User{
     surname: string,
 
     email: string,
-    roleId : number,
-    role: Role,
+    role: string,
+    isEmailVerified: boolean
 }
