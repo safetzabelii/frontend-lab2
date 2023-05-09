@@ -33,6 +33,7 @@ import ListRestaurants from '../../features/admin/pages/listRestaurants';
 import ListOffers from '../../features/admin/offers/listOffers';
 import ListUsers from '../../features/admin/users/listUsers';
 import UserDetails from '../../features/admin/users/userDetails';
+import ListMenus from '../../features/admin/menu/listMenus';
 
 
 function App() {
@@ -110,6 +111,7 @@ function App() {
           <Route path="/dashboard/listOffers" element={<ListOffers/>}/>
           <Route path="/dashboard/userDetails/:id" element={<UserDetails/>}/>
           <Route path="/dashboard/listUsers" element={<ListUsers/>}/>
+          <Route path="/dashboard/listMenus" element={<ListMenus/>}/>
 
           
           </Routes>

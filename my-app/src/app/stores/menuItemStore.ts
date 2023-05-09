@@ -14,7 +14,7 @@ export default class MenuItemStore {
         makeAutoObservable(this);
     }
 
-    get MenuItems() {
+    get getMenuItems() {
         return Array.from(this.menuItemRegistry.values());
     }
 

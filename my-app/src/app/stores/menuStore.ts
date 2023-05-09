@@ -27,6 +27,21 @@ menuRegistry = new Map<string,Menu>();
         return Array.from(this.menuRegistry.values());
     }
 
+    get MenuByName(){
+        return Array.from(this.menuRegistry.values()).sort((a,b) =>{
+            let fa = a.name.toLowerCase(),
+                fb = b.name.toLowerCase();
+
+                if(fa<fb){
+                    return -1;
+                }
+                if(fa>fb){
+                    return 1;
+                }
+                return 0;
+        });
+    }
+
     loadMenus = async () => {
         try{
             const menus = await agent.Menus.list();

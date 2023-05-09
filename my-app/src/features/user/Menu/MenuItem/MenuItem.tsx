@@ -1,32 +1,50 @@
+import { observer } from "mobx-react";
+import { useNavigate } from "react-router-dom";
+import { SyntheticEvent, useEffect, useState } from "react";
+import menuItemStore from "../../../../app/stores/menuItemStore";
+import { useStore } from "../../../../app/stores/store";
 
-const MenuItem = () => {
-    return (
-        <div className="bg-white shadow-lg rounded-lg overflow-hidden">
-  <div className="flex justify-between items-center px-6 py-4 bg-green-500 text-white">
-    <h3 className="font-bold text-lg">Main Dishes</h3>
-    <input type="text" placeholder="Search menu items" className="py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 flex-grow" />
-  <button className="ml-3 px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-    Search
-  </button>
-  </div>
+export default observer(function MenuItems (){
+    const {menuItemStore} = useStore();
+    const {loadMenuItems, deleteMenuItem, getMenuItems} = menuItemStore;
+    const [target, setTarget] = useState('');
 
+    function handleMenuItemDelete(e: SyntheticEvent<HTMLButtonElement>, id: string) {
+      setTarget(e.currentTarget.name);
+      deleteMenuItem(id);
+    }
 
-  <div className="flex items-center justify-between border-b border-gray-200 py-4">
-  <div className="flex items-center">
-    <img src="https://via.placeholder.com/64" alt="Menu item" className="h-16 w-16 rounded-lg mr-4" />
-    <div>
-      <h3 className="text-lg font-medium text-gray-900">Cheeseburger</h3>
-      <p className="text-gray-500">$10.99</p>
-    </div>
-  </div>
-  <button className="px-4 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-    Add to Cart
-  </button>
-</div>
+    useEffect(() => {
+        loadMenuItems();
+    },[loadMenuItems]);
 
-</div>
-
-
+    return(
+        <>
+        {getMenuItems.map((menuitem) => (
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {getMenuItems.map((menuitem) => (
+            <div key={menuitem.id} className="bg-white shadow rounded-lg overflow-hidden">
+              <div className="relative">
+                <button className="absolute top-0 right-0 m-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full" onClick={(e) => handleMenuItemDelete(e, menuitem.id)} name={menuitem.name}>
+                  {target === menuitem.name ? "Deleting..." : "Delete"}
+                </button>
+              </div>
+              <div className="p-4">
+                <h3 className="font-semibold text-lg mb-2">{menuitem.name}</h3>
+                <p className="text-gray-700 text-base mb-4">{menuitem.description}</p>
+                <div>
+                  <a href="#">
+                          <img className="p-8 rounded-t-lg" src="/docs/images/products/apple-watch.png" alt="product image" />    
+                  </a>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-900 font-bold text-xl">${menuitem.price}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+          </div>
+        ))}
+        </>
     );
-};
-export default MenuItem;
+})
