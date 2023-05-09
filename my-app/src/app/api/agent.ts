@@ -16,6 +16,7 @@ import { ForgotPasswordEmailDto } from "../models/User/Dto/ForgotPasswordEmailDt
 import { config } from "process";
 import { ForgotPasswordEmailResponseDto } from "../models/User/Dto/ForgotPasswordEmailResponseDto";
 import { OfferDto } from "../models/Menu/OfferDto";
+import { UserEditDto } from "../models/User/Dto/UserEditDto";
 
 
 
@@ -90,14 +91,15 @@ const Roles = {
         list: () => request.get<User[]>("User/GetAllUsers"),
         details: (id: string) => request.get<User>(`User/GetUser/${id}`),
         create: (user: SignUp) => axios.post<void>("/User/SignUp", user),
-        update: (user: User) => axios.put<void>(`/User/EditUser/`, user),
+        update: (user: UserEditDto) => axios.put<void>(`/User/EditUser/`, user),
         delete: (id: string) => axios.delete<void>(`/User/DeleteUser/${id}`),
         logIn: (user: LogInResponseObject) => request.post<LogInResponseObject>("/User/LogIn", user),
         forgotPassword: (user: ForgotPassword)=> request.put<ForgotPassword>("/User/ForgotPassword",user),
         verifyEmail: (token:string) => request.put<void>(`/User/VerifyEmail/${token}`,token),
         changePassword : (user: ChangePassword)=> request.put<void>("/User/ChangePassword",user),
         sendForgotPasswordEmail : (email: ForgotPasswordEmailDto) => request.post<ForgotPasswordEmailResponseDto>("/User/SendForgotPasswordEmail",email),
-        getAllUsersForAdminDashboardDisplay: () => request.get<User[]>("User/GetAllUsersForAdminDashboardDisplay"),
+        getAllUsersForAdminDashboardDisplay: () => request.get<User[]>("/User/GetAllUsersForAdminDashboardDisplay"),
+        getUserByIdForEdit: (id:string) => request.get<UserEditDto>(`/User/GetUserForEdit/${id}`),
     }
         
   const agent = {

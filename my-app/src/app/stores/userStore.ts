@@ -7,6 +7,7 @@ import { ForgotPassword } from "../models/User/Dto/ForgotPassword";
 import { ForgotPasswordEmailDto } from "../models/User/Dto/ForgotPasswordEmailDto";
 import { User } from "../models/User/User";
 import { UserForAdminDashboardDto } from "../models/User/Dto/UserForAdminDashboardDto";
+import { UserEditDto } from "../models/User/Dto/UserEditDto";
 
 
 
@@ -14,6 +15,7 @@ export default class UserStore {
     user: LogInResponseObject | null=null;
     userRegistry = new Map<string,User>();
     selectedUser:User |undefined = undefined;
+    userForEdit: UserEditDto | undefined = undefined;
     editMode =false;
     loading = false;
     loadingInitial = false;
@@ -60,13 +62,11 @@ export default class UserStore {
             
         }
     }
-    updateUser = async (user:User)=>{
+    updateUser = async (user:UserEditDto)=>{
         this.loading= true;
         try{
             await agent.Users.update(user);
             runInAction(()=>{
-                this.userRegistry.set(user.id!,user);
-                this.selectedUser=user;
                 this.editMode=false;
                 this.loading=false;
                 
@@ -122,6 +122,24 @@ export default class UserStore {
             }
         }
     }
+    loadUserForEdit = async (id:string)=>{
+            try{
+                var user = await  agent.Users.getUserByIdForEdit(id);
+                if(user != null){
+                runInAction(()=>{
+                    this.userForEdit=user!;
+                })
+                this.setLoadingInitial(false);
+                return user;
+            }else{
+                return console.log("No user was retrived");
+            }
+            }catch(error){
+                console.log(error);
+                this.setLoadingInitial(false);
+            }
+        
+    }
     private getUser = (id:string)=>{
         return this.userRegistry.get(id);
     }
@@ -129,6 +147,8 @@ export default class UserStore {
    private setUser = (user:User)=>{
         this.userRegistry.set(user.id!,user);
  }
+
+
 
     login = async (creds: LogInResponseObject)=>{
         try{

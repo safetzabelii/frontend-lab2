@@ -86,7 +86,11 @@ function handleUserDelete(e:SyntheticEvent<HTMLButtonElement>,id:string){
                       {user.role}
                     </td>
                     <td className="px-6 py-4 text-center whitespace-nowrap text-sm font-medium text-gray-900">
-                      {user.isEmailVerified}
+                    {user.isEmailVerified ? (
+                  <label className="inline-block px-8 py-2 mb-4 ml-auto font-bold leading-normal text-center text-white align-middle transition-all ease-in bg-green-700 border-0 rounded-lg shadow-md cursor-pointer text-xs tracking-tight-rem hover:shadow-xs hover:-translate-y-px active:opacity-85">Verified</label>
+  ):
+                 ( <label className="inline-block px-8 py-2 mb-4 ml-auto font-bold leading-normal text-center text-white align-middle transition-all ease-in bg-red-700 border-0 rounded-lg shadow-md cursor-pointer text-xs tracking-tight-rem hover:shadow-xs hover:-translate-y-px active:opacity-85">Not Verified</label>
+)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <div className="flex items-center justify-center space-x-10">
