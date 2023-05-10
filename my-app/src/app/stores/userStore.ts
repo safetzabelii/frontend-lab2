@@ -48,8 +48,8 @@ export default class UserStore {
     }
     loadUsers = async () => {
         try{
-            const users = await agent.Users.list();
-            users.forEach((user:User)=>{
+            const response = await agent.Users.list();
+            response.data.forEach((user:User)=>{
                 this.setUser(user);
             })
             this.setLoadingInitial(false);

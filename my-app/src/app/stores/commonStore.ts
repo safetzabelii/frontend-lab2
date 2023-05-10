@@ -1,6 +1,7 @@
 import Cookies from "js-cookie";
 import { makeAutoObservable, reaction } from "mobx";
 import * as forge from 'node-forge';
+import { ServerError } from "../models/Error/ServerError";
 
 
 export default class CommonStore{
@@ -9,7 +10,7 @@ export default class CommonStore{
     changePasswordToken: string | null = null;
     userId: string | null = null;
     appLoaded = false;
-
+    error: ServerError | null = null;
     constructor(){
         makeAutoObservable(this);
 
@@ -40,7 +41,9 @@ export default class CommonStore{
             }
           );
     }
-
+    setServerError = (error: ServerError) =>{
+      this.error = error;
+    }
     setToken = (token: string | null) =>{
         this.token = token;
     }

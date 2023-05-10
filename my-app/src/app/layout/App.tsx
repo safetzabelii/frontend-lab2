@@ -34,6 +34,7 @@ import ListOffers from '../../features/admin/offers/listOffers';
 import ListUsers from '../../features/admin/users/listUsers';
 import UserDetails from '../../features/admin/users/userDetails';
 import ListMenus from '../../features/admin/menu/listMenus';
+import ErrorFlashCard from './common/ErrorFlashCard';
 
 
 function App() {
@@ -50,6 +51,7 @@ function App() {
 
   return (
    <BrowserRouter>
+   <ErrorFlashCard/>
    <ModalContainer/>
     <div className="flex flex-row h-screen">
       <Routes>

@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import { Menu } from "../models/Menu/Menu";
 import { MenuItem } from "../models/Menu/MenuItem";
 import { Offer } from "../models/Menu/Offer";
@@ -17,13 +17,63 @@ import { config } from "process";
 import { ForgotPasswordEmailResponseDto } from "../models/User/Dto/ForgotPasswordEmailResponseDto";
 import { OfferDto } from "../models/Menu/OfferDto";
 import { UserEditDto } from "../models/User/Dto/UserEditDto";
+import { store } from "../stores/store";
+import apiUtils from "../stores/apiUtils";
+import { toast } from "react-toastify";
 
 
 
+interface ErrorResponseData {
+  statusCode : number;
+  errors: { [key: string]: string[] };
+}
 axios.defaults.baseURL = "http://localhost:7017/api";
 
 const responseBody = (response: AxiosResponse) => response.data;
 
+axios.interceptors.response.use(async (response) => {
+  return response;
+},(error:AxiosError<ErrorResponseData>)=>{
+const {data,status,config}= error.response! ;
+
+switch(status){
+  case 400:
+    if(typeof data === 'string'){
+      toast.error(data);
+    }
+      toast.error('bad-request');
+      if(config.method === 'get' && data.errors.hasOwnProperty('id')){
+        return 'error';
+      }
+      if(data.errors){
+      const modalStateErrors = [];
+      for(const key in data.errors){
+        if(data.errors[key]){
+          modalStateErrors.push(data.errors[key])
+        }
+      }
+      throw modalStateErrors.flat();
+
+    }else{
+      toast.error(JSON.stringify(data));
+    }
+      break;
+      case 401:
+      toast.error('Unauthorized');
+      store.commonStore.setServerError(data);
+      break;
+      case 404:
+        toast.error('Not Found');
+        store.commonStore.setServerError(data);
+      break;
+      case 500:
+        toast.error('Server Error');
+      store.commonStore.setServerError(data);
+      break;
+}
+return Promise.reject(Error);
+}
+);
 const request = {
 
     get: <T>(url: string) => axios.get<T>(url).then(responseBody),
