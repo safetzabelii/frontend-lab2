@@ -8,6 +8,10 @@ import { ForgotPasswordEmailDto } from "../models/User/Dto/ForgotPasswordEmailDt
 import { User } from "../models/User/User";
 import { UserForAdminDashboardDto } from "../models/User/Dto/UserForAdminDashboardDto";
 import { UserEditDto } from "../models/User/Dto/UserEditDto";
+import { toast } from "react-toastify";
+import { AxiosError } from "axios";
+import { ServerError } from "../models/Error/ServerError";
+import { NavigateFunction, useNavigate } from "react-router-dom";
 
 
 
@@ -19,16 +23,20 @@ export default class UserStore {
     editMode =false;
     loading = false;
     loadingInitial = false;
+    
 
 
 
-    constructor(){
-        makeAutoObservable(this)
+    constructor()
+    {
+        makeAutoObservable(this)  
     }
+    
     get UserByName(){
         return Array.from(this.userRegistry.values()).sort((a,b) =>{
             let fa = a.name.toLowerCase(),
                 fb = b.name.toLowerCase();
+                
 
                 if(fa<fb){
                     return -1;
@@ -65,7 +73,7 @@ export default class UserStore {
     updateUser = async (user:UserEditDto)=>{
         this.loading= true;
         try{
-            await agent.Users.update(user);
+            var result = await agent.Users.update(user);
             runInAction(()=>{
                 this.editMode=false;
                 this.loading=false;
@@ -82,12 +90,11 @@ export default class UserStore {
     deleteUser = async(id:string)=>{
         this.loading=true;
         try{
-            await agent.Users.delete(id);
+            var result = await agent.Users.delete(id);
             runInAction(()=>{
                 this.userRegistry.delete(id);
                 this.loading=false;
             })
-
         }catch(error){
             console.log(error);
             runInAction(()=>{
@@ -100,42 +107,41 @@ export default class UserStore {
         let user = this.getUser(id);
         if(user){
             this.selectedUser = user;
+            
             return user;
         }
         else{
             this.loadingInitial=true;
             try{
-                user = await  agent.Users.details(id);
-                if(user != null){
-                this.setUser(user);
+                var result = await  agent.Users.details(id);
+                if(result.data != null){
+                this.setUser(result.data);
                 runInAction(()=>{
-                    this.selectedUser=user!;
+                    this.selectedUser=result.data!;
                 })
                 this.setLoadingInitial(false);
-                return user;
+                return result.data;
             }else{
                 return console.log("No user was retrived");
             }
-            }catch(error){
-                console.log(error);
+            }catch(error:AxiosError<ServerError>|any){
                 this.setLoadingInitial(false);
             }
         }
     }
     loadUserForEdit = async (id:string)=>{
             try{
-                var user = await  agent.Users.getUserByIdForEdit(id);
-                if(user != null){
+                var result = await  agent.Users.getUserByIdForEdit(id);
+                if(result.data != null){
                 runInAction(()=>{
-                    this.userForEdit=user!;
+                    this.userForEdit=result.data!;
                 })
                 this.setLoadingInitial(false);
-                return user;
+                return result.data;
             }else{
                 return console.log("No user was retrived");
             }
-            }catch(error){
-                console.log(error);
+            }catch(error:AxiosError<ServerError>|any){
                 this.setLoadingInitial(false);
             }
         
@@ -152,11 +158,11 @@ export default class UserStore {
 
     login = async (creds: LogInResponseObject)=>{
         try{
-            const user = await agent.Users.logIn(creds);
-            const token = user.token;
+            const result = await agent.Users.logIn(creds);
+            const token = result.data.token;
             store.commonStore.setToken(token);
             runInAction(()=>{
-            this.user = user;
+            this.user = result.data;
             })
         }catch(error){
             throw error;
@@ -179,8 +185,8 @@ export default class UserStore {
             const result = await agent.Users.verifyEmail(token);
             store.commonStore.setVerificationToken(null);
             window.localStorage.removeItem('vft');
-            if(result != null){
-                console.log(result);
+            if(result.data != null){
+                console.log(result.data);
             }
             
         }
@@ -192,8 +198,8 @@ export default class UserStore {
     sendForgotPasswordEmail = async (email: ForgotPasswordEmailDto)=>{
         try{
             const result = await agent.Users.sendForgotPasswordEmail(email);
-            if(result !=null){
-                store.commonStore.setCookies(result.userId,result.encryptedToken,result.key,result.iv);
+            if(result.data !=null){
+                store.commonStore.setCookies(result.data.userId,result.data.encryptedToken,result.data.key,result.data.iv);
         }
         else{
             console.log("The email was not sent");
@@ -214,7 +220,7 @@ export default class UserStore {
             window.localStorage.removeItem('userId');
             store.commonStore.setUserId(null);
             window.localStorage.removeItem('cpt');
-            return result;
+            return result.data;
         }
         catch(error){
             console.log(error);
@@ -229,8 +235,8 @@ export default class UserStore {
     }
     getAllUsersForAdminDashboardDisplay= async ()=>{
         try{
-            const users = await agent.Users.getAllUsersForAdminDashboardDisplay();
-            users.forEach((user:UserForAdminDashboardDto)=>{
+            const response = await agent.Users.getAllUsersForAdminDashboardDisplay();
+            response.data.forEach((user:UserForAdminDashboardDto)=>{
                 this.setUser(user);
             })
             this.setLoadingInitial(false);

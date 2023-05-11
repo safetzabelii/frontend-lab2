@@ -25,13 +25,19 @@ export default observer(function UserDetails() {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     if (id != null) {
-      loadUserForEdit(id).then((loadedUser: UserEditDto | void) => {
-        setUser(loadedUser!);
-        setLoading(false);
-      }).catch((error) => console.log(error));
+const fetchData = async () => {
+  try{
+    const loadedUser = await loadUserForEdit(id);
+      setUser(loadedUser!);
+      setLoading(false);
+  }catch(error){
+    console.log(error);
+  }
+};
+      fetchData();
       loadRolet();
     }
-  }, [id, loadUserForEdit, loadRolet]);
+  },[id]);
   function handleFormSubmit(user: UserEditDto) {
     updateUser(user).then(() => {
       navigate('/dashboard/listUsers')
@@ -44,7 +50,7 @@ export default observer(function UserDetails() {
               <div className="border-black/12.5 rounded-t-2xl border-b-0 border-solid p-6 pb-0">
                 <div className="flex items-center">
                   <p className="mb-0 dark:text-black/80">Edit Profile</p>
-                  {user.isEmailVerified ? (
+                  {user?.isEmailVerified ? (
                   <label className="inline-block px-8 py-2 mb-4 ml-auto font-bold leading-normal text-center text-white align-middle transition-all ease-in bg-green-700 border-0 rounded-lg shadow-md cursor-pointer text-xs tracking-tight-rem hover:shadow-xs hover:-translate-y-px active:opacity-85">Verified</label>
   ):
                  ( <label className="inline-block px-8 py-2 mb-4 ml-auto font-bold leading-normal text-center text-white align-middle transition-all ease-in bg-red-700 border-0 rounded-lg shadow-md cursor-pointer text-xs tracking-tight-rem hover:shadow-xs hover:-translate-y-px active:opacity-85">Not Verified</label>

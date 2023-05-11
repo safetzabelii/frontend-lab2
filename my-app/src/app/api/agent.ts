@@ -18,44 +18,31 @@ import { ForgotPasswordEmailResponseDto } from "../models/User/Dto/ForgotPasswor
 import { OfferDto } from "../models/Menu/OfferDto";
 import { UserEditDto } from "../models/User/Dto/UserEditDto";
 import { store } from "../stores/store";
-import apiUtils from "../stores/apiUtils";
 import { toast } from "react-toastify";
+import { ServerError } from "../models/Error/ServerError";
 
 
-
-interface ErrorResponseData {
-  statusCode : number;
-  errors: { [key: string]: string[] };
-}
 axios.defaults.baseURL = "http://localhost:7017/api";
 
 const responseBody = (response: AxiosResponse) => response.data;
 
 axios.interceptors.response.use(async (response) => {
+  console.log(response.data.message)
+  if(response.data.message !== null){
+    toast.success(response.data.message);
+  }
   return response;
-},(error:AxiosError<ErrorResponseData>)=>{
-const {data,status,config}= error.response! ;
-
+},(error:AxiosError<ServerError>)=>{
+const {data,status,config}= error.response! 
 switch(status){
   case 400:
-    if(typeof data === 'string'){
-      toast.error(data);
-    }
-      toast.error('bad-request');
-      if(config.method === 'get' && data.errors.hasOwnProperty('id')){
-        return 'error';
-      }
+    if(typeof data === 'object'){
       if(data.errors){
-      const modalStateErrors = [];
-      for(const key in data.errors){
-        if(data.errors[key]){
-          modalStateErrors.push(data.errors[key])
-        }
+      toast.error(data.errors[0]);
       }
-      throw modalStateErrors.flat();
-
-    }else{
-      toast.error(JSON.stringify(data));
+    }
+    else{
+      toast.error("Bad Request");
     }
       break;
       case 401:

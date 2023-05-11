@@ -9,6 +9,7 @@ import OrderStore from "./orderStore";
 import OrderItemStore from "./orderItemStore";
 import CommonStore from "./commonStore";
 import ModalStore from "./modalStore";
+import { NavigateFunction } from "react-router-dom";
 
 
 

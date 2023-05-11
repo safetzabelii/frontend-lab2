@@ -34,8 +34,8 @@ import ListOffers from '../../features/admin/offers/listOffers';
 import ListUsers from '../../features/admin/users/listUsers';
 import UserDetails from '../../features/admin/users/userDetails';
 import ListMenus from '../../features/admin/menu/listMenus';
-import ErrorFlashCard from './common/ErrorFlashCard';
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const verificationToken = store.commonStore.verificationToken;
@@ -50,17 +50,21 @@ function App() {
 
 
   return (
+    <>
+   <ToastContainer position="top-right" hideProgressBar />
    <BrowserRouter>
-   <ErrorFlashCard/>
    <ModalContainer/>
     <div className="flex flex-row h-screen">
+    
       <Routes>
         <Route  path={"/*"} element={<>
           
             <AdminNavbar/>
+            
             <div className="flex-1">
          
         <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+        
           <Routes>
           {
           /*
@@ -127,6 +131,8 @@ function App() {
       </Routes>
       </div>
     </BrowserRouter>
+    
+    </>
     
   );
 }

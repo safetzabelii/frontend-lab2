@@ -37,7 +37,7 @@ const Signup = () => {
     surname: '',
     email: '',
     password: '',
-    roleId: 1,
+    roleId: 2,
     isEmailVerified:false,
     accountVerificationToken: '',
   };
