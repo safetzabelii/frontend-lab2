@@ -5,4 +5,6 @@ interface Restaurant {
     address: string;
     phoneNumber: string;
     image: string;
+    files:string;
+    imagePath:string;
   }

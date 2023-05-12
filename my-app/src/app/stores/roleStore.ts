@@ -41,8 +41,8 @@ export default class roleStore{
                 this.editMode=false;
                 this.loading=false;
             })
+        
         }catch(error){
-            console.log(error);
             runInAction(()=>{
                 this.loading=false;
             })
@@ -53,17 +53,14 @@ export default class roleStore{
 
     loadRolet = async () => {
         try{
-            const roles = await agent.Roles.list();
-            roles.forEach((role:Role)=>{
+            const result = await agent.Roles.list();
+            result.data.forEach((role:Role)=>{
                 this.setRole(role);
             })
             this.setLoadingInitial(false);
         }catch(error){
             
             this.setLoadingInitial(false);
-           
-            
-            console.log(error);
             
         }
     }
@@ -71,15 +68,15 @@ export default class roleStore{
         this.loading= true;
         try{
             await agent.Roles.update(role);
-            runInAction(()=>{
-                this.roleRegistry.set(role.id!,role);
-                this.selectedRole=role;
-                this.editMode=false;
-                this.loading=false;
-                
-            })
+                runInAction(()=>{
+                    this.roleRegistry.set(role.id!,role);
+                    this.selectedRole=role;
+                    this.editMode=false;
+                    this.loading=false;
+                    
+                })
+           
         }catch(error){
-            console.log(error);
             runInAction(()=>{
                 this.loading=false;
             })
@@ -90,13 +87,11 @@ export default class roleStore{
         this.loading=true;
         try{
             await agent.Roles.delete(id);
-            runInAction(()=>{
-                this.roleRegistry.delete(id);
-                this.loading=false;
-            })
-
+                runInAction(()=>{
+                    this.roleRegistry.delete(id);
+                    this.loading=false;
+                })
         }catch(error){
-            console.log(error);
             runInAction(()=>{
                 this.loading=false;
             })
@@ -112,19 +107,14 @@ export default class roleStore{
         else{
             this.loadingInitial=true;
             try{
-                role = await  agent.Roles.details(id);
-                if(role != null){
-                this.setRole(role);
+                var result = await  agent.Roles.details(id);
+                this.setRole(result.data);
                 runInAction(()=>{
                     this.selectedRole=role!;
                 })
                 this.setLoadingInitial(false);
                 return role;
-            }else{
-                return console.log("No role was retrived");
-            }
             }catch(error){
-                console.log(error);
                 this.setLoadingInitial(false);
             }
         }

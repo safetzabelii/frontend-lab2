@@ -5,6 +5,7 @@ import { useStore } from '../../../app/stores/store';
 import { ErrorMessage, Field, Form, Formik, useFormik } from 'formik';
 import { User } from '../../../app/models/User/User';
 import { UserEditDto } from '../../../app/models/User/Dto/UserEditDto';
+import Navbar from '../../../app/layout/navbar';
 
 
 export default observer(function UserDetails() {
@@ -25,19 +26,19 @@ export default observer(function UserDetails() {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     if (id != null) {
-const fetchData = async () => {
-  try{
-    const loadedUser = await loadUserForEdit(id);
-      setUser(loadedUser!);
-      setLoading(false);
-  }catch(error){
-    console.log(error);
-  }
-};
-      fetchData();
-      loadRolet();
+      loadUserForEdit(id).then((loadedUser: UserEditDto | void) => {
+        if(loadedUser != null){
+          setUser(loadedUser!);
+          setLoading(false);
+          loadRolet();
+        }
+        else{
+          navigate('/dashboard/listUsers');
+        }
+        
+      });
     }
-  },[id]);
+  }, [id]);
   function handleFormSubmit(user: UserEditDto) {
     updateUser(user).then(() => {
       navigate('/dashboard/listUsers')

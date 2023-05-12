@@ -8,10 +8,11 @@ import RestaurantCreateForm from './restaurantCreateForm';
 export default observer(function ListRestaurants() {
   const { restaurantStore, modalStore } = useStore();
   const [target, setTarget] = useState('');
-  const { restaurantsByName, loading, loadRestaurants, deleteRestaurant } = restaurantStore;
+  const { restaurantsByName, loading, loadRestaurants, deleteRestaurant,getRestaurants } = restaurantStore;
 
   useEffect(() => {
     loadRestaurants().catch((error) => console.log(error));
+    
   }, [loadRestaurants]);
 
   function openCreateForm() {
@@ -78,7 +79,7 @@ export default observer(function ListRestaurants() {
                                 </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
-                                {restaurantsByName.map((restaurant) => (
+                                {getRestaurants.map((restaurant) => (
                                     <tr key={restaurant.id}>
                                         <td className="px-6 py-4 whitespace-nowrap text-center">
                                             <div className="flex items-center">
@@ -105,7 +106,19 @@ export default observer(function ListRestaurants() {
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="flex items-center">
                                                 <div className="ml-4">
-                                                <div className="text-sm text-gray-500">{restaurant.image}</div>                                               
+                                                <div className="text-sm text-gray-500">
+                                                <img
+                                                    src={`data:image/jpeg;base64,${restaurant.imagePath}`}
+                                                    alt="Restaurant Image"
+                                                    style={{
+                                                        width: '50px', 
+                                                        height: '50px', 
+                                                        borderRadius: '50%', 
+                                                        objectFit: 'cover', 
+                                                    }}
+                                                />
+                                                <label>{restaurant.image}</label>
+                                                </div>                                               
                                                 </div>
                                             </div>
                                         </td>

@@ -20,6 +20,7 @@ import { UserEditDto } from "../models/User/Dto/UserEditDto";
 import { store } from "../stores/store";
 import { toast } from "react-toastify";
 import { ServerError } from "../models/Error/ServerError";
+import { Server } from "http";
 
 
 axios.defaults.baseURL = "http://localhost:7017/api";
@@ -27,13 +28,13 @@ axios.defaults.baseURL = "http://localhost:7017/api";
 const responseBody = (response: AxiosResponse) => response.data;
 
 axios.interceptors.response.use(async (response) => {
-  console.log(response.data.message)
   if(response.data.message !== null){
     toast.success(response.data.message);
   }
   return response;
 },(error:AxiosError<ServerError>)=>{
 const {data,status,config}= error.response! 
+console.log(data);
 switch(status){
   case 400:
     if(typeof data === 'object'){
@@ -46,16 +47,35 @@ switch(status){
     }
       break;
       case 401:
-      toast.error('Unauthorized');
-      store.commonStore.setServerError(data);
+        if(typeof data === 'object'){
+          if(data.errors){
+          toast.error(data.errors[0]);
+          }
+        }
+        else{
+          toast.error("Unauthorized");
+        }
       break;
       case 404:
-        toast.error('Not Found');
-        store.commonStore.setServerError(data);
+        if(typeof data === 'object'){
+          if(data.errors){
+          toast.error(data.errors[0]);
+          }
+        }
+        else{
+          toast.error("Not Found");
+        }
       break;
       case 500:
-        toast.error('Server Error');
-      store.commonStore.setServerError(data);
+        if(typeof data === 'object'){
+
+          if(data.errors){
+          toast.error(data.errors[0]);
+          }
+        }
+        else{
+          toast.error("Server Error");
+        }
       break;
 }
 return Promise.reject(Error);
@@ -113,21 +133,21 @@ const OrderItems = {
 const Restaurants = {
     list: () => request.get<Restaurant[]>("/Restaurant"),
     details: (id: string) => request.get<Restaurant>(`/Restaurant/${id}`),
-    create: (restaurant: Restaurant) => axios.post<void>("/Restaurant", restaurant),
+    create: (restaurant: FormData) => axios.post<void>("/Restaurant", restaurant),
     update: (restaurant: Restaurant) => axios.put<void>(`/Restaurant/${restaurant.id}`, restaurant),
     delete: (id: string) => axios.delete<void>(`/Restaurant/${id}`),
     };
 const Roles = {
     list: () => request.get<Role[]>("/Role/GetAllRoles"),
     details: (id: string) => request.get<Role>(`/Role/GetRole/${id}`),
-    create: (role: Role) => axios.post<void>("/Role/CreateRole", role),
-    update: (role: Role) => axios.put<void>("/Role/EditRole", role),
-    delete: (id: string) => axios.delete<void>(`/Role/DeleteRole/${id}`),
+    create: (role: Role) => axios.post<ServerError>("/Role/CreateRole", role),
+    update: (role: Role) => axios.put<ServerError>("/Role/EditRole", role),
+    delete: (id: string) => axios.delete<ServerError>(`/Role/DeleteRole/${id}`),
     };
     const Users = {
         list: () => request.get<User[]>("User/GetAllUsers"),
         details: (id: string) => request.get<User>(`User/GetUser/${id}`),
-        create: (user: SignUp) => axios.post<void>("/User/SignUp", user),
+        create: (user: SignUp) => axios.post<ServerError>("/User/SignUp", user),
         update: (user: UserEditDto) => axios.put<void>(`/User/EditUser/`, user),
         delete: (id: string) => axios.delete<void>(`/User/DeleteUser/${id}`),
         logIn: (user: LogInResponseObject) => request.post<LogInResponseObject>("/User/LogIn", user),

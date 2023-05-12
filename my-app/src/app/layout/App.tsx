@@ -46,12 +46,15 @@ function App() {
   if (cookies) {
     token = cookies.token;  
   }
-
-
-
+  
   return (
     <>
-   <ToastContainer position="top-right" hideProgressBar />
+   <ToastContainer 
+   position="top-right" 
+   hideProgressBar
+   autoClose={2000}
+ 
+/>
    <BrowserRouter>
    <ModalContainer/>
     <div className="flex flex-row h-screen">

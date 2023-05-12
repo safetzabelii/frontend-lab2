@@ -73,7 +73,7 @@ export default class UserStore {
     updateUser = async (user:UserEditDto)=>{
         this.loading= true;
         try{
-            var result = await agent.Users.update(user);
+            await agent.Users.update(user);
             runInAction(()=>{
                 this.editMode=false;
                 this.loading=false;
@@ -90,7 +90,7 @@ export default class UserStore {
     deleteUser = async(id:string)=>{
         this.loading=true;
         try{
-            var result = await agent.Users.delete(id);
+            await agent.Users.delete(id);
             runInAction(()=>{
                 this.userRegistry.delete(id);
                 this.loading=false;
@@ -170,9 +170,9 @@ export default class UserStore {
     }
     signup = async (creds: SignUp)=>{
         try{
-            const user = await agent.Users.create(creds);
-            if(user.data != null){
-            store.commonStore.setVerificationToken(user.data);
+            const result = await agent.Users.create(creds);
+            if(result.data.data != null){
+            store.commonStore.setVerificationToken(result.data.data);
             }
         }
         catch(error){

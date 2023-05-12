@@ -37,14 +37,12 @@ const Signup = () => {
     surname: '',
     email: '',
     password: '',
-    roleId: 2,
+    roleId: 0,
     isEmailVerified:false,
     accountVerificationToken: '',
   };
 
   const onSubmit = (values: any, { setSubmitting }: any) => {
-    console.log('hello');
-    console.log(values);
     signup(values).then(()=>navigate("/verifyaccount"));
     setSubmitting(false);
   };

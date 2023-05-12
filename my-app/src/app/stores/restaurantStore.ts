@@ -49,12 +49,12 @@ restaurantRegistry = new Map<string,Restaurant>();
     setLoadingInitial = (state: boolean)=>{
         this.loadingInitial=state;
     }
-    createRestaurant = async (restaurant:Restaurant)=>{
+    createRestaurant = async (restaurant:FormData)=>{
         this.loading=true;
         try{
             await agent.Restaurants.create(restaurant);
             runInAction(()=>{
-                this.restaurantRegistry.set(restaurant.id!,restaurant);
+                //this.restaurantRegistry.set(restaurant.id!,restaurant);
                 this.editMode=false;
                 this.loading=false;
             })
@@ -112,6 +112,7 @@ restaurantRegistry = new Map<string,Restaurant>();
             this.loadingInitial=true;
             try{
                 restaurant = await  agent.Restaurants.details(id);
+                
                 this.setRestaurant(restaurant!);
                 runInAction(()=>{
                     this.selectedRestaurant=restaurant;

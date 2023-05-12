@@ -22,6 +22,8 @@ export default observer(function RestaurantCreateForm(){
     address: '',
     phoneNumber: '',
     image: '',
+    files:'',
+    imagePath:'',
   });
 
   const validationSchema = Yup.object({
@@ -29,10 +31,16 @@ export default observer(function RestaurantCreateForm(){
   });
   
   function handleFormSubmit(restaurant: Restaurant){
-    let newRestaurant = {
-      ...restaurant,
-    }
-    createRestaurant(newRestaurant).then(()=>navigate('dashboard/listRestaurants')); 
+    const formData = new FormData();
+    formData.append('name',restaurant.name);
+    formData.append('address',restaurant.address);
+    formData.append('phoneNumber',restaurant.phoneNumber);
+    formData.append('files',(document.getElementById('files') as HTMLInputElement).files![0]);
+    formData.append('image','test');
+    formData.append('imagePath','test');
+
+
+    createRestaurant(formData).then(()=>navigate('dashboard/listRestaurants')); 
   }
 
   return (
@@ -43,7 +51,7 @@ export default observer(function RestaurantCreateForm(){
           validationSchema={validationSchema}
         >
           {formik => (
-            <Form className="mt-6">
+            <Form className="mt-6" encType="multipart/form-data">
               <div className="mb-4">
               <label className="block text-white font-bold mb-2" htmlFor="name">
               Name:
@@ -93,18 +101,19 @@ export default observer(function RestaurantCreateForm(){
               className="text-red-500 text-sm mt-1"
             />
 
-            <label className="block text-white font-bold mb-2" htmlFor="image">
+            <label className="block text-white font-bold mb-2" htmlFor="files">
               Image:
             </label>
             <Field
               className="border border-gray-400 p-2 w-full rounded-md"
-              type="text"
-              name="image"
-              id="image"
-              placeholder="Enter restaurant image"
+              type="file"
+              name="files"
+              id="files"
+              placeholder="Upload restaurant image"
+              accept="*"
             />
             <ErrorMessage
-              name="image"
+              name="files"
               component="div"
               className="text-red-500 text-sm mt-1"
             />

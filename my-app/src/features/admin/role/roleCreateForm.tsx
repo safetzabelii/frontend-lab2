@@ -10,7 +10,7 @@ import { useStore } from '../../../app/stores/store';
 import { Role } from '../../../app/models/Role/Role';
 
 export default observer(function RoleCreateForm(){
-  const {roleStore} = useStore();
+  const {roleStore,modalStore} = useStore();
   const navigate = useNavigate();
 
   const{createRole}=roleStore;
@@ -27,7 +27,9 @@ export default observer(function RoleCreateForm(){
     let newRole = {
       ...role,
     }
-    createRole(newRole).then(()=>navigate('/listRoles')); 
+    createRole(newRole).then(()=>{
+      modalStore.closeModal();
+      navigate('/dashboard/listRoles')}); 
   }
 
   return (
