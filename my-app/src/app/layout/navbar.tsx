@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { FaHome, FaEllipsisV, FaSignInAlt, FaUserPlus, FaLanguage, FaListAlt } from "react-icons/fa";
 import { useStore } from "../stores/store";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [isLanguageOpen, setIsLanguageOpen] = useState(false);
   const {userStore} = useStore();
   const {logout} = userStore;
   const [isMoreOpen, setIsMoreOpen] = useState(false);
+  const navigate = useNavigate();
 
-
- 
+  const handleLogout = () => {
+    logout()
+    navigate("/login");
+  };
   
 
   return (
@@ -92,7 +96,7 @@ const Navbar = () => {
         </div>
         {userStore.isLoggedIn ? (
   <>
-    <button onClick={logout} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-8">
+    <button onClick={handleLogout} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-8">
       Log out
     </button>
 

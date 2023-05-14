@@ -8,7 +8,6 @@ import { ForgotPasswordEmailDto } from "../models/User/Dto/ForgotPasswordEmailDt
 import { User } from "../models/User/User";
 import { UserForAdminDashboardDto } from "../models/User/Dto/UserForAdminDashboardDto";
 import { UserEditDto } from "../models/User/Dto/UserEditDto";
-import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 import { ServerError } from "../models/Error/ServerError";
 import { NavigateFunction, useNavigate } from "react-router-dom";
@@ -54,6 +53,8 @@ export default class UserStore {
         const token = window.localStorage.getItem('jwt');
         return !!token;
     }
+
+
     loadUsers = async () => {
         try{
             const response = await agent.Users.list();
@@ -163,6 +164,18 @@ export default class UserStore {
             store.commonStore.setToken(token);
             runInAction(()=>{
             this.user = result.data;
+            })
+        }catch(error){
+            throw error;
+        }
+    }
+    getCurrentUser = async(token:string)=>{
+        try{
+            const result = await agent.Users.getCurrentUser(token); 
+            runInAction(()=>{
+                if(result.data.data != null){
+                this.user = result.data.data as unknown as LogInResponseObject;
+            }
             })
         }catch(error){
             throw error;

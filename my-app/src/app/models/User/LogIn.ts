@@ -7,6 +7,6 @@ export interface LogIn {
   export interface LogInResponseObject{
     id: string,
     email: string,
-    roleId : number,
+    role : string,
     token:string
   }

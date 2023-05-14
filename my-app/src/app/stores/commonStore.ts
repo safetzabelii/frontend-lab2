@@ -44,6 +44,9 @@ export default class CommonStore{
     setServerError = (error: ServerError) =>{
       this.error = error;
     }
+    get getToken(){
+      return this.token
+  }
     setToken = (token: string | null) =>{
         this.token = token;
     }

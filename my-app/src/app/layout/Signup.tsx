@@ -36,10 +36,7 @@ const Signup = () => {
     name: '',
     surname: '',
     email: '',
-    password: '',
-    roleId: 0,
-    isEmailVerified:false,
-    accountVerificationToken: '',
+    password: ''
   };
 
   const onSubmit = (values: any, { setSubmitting }: any) => {

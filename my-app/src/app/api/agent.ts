@@ -157,6 +157,7 @@ const Roles = {
         sendForgotPasswordEmail : (email: ForgotPasswordEmailDto) => request.post<ForgotPasswordEmailResponseDto>("/User/SendForgotPasswordEmail",email),
         getAllUsersForAdminDashboardDisplay: () => request.get<User[]>("/User/GetAllUsersForAdminDashboardDisplay"),
         getUserByIdForEdit: (id:string) => request.get<UserEditDto>(`/User/GetUserForEdit/${id}`),
+        getCurrentUser:(token: string) => axios.post<ServerError>(`/User/GetCurrentUser/${token}`),
     }
         
   const agent = {
