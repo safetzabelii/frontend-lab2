@@ -1,10 +1,12 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
 import { Restaurant } from "../models/Menu/Restaurant";
+import { ReducerStateWithoutAction } from "react";
 
 export default class RestaurantStore{
 restaurantRegistry = new Map<string,Restaurant>();
     selectedRestaurant:Restaurant |undefined = undefined;
+    createdRestaurant:Restaurant|undefined = undefined;
     editMode =false;
     loading = false;
     loadingInitial = false;
@@ -30,8 +32,8 @@ restaurantRegistry = new Map<string,Restaurant>();
     loadRestaurants = async () => {
         this.setLoadingInitial(true);
         try{
-            const restaurants = await agent.Restaurants.list();
-            restaurants.forEach((restaurant: Restaurant)=>{
+            const result = await agent.Restaurants.list();
+            result.data.forEach((restaurant: Restaurant)=>{
                 this.setRestaurant(restaurant);
             })
             runInAction(() => {
@@ -52,9 +54,13 @@ restaurantRegistry = new Map<string,Restaurant>();
     createRestaurant = async (restaurant:FormData)=>{
         this.loading=true;
         try{
-            await agent.Restaurants.create(restaurant);
+            const response = await agent.Restaurants.create(restaurant);
+
             runInAction(()=>{
-                //this.restaurantRegistry.set(restaurant.id!,restaurant);
+                if(response.data.data != null){
+                    this.createdRestaurant= response.data.data as Restaurant;
+                this.restaurantRegistry.set(this.createdRestaurant.id!,this.createdRestaurant);
+                 }
                 this.editMode=false;
                 this.loading=false;
             })
@@ -66,13 +72,16 @@ restaurantRegistry = new Map<string,Restaurant>();
             
         }
     }
-    updateRestaurant = async (restaurant:Restaurant)=>{
+    updateRestaurant = async (restaurant:FormData)=>{
         this.loading= true;
         try{
-            await agent.Restaurants.update(restaurant);
+            const response = await agent.Restaurants.update(restaurant);
             runInAction(()=>{
-                this.restaurantRegistry.set(restaurant.id!,restaurant);
-                this.selectedRestaurant=restaurant;
+                if(response.data.data != null){
+                    this.createdRestaurant= response.data.data as Restaurant;
+                this.restaurantRegistry.set(this.createdRestaurant.id!,this.createdRestaurant);
+                 }
+                this.selectedRestaurant=this.createdRestaurant;
                 this.editMode=false;
                 this.loading=false;
                 
@@ -111,14 +120,18 @@ restaurantRegistry = new Map<string,Restaurant>();
         else{
             this.loadingInitial=true;
             try{
-                restaurant = await  agent.Restaurants.details(id);
-                
-                this.setRestaurant(restaurant!);
-                runInAction(()=>{
-                    this.selectedRestaurant=restaurant;
-                })
-                this.setLoadingInitial(false);
-                return restaurant;
+                var result = await  agent.Restaurants.details(id);
+                if(result.data !=null){
+                    this.setRestaurant(restaurant!);
+                    runInAction(()=>{
+                        this.selectedRestaurant=restaurant;
+                    })
+                    this.setLoadingInitial(false);
+                    return result.data;;
+                }
+                else{
+                    return console.log("No user was retrived");
+                }
             }catch(error){
                 console.log(error);
                 this.setLoadingInitial(false);

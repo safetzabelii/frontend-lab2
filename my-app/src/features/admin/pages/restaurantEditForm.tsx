@@ -1,7 +1,7 @@
 
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { FaCoffee } from 'react-icons/fa';
@@ -10,12 +10,14 @@ import { observer } from 'mobx-react';
 import { useStore } from '../../../app/stores/store';
 import { Restaurant } from '../../../app/models/Menu/Restaurant';
 
-export default observer(function RestaurantCreateForm(){
+interface Props {
+    id?: string;
+  }
+export default observer(function RestaurantEditForm(props: Props){
   const {restaurantStore,modalStore} = useStore();
+  const{loadRestaurant, updateRestaurant} =restaurantStore
   const navigate = useNavigate();
-
-  const{createRestaurant}=restaurantStore;
-
+  const [loading, setLoading] = useState(true);
   const [restaurant, setRestaurant] = useState<Restaurant>({
     id: '',
     name: '',
@@ -25,6 +27,14 @@ export default observer(function RestaurantCreateForm(){
     files:'',
     imagePath:'',
   });
+  useEffect(()=>{
+    if(props.id){
+        loadRestaurant(props.id).then((loadedRestaurant:Restaurant|void)=>{
+            setRestaurant(loadedRestaurant!);
+            setLoading(false);
+        })
+    }
+  },[props.id,loadRestaurant]);
 
   const validationSchema = Yup.object({
     name: Yup.string().required('Name is required'),
@@ -32,15 +42,12 @@ export default observer(function RestaurantCreateForm(){
   
   function handleFormSubmit(restaurant: Restaurant){
     const formData = new FormData();
+    formData.append('id',props.id!);
     formData.append('name',restaurant.name);
     formData.append('address',restaurant.address);
     formData.append('phoneNumber',restaurant.phoneNumber);
     formData.append('files',(document.getElementById('files') as HTMLInputElement).files![0]);
-    formData.append('image','test');
-    formData.append('imagePath','test');
-
-
-    createRestaurant(formData).then(()=>
+    updateRestaurant(formData).then(()=>
     {
       modalStore.closeModal();
       navigate('dashboard/listRestaurants')
@@ -51,6 +58,7 @@ export default observer(function RestaurantCreateForm(){
     
         <Formik
           initialValues={restaurant}
+          enableReinitialize
           onSubmit={handleFormSubmit}
           validationSchema={validationSchema}
         >

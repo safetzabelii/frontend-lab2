@@ -133,21 +133,21 @@ const OrderItems = {
 const Restaurants = {
     list: () => request.get<Restaurant[]>("/Restaurant"),
     details: (id: string) => request.get<Restaurant>(`/Restaurant/${id}`),
-    create: (restaurant: FormData) => axios.post<void>("/Restaurant", restaurant),
-    update: (restaurant: Restaurant) => axios.put<void>(`/Restaurant/${restaurant.id}`, restaurant),
+    create: (restaurant: FormData) => axios.post<ServerError<Restaurant>>("/Restaurant", restaurant),
+    update: (restaurant: FormData) => axios.put<ServerError<Restaurant>>('/Restaurant', restaurant),
     delete: (id: string) => axios.delete<void>(`/Restaurant/${id}`),
     };
 const Roles = {
     list: () => request.get<Role[]>("/Role/GetAllRoles"),
     details: (id: string) => request.get<Role>(`/Role/GetRole/${id}`),
-    create: (role: Role) => axios.post<ServerError>("/Role/CreateRole", role),
-    update: (role: Role) => axios.put<ServerError>("/Role/EditRole", role),
-    delete: (id: string) => axios.delete<ServerError>(`/Role/DeleteRole/${id}`),
+    create: (role: Role) => axios.post<ServerError<Role>>("/Role/CreateRole", role),
+    update: (role: Role) => axios.put<ServerError<string>>("/Role/EditRole", role),
+    delete: (id: string) => axios.delete<ServerError<string>>(`/Role/DeleteRole/${id}`),
     };
     const Users = {
         list: () => request.get<User[]>("User/GetAllUsers"),
         details: (id: string) => request.get<User>(`User/GetUser/${id}`),
-        create: (user: SignUp) => axios.post<ServerError>("/User/SignUp", user),
+        create: (user: SignUp) => axios.post<ServerError<string>>("/User/SignUp", user),
         update: (user: UserEditDto) => axios.put<void>(`/User/EditUser/`, user),
         delete: (id: string) => axios.delete<void>(`/User/DeleteUser/${id}`),
         logIn: (user: LogInResponseObject) => request.post<LogInResponseObject>("/User/LogIn", user),
@@ -157,7 +157,7 @@ const Roles = {
         sendForgotPasswordEmail : (email: ForgotPasswordEmailDto) => request.post<ForgotPasswordEmailResponseDto>("/User/SendForgotPasswordEmail",email),
         getAllUsersForAdminDashboardDisplay: () => request.get<User[]>("/User/GetAllUsersForAdminDashboardDisplay"),
         getUserByIdForEdit: (id:string) => request.get<UserEditDto>(`/User/GetUserForEdit/${id}`),
-        getCurrentUser:(token: string) => axios.post<ServerError>(`/User/GetCurrentUser/${token}`),
+        getCurrentUser:(token: string) => axios.post<ServerError<User>>(`/User/GetCurrentUser/${token}`),
     }
         
   const agent = {

@@ -35,6 +35,7 @@ import UserDetails from '../../features/admin/users/userDetails';
 import ListMenus from '../../features/admin/menu/listMenus';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import RestaurantEditForm from '../../features/admin/pages/restaurantEditForm';
 
 function App() {
   const verificationToken = store.commonStore.verificationToken;
@@ -52,6 +53,25 @@ function App() {
       userStore.getCurrentUser(token)
         .then(() => {
           setLoading(false);
+          if (userStore.user?.role === "Admin") {
+            const allContents = document.getElementById('allContents') as HTMLDivElement;
+            if (allContents) {
+              allContents.className = "h-screen";
+              allContents.style.display = 'flex';
+              allContents.style.justifyContent = 'space-evenly';
+            }
+          
+            const contentContainerWrapper = document.getElementById('contentContainerWrapper') as HTMLDivElement;
+            if (contentContainerWrapper) {
+              contentContainerWrapper.className = "flex-1";
+            }
+          
+            const contentContainer = document.querySelector('.contentContainer') as HTMLDivElement;
+            if (contentContainer) {
+              contentContainer.style.display = 'flex';
+              contentContainer.style.justifyContent = 'space-evenly';
+            }
+          }
         })
         .catch((error) => {
           console.log(error);
@@ -77,7 +97,7 @@ function App() {
    <BrowserRouter>
    <ModalContainer/>
     
-    
+    <div id="allContents">
     <Routes>
   <Route path={"/*"} element={<>
     {userStore.user?.role === "Admin" ? (
@@ -85,8 +105,8 @@ function App() {
     ) : (
         <Navbar />
     )}
-        
-
+        <div id="contentContainerWrapper">
+<div className="contentContainer">
           <Routes>
             {/* Routes for all users */}
             <Route element={<UserAlreadyLoggedInRoute />}>
@@ -125,12 +145,14 @@ function App() {
               <Route path="/dashboard/userDetails/:id" element={<UserDetails />} />
               <Route path="/dashboard/listUsers" element={<ListUsers />} />
               <Route path="/dashboard/listMenus" element={<ListMenus />} />
+              <Route path="/dashboard/restaurantEditForm" element={<RestaurantEditForm/>}/>
             </Route>
           </Routes>
-        {/* Close the additional divs for styling here */}
-      
+          </div>
+      </div>
   </>} />
 </Routes>
+</div>
     </BrowserRouter>
     
         </>

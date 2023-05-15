@@ -1,6 +1,6 @@
-export interface ServerError{
+export interface ServerError<T=unknown>{
     statusCode: number;
-    data?: string;
+    data?: T;
     errors?: string[] |null;
     message?:string|null;
 }

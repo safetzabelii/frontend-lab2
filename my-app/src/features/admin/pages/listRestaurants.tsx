@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { useStore } from '../../../app/stores/store';
 import { RiDeleteBinLine as TrashIcon, RiPencilLine as PencilIcon } from 'react-icons/ri';
 import RestaurantCreateForm from './restaurantCreateForm';
+import RestaurantEditForm from './restaurantEditForm';
 
 export default observer(function ListRestaurants() {
   const { restaurantStore, modalStore } = useStore();
@@ -123,9 +124,9 @@ export default observer(function ListRestaurants() {
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <Link to={`/restaurants/${restaurant.id}`} className="text-indigo-600 hover:text-indigo-900 mr-4">
+                                            <button type="button"onClick={()=>{modalStore.openModal("Update Restaurant", <RestaurantEditForm id={restaurant.id}/>)}} className="text-indigo-600 hover:text-indigo-900 mr-4">
                                             Edit
-                                            </Link>
+                                            </button>
                                             <button className="text-red-600 hover:text-red-900" onClick={(e) => handleRestaurantDelete(e, restaurant.id)}>
                                             Delete
                                             </button>
