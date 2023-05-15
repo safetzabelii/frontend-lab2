@@ -131,11 +131,12 @@ const OrderItems = {
         };     
 
 const Restaurants = {
-    list: () => request.get<Restaurant[]>("/Restaurant"),
-    details: (id: string) => request.get<Restaurant>(`/Restaurant/${id}`),
-    create: (restaurant: FormData) => axios.post<ServerError<Restaurant>>("/Restaurant", restaurant),
-    update: (restaurant: FormData) => axios.put<ServerError<Restaurant>>('/Restaurant', restaurant),
-    delete: (id: string) => axios.delete<void>(`/Restaurant/${id}`),
+    list: () => request.get<Restaurant[]>("/Restaurant/GetAllRestaurant"),
+    details: (id: string) => request.get<Restaurant>(`/Restaurant/GetRestaurant/${id}`),
+    create: (restaurant: FormData) => axios.post<ServerError<Restaurant>>("/Restaurant/CreateRestaurant", restaurant),
+    update: (restaurant: FormData) => axios.put<ServerError<Restaurant>>('/Restaurant/EditRestaurant', restaurant),
+    delete: (id: string) => axios.delete<void>(`/Restaurant/DeleteRestaurant/${id}`),
+    getRestaurantsForSelect: ()=>request.get<Restaurant[]>("/Restaurant/GetRestaurantsForSelect"),
     };
 const Roles = {
     list: () => request.get<Role[]>("/Role/GetAllRoles"),

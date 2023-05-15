@@ -5,6 +5,5 @@ export interface Menu {
     name: string;
     description: string;
     image: string;
-    restaurantId: number;
-    restaurant: Restaurant;
+    restaurantId: string;
   }

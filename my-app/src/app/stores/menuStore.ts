@@ -1,6 +1,7 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
 import { Menu } from "../models/Menu/Menu";
+import { MenuDto } from "../models/Menu/MenuDto";
 
 export default class MenuStore{
   static isMenuOpen: JSX.Element;

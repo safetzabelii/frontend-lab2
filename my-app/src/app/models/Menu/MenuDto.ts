@@ -3,4 +3,5 @@ export interface MenuDto {
     name: string;
     description: string;
     image: string;
+    restaurantId:string;
 }

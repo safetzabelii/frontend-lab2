@@ -46,6 +46,23 @@ restaurantRegistry = new Map<string,Restaurant>();
             });
         }
     }
+    getRestaurantsForSelect = async()=>{
+        this.setLoadingInitial(true);
+        try{
+            const result = await agent.Restaurants.getRestaurantsForSelect();
+            result.data.forEach((restaurant: Restaurant)=>{
+                this.setRestaurant(restaurant);
+            })
+            runInAction(() => {
+                this.setLoadingInitial(false);
+            });
+        } catch(error){
+            console.log(error);
+            runInAction(() => {
+                this.setLoadingInitial(false);
+            });
+        }
+    }
     
 
     setLoadingInitial = (state: boolean)=>{

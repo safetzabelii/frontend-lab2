@@ -127,7 +127,7 @@ export default observer(function ListRestaurants() {
                                             <button type="button"onClick={()=>{modalStore.openModal("Update Restaurant", <RestaurantEditForm id={restaurant.id}/>)}} className="text-indigo-600 hover:text-indigo-900 mr-4">
                                             Edit
                                             </button>
-                                            <button className="text-red-600 hover:text-red-900" onClick={(e) => handleRestaurantDelete(e, restaurant.id)}>
+                                            <button className="text-red-600 hover:text-red-900" onClick={(e) => handleRestaurantDelete(e, restaurant.id!)}>
                                             Delete
                                             </button>
                                         </td>

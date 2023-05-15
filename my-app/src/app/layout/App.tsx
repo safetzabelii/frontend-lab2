@@ -36,12 +36,14 @@ import ListMenus from '../../features/admin/menu/listMenus';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import RestaurantEditForm from '../../features/admin/pages/restaurantEditForm';
+import MenuCreateForm from '../../features/admin/menu/menuCreateForm';
 
 function App() {
   const verificationToken = store.commonStore.verificationToken;
   const {commonStore,userStore} = useStore();
   const cookies = commonStore.getCookies();
   const [loading, setLoading] = useState(true);
+  const [isUserLoaded, setIsUserLoaded] = useState(false);
   let token = null;
   if (cookies) {
     token = cookies.token;  
@@ -53,35 +55,40 @@ function App() {
       userStore.getCurrentUser(token)
         .then(() => {
           setLoading(false);
-          if (userStore.user?.role === "Admin") {
-            const allContents = document.getElementById('allContents') as HTMLDivElement;
-            if (allContents) {
-              allContents.className = "h-screen";
-              allContents.style.display = 'flex';
-              allContents.style.justifyContent = 'space-evenly';
-            }
-          
-            const contentContainerWrapper = document.getElementById('contentContainerWrapper') as HTMLDivElement;
-            if (contentContainerWrapper) {
-              contentContainerWrapper.className = "flex-1";
-            }
-          
-            const contentContainer = document.querySelector('.contentContainer') as HTMLDivElement;
-            if (contentContainer) {
-              contentContainer.style.display = 'flex';
-              contentContainer.style.justifyContent = 'space-evenly';
-            }
-          }
+          setIsUserLoaded(true);
         })
         .catch((error) => {
           console.log(error);
           setLoading(false);
+          setIsUserLoaded(true);
         });
     } else {
       setLoading(false);
+      setIsUserLoaded(true);
     }
   }, [commonStore, userStore]);
   
+  useEffect(() => {
+    if (isUserLoaded && userStore.user?.role === "Admin") {
+      const allContents = document.getElementById('allContents') as HTMLDivElement;
+      if (allContents) {
+        allContents.className = "h-screen";
+        allContents.style.display = 'flex';
+        allContents.style.justifyContent = 'space-evenly';
+      }
+      
+      const contentContainerWrapper = document.getElementById('contentContainerWrapper') as HTMLDivElement;
+      if (contentContainerWrapper) {
+        contentContainerWrapper.className = "flex-1";
+      }
+      
+      const contentContainer = document.querySelector('.contentContainer') as HTMLDivElement;
+      if (contentContainer) {
+        contentContainer.style.display = 'flex';
+        contentContainer.style.justifyContent = 'space-evenly';
+      }
+    }
+  }, [isUserLoaded, userStore.user?.role]);
   return (
     <>
     {loading ? (
@@ -146,6 +153,7 @@ function App() {
               <Route path="/dashboard/listUsers" element={<ListUsers />} />
               <Route path="/dashboard/listMenus" element={<ListMenus />} />
               <Route path="/dashboard/restaurantEditForm" element={<RestaurantEditForm/>}/>
+              <Route path="/dashboard/createMenuForm" element={<MenuCreateForm/>}/>
             </Route>
           </Routes>
           </div>
