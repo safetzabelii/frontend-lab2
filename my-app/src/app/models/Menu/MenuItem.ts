@@ -6,6 +6,8 @@ export interface MenuItem {
     description: string;
     price: number;
     image: string;
-    menuId: number;
-    menu: Menu;
+    menuId: string;
+    menu?: string;
+    imagePath?:string;
+    files?:string;
   }

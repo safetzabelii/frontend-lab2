@@ -1,28 +1,29 @@
 import { observer } from 'mobx-react-lite';
 import { SyntheticEvent, useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useStore } from '../../../app/stores/store';
 import { RiDeleteBinLine as TrashIcon, RiPencilLine as PencilIcon } from 'react-icons/ri';
-import MenuCreateForm from './menuCreateForm';
-import MenuEditForm from './menuEditForm';
+import RestaurantCreateForm from './restaurantCreateForm';
+import RestaurantEditForm from './restaurantEditForm';
 
-export default observer(function ListMenus() {
-  const { menuStore, modalStore } = useStore();
+export default observer(function ListRestaurants() {
+  const { restaurantStore, modalStore } = useStore();
   const [target, setTarget] = useState('');
-  const { MenuByName ,loading, loadMenus, deleteMenu } = menuStore;
-const navigate = useNavigate();
+  const { restaurantsByName, loading, loadRestaurants, deleteRestaurant,getRestaurants } = restaurantStore;
+
   useEffect(() => {
-    loadMenus().catch((error) => console.log(error));
-  }, [loadMenus]);
+    loadRestaurants().catch((error) => console.log(error));
+    
+  }, [loadRestaurants]);
 
   function openCreateForm() {
     modalStore.closeModal();
-    modalStore.openModal("Create Menu", <MenuCreateForm />);
+    modalStore.openModal("Create Restaurant", <RestaurantCreateForm />);
   }
 
-  function handleMenuDelete(e: SyntheticEvent<HTMLButtonElement>, id: string) {
+  function handleRestaurantDelete(e: SyntheticEvent<HTMLButtonElement>, id: string) {
     setTarget(e.currentTarget.name);
-    deleteMenu(id);
+    deleteRestaurant(id);
   }
 
   return (
@@ -37,7 +38,7 @@ const navigate = useNavigate();
                             type="button"
                             onClick={openCreateForm}
                             >
-                            Create Menu
+                            Create Restaurant
                             </button>
                         </div>
                         <table className="min-w-full divide-y divide-gray-200">
@@ -47,13 +48,20 @@ const navigate = useNavigate();
                                     scope="col"
                                     className="px-6 py-3 items-space-between text-center text-xs font-medium text-white uppercase tracking-wider"
                                     >
-                                    Name
+                                    Restaurant Name
                                     </th>
                                     <th
                                     scope="col"
                                     className="px-6 py-3 items-space-between text-center text-xs font-medium text-white uppercase tracking-wider"
                                     >
-                                    Description
+                                    Restaurant Address
+                                    </th>
+
+                                    <th
+                                    scope="col"
+                                    className="px-6 py-3 items-space-between text-center text-xs font-medium text-white uppercase tracking-wider"
+                                    >
+                                    Phone Number
                                     </th>
 
                                     <th
@@ -62,12 +70,7 @@ const navigate = useNavigate();
                                     >
                                     Image
                                     </th>
-                                    <th
-                                    scope="col"
-                                    className="px-6 py-3 items-space-between text-center text-xs font-medium text-white uppercase tracking-wider"
-                                    >
-                                    Restaurant
-                                    </th>
+
                                     <th
                                     scope="col"
                                     className="px-6 py-3 text-center text-xs font-medium text-white uppercase tracking-wider"
@@ -77,36 +80,26 @@ const navigate = useNavigate();
                                 </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
-                                {MenuByName.map((menu) => (
-                                    <tr key={menu.id} >
-                                        <td className="px-6 py-4 whitespace-nowrap text-center" >
+                                {getRestaurants.map((restaurant) => (
+                                    <tr key={restaurant.id}>
+                                        <td className="px-6 py-4 whitespace-nowrap text-center justify-center">
                                             <div className="flex items-center">
                                                 <div className="ml-4">
-                                                    <div className="text-sm font-medium text-gray-900">{menu.name}</div>
+                                                    <div className="text-sm font-medium text-gray-900">{restaurant.name}</div>
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="flex items-center">
                                                 <div className="ml-4">
-                                                    <div className="text-sm text-gray-500">{menu.description}</div>  
+                                                    <div className="text-sm text-gray-500">{restaurant.address}</div>  
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap" >
+                                        <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="flex items-center">
                                                 <div className="ml-4">
-                                                <img
-                                                    src={`data:image/jpeg;base64,${menu.imagePath}`}
-                                                    alt="Menu Image"
-                                                    style={{
-                                                        width: '50px', 
-                                                        height: '50px', 
-                                                        borderRadius: '50%', 
-                                                        objectFit: 'cover', 
-                                                    }}
-                                                />
-                                                <label>{menu.image}</label>
+                                                <div className="text-sm text-gray-500">{restaurant.phoneNumber}</div>
                                                 
                                                 </div>
                                             </div>
@@ -114,15 +107,27 @@ const navigate = useNavigate();
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="flex items-center">
                                                 <div className="ml-4">
-                                                    <div className="text-sm text-gray-500">{menu.restaurant}</div>  
+                                                <div className="text-sm text-gray-500">
+                                                <img
+                                                    src={`data:image/jpeg;base64,${restaurant.imagePath}`}
+                                                    alt="Restaurant Image"
+                                                    style={{
+                                                        width: '50px', 
+                                                        height: '50px', 
+                                                        borderRadius: '50%', 
+                                                        objectFit: 'cover', 
+                                                    }}
+                                                />
+                                                <label>{restaurant.image}</label>
+                                                </div>                                               
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <button type="button"onClick={()=>{modalStore.openModal("Update Menu", <MenuEditForm id={menu.id}/>)}} className="text-indigo-600 hover:text-indigo-900 mr-4">
+                                            <button type="button"onClick={()=>{modalStore.openModal("Update Restaurant", <RestaurantEditForm id={restaurant.id}/>)}} className="text-indigo-600 hover:text-indigo-900 mr-4">
                                             Edit
                                             </button>
-                                            <button className="text-red-600 hover:text-red-900" onClick={(e) => handleMenuDelete(e, menu.id)}>
+                                            <button className="text-red-600 hover:text-red-900" onClick={(e) => handleRestaurantDelete(e, restaurant.id!)}>
                                             Delete
                                             </button>
                                         </td>

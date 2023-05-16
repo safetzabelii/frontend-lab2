@@ -5,6 +5,7 @@ import { MenuItem } from "../models/Menu/MenuItem";
 export default class MenuItemStore {
     menuItemRegistry = new Map<string, MenuItem>();
     selectedMenuItem: MenuItem | undefined = undefined;
+    createdMenuItem:MenuItem|undefined = undefined;
     editMode = false;
     loading = false;
     loadingInitial = false;
@@ -24,8 +25,8 @@ export default class MenuItemStore {
 
     loadMenuItems = async () => {
         try{
-            const menuItems = await agent.MenuItems.list();
-            menuItems.forEach((menuitem: MenuItem)=>{
+            const result = await agent.MenuItems.list();
+            result.data.forEach((menuitem: MenuItem)=>{
                 this.setMenuItem(menuitem);
             })
             this.setLoadingInitial(false);
@@ -35,20 +36,24 @@ export default class MenuItemStore {
         }
     }
 
-    createMenuItem = async(menuItem: MenuItem) => {
-        this.loading = true;
+    createMenuItem = async (menuItem:FormData)=>{
+        this.loading=true;
         try{
-            await agent.MenuItems.create(menuItem);
-            runInAction(() =>{
-                this.menuItemRegistry.set(menuItem.id!, menuItem);
+            const response = await agent.MenuItems.create(menuItem);
+            runInAction(()=>{
+                if(response.data.data != null){
+                    this.createdMenuItem = response.data.data as MenuItem;
+                    this.menuItemRegistry.set(this.createdMenuItem.id!,this.createdMenuItem);
+                }
                 this.editMode=false;
                 this.loading=false;
             })
         }catch(error){
             console.log(error);
-            runInAction(() =>{
-                this.loading = false;
+            runInAction(()=>{
+                this.loading=false;
             })
+            
         }
     }
 
@@ -67,6 +72,28 @@ export default class MenuItemStore {
             })
         }
     }
+    updateMenuItem = async (menuItem:FormData)=>{
+        this.loading= true;
+        try{
+            var response = await agent.MenuItems.update(menuItem);
+            runInAction(()=>{
+                if(response.data.data != null){
+                    this.createdMenuItem = response.data.data as MenuItem;
+                this.menuItemRegistry.set( this.createdMenuItem.id!, this.createdMenuItem);
+                this.selectedMenuItem= this.createdMenuItem;
+                }
+                this.editMode=false;
+                this.loading=false;
+                
+            })
+        }catch(error){
+            console.log(error);
+            runInAction(()=>{
+                this.loading=false;
+            })
+            
+        }
+    }
 
     loadMenuItem = async(id:string) => {
         let menuItem = this.getMenuItem(id);
@@ -77,13 +104,17 @@ export default class MenuItemStore {
         else{
             this.loadingInitial = true;
             try{
-                menuItem = await agent.MenuItems.details(id);
+                const result = await agent.MenuItems.details(id);
+                if(result.data != null){
                 this.setMenuItem(menuItem!);
                 runInAction(() => {
                     this.selectedMenuItem =menuItem;
                 })
+            }else{
+                return console.log("No menu item was retrived");
+            }
                 this.setLoadingInitial(false);
-                return menuItem;
+                return result.data;
             }   catch(error){
                 console.log(error);
                 this.setLoadingInitial(false);

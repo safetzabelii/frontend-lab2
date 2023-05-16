@@ -10,6 +10,7 @@ export default class MenuStore{
   }
 menuRegistry = new Map<string,Menu>();
     selectedMenu:Menu |undefined = undefined;
+    createdMenu:Menu|undefined = undefined;
     editMode =false;
     loading = false;
     loadingInitial = false;
@@ -45,8 +46,8 @@ menuRegistry = new Map<string,Menu>();
 
     loadMenus = async () => {
         try{
-            const menus = await agent.Menus.list();
-            menus.forEach((menu: Menu)=>{
+            const result = await agent.Menus.list();
+            result.data.forEach((menu: Menu)=>{
                 this.setMenu(menu);
             })
             this.setLoadingInitial(false);
@@ -63,12 +64,15 @@ menuRegistry = new Map<string,Menu>();
     setLoadingInitial = (state: boolean)=>{
         this.loadingInitial=state;
     }
-    createMenu = async (menu:Menu)=>{
+    createMenu = async (menu:FormData)=>{
         this.loading=true;
         try{
-            await agent.Menus.create(menu);
+            const response = await agent.Menus.create(menu);
             runInAction(()=>{
-                this.menuRegistry.set(menu.id!,menu);
+                if(response.data.data != null){
+                    this.createdMenu = response.data.data as Menu;
+                    this.menuRegistry.set(this.createdMenu.id!,this.createdMenu);
+                }
                 this.editMode=false;
                 this.loading=false;
             })
@@ -85,13 +89,16 @@ menuRegistry = new Map<string,Menu>();
         this.selectedMenu = menu;
       };
 
-    updateMenu = async (menu:Menu)=>{
+    updateMenu = async (menu:FormData)=>{
         this.loading= true;
         try{
-            await agent.Menus.update(menu);
+            const response = await agent.Menus.update(menu);
             runInAction(()=>{
-                this.menuRegistry.set(menu.id!,menu);
-                this.selectedMenu=menu;
+                if(response.data.data != null){
+                    this.createdMenu = response.data.data as Menu;
+                this.menuRegistry.set( this.createdMenu.id!, this.createdMenu);
+                this.selectedMenu= this.createdMenu;
+                }
                 this.editMode=false;
                 this.loading=false;
                 
@@ -130,13 +137,18 @@ menuRegistry = new Map<string,Menu>();
         else{
             this.loadingInitial=true;
             try{
-                menu = await  agent.Menus.details(id);
-                this.setMenu(menu!);
-                runInAction(()=>{
-                    this.selectedMenu=menu;
-                })
+                const result = await  agent.Menus.details(id);
+                if(result.data != null){
+                    this.setMenu(menu!);
+                    runInAction(()=>{
+                        this.selectedMenu=menu;
+                    })
+                }
+                else{
+                    return console.log("No menu was retrived");
+                }
                 this.setLoadingInitial(false);
-                return menu;
+                return result.data;
             }catch(error){
                 console.log(error);
                 this.setLoadingInitial(false);

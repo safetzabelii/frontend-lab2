@@ -3,7 +3,9 @@ import { SyntheticEvent, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useStore } from '../../../app/stores/store';
 import { RiDeleteBinLine as TrashIcon, RiPencilLine as PencilIcon } from 'react-icons/ri';
-import OffersCreateForm from './OffersCreateForm';
+import OfferCreateForm from './offerCreateForm';
+import OfferEditForm from './offerEditForm';
+
 
 export default observer(function ListOffers() {
   const { offerStore, modalStore } = useStore();
@@ -16,7 +18,7 @@ export default observer(function ListOffers() {
 
   function openCreateForm() {
     modalStore.closeModal();
-    modalStore.openModal("Create Offer", <OffersCreateForm />);
+    modalStore.openModal("Create Offer", <OfferCreateForm />);
   }
 
   function handleOfferDelete(e: SyntheticEvent<HTMLButtonElement>, id: string) {
@@ -46,22 +48,27 @@ export default observer(function ListOffers() {
                                     scope="col"
                                     className="px-6 py-3 items-space-between text-center text-xs font-medium text-white uppercase tracking-wider"
                                     >
-                                    Offer Name
+                                    Name
                                     </th>
                                     <th
                                     scope="col"
                                     className="px-6 py-3 items-space-between text-center text-xs font-medium text-white uppercase tracking-wider"
                                     >
-                                    Offer Description
+                                    Description
                                     </th>
 
                                     <th
                                     scope="col"
                                     className="px-6 py-3 items-space-between text-center text-xs font-medium text-white uppercase tracking-wider"
                                     >
-                                    Offer Image
+                                    Image
                                     </th>
-
+                                    <th
+                                    scope="col"
+                                    className="px-6 py-3 items-space-between text-center text-xs font-medium text-white uppercase tracking-wider"
+                                    >
+                                    Price
+                                    </th>
                                     <th
                                     scope="col"
                                     className="px-6 py-3 items-space-between text-center text-xs font-medium text-white uppercase tracking-wider"
@@ -74,21 +81,18 @@ export default observer(function ListOffers() {
                                     >
                                     Start date
                                     </th>
-
-                                    <th
-                                    scope="col"
-                                    className="px-6 py-3 items-space-between text-center text-xs font-medium text-white uppercase tracking-wider"
-                                    >
-                                    Image
-                                    </th>
-
                                     <th
                                     scope="col"
                                     className="px-6 py-3 items-space-between text-center text-xs font-medium text-white uppercase tracking-wider"
                                     >
                                     End Date
                                     </th>
-
+                                    <th
+                                    scope="col"
+                                    className="px-6 py-3 items-space-between text-center text-xs font-medium text-white uppercase tracking-wider"
+                                    >
+                                    Restaurant
+                                    </th>
                                     <th
                                     scope="col"
                                     className="px-6 py-3 text-center text-xs font-medium text-white uppercase tracking-wider"
@@ -117,7 +121,17 @@ export default observer(function ListOffers() {
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="flex items-center">
                                                 <div className="ml-4">
-                                                <div className="text-sm text-gray-500">{offer.image}</div>
+                                                <img
+                                                    src={`data:image/jpeg;base64,${offer.imagePath}`}
+                                                    alt="Menu Image"
+                                                    style={{
+                                                        width: '50px', 
+                                                        height: '50px', 
+                                                        borderRadius: '50%', 
+                                                        objectFit: 'cover', 
+                                                    }}
+                                                />
+                                                <label>{offer.image}</label>
                                                 </div>
                                             </div>
                                         </td>
@@ -131,21 +145,35 @@ export default observer(function ListOffers() {
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="flex items-center">
                                                 <div className="ml-4">
-                                                <div className="text-sm text-gray-500">{offer.startDate.toLocaleString()}</div>                                               
+                                                <div className="text-sm text-gray-500">{offer.price}$</div>                                               
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="flex items-center">
                                                 <div className="ml-4">
-                                                <div className="text-sm text-gray-500">{offer.endDate.toLocaleString()}</div>                                               
+                                                <div className="text-sm text-gray-500">{offer.startDate?.toLocaleString()}</div>                                               
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            <div className="flex items-center">
+                                                <div className="ml-4">
+                                                <div className="text-sm text-gray-500">{offer.endDate?.toLocaleString()}</div>                                               
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            <div className="flex items-center">
+                                                <div className="ml-4">
+                                                <div className="text-sm text-gray-500">{offer.restaurant}</div>                                               
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <Link to={`/offers/${offer.id}`} className="text-indigo-600 hover:text-indigo-900 mr-4">
+                                             <button type="button"onClick={()=>{modalStore.openModal("Update Offer", <OfferEditForm id={offer.id}/>)}} className="text-indigo-600 hover:text-indigo-900 mr-4">
                                             Edit
-                                            </Link>
+                                            </button>
                                             <button className="text-red-600 hover:text-red-900" onClick={(e) => handleOfferDelete(e, offer.id)}>
                                             Delete
                                             </button>

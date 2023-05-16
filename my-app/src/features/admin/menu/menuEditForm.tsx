@@ -1,22 +1,25 @@
-import { Formik, Form, Field, ErrorMessage, FieldProps, useField } from 'formik';
+
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { observer, useAsObservableSource } from 'mobx-react';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { FaCoffee } from 'react-icons/fa';
+
+import { observer } from 'mobx-react';
 import { useStore } from '../../../app/stores/store';
-import { Menu } from '../../../app/models/Menu/Menu';
-import Select from "react-select";
 import { Restaurant } from '../../../app/models/Menu/Restaurant';
-import ModalStore from '../../../app/stores/modalStore';
-export default observer(function MenuCreateForm(){
-  const {menuStore,restaurantStore,modalStore} = useStore();
+import { Menu } from '../../../app/models/Menu/Menu';
+
+interface Props {
+    id?: string;
+  }
+export default observer(function MenuEditForm(props: Props){
+  const {menuStore,modalStore,restaurantStore} = useStore();
+  const{loadMenu, updateMenu} =menuStore
   const navigate = useNavigate();
-
-  const{createMenu}=menuStore;
-  const{getRestaurantsForSelect,getRestaurants}=restaurantStore;
-  const [val, setVal] = useState(null);
-
-  const [menuDto, setMenu] = useState<Menu>({
+  const [loading, setLoading] = useState(true);
+  const [menu, setMenu] = useState<Menu>({
     id: '',
     name: '',
     description:'',
@@ -26,33 +29,37 @@ export default observer(function MenuCreateForm(){
     restaurantId:'',
   });
   useEffect(()=>{
-    getRestaurantsForSelect();
-  },[restaurantStore]);
-  
+    if(props.id){
+        loadMenu(props.id).then((loadedMenu:Menu|void)=>{
+            setMenu(loadedMenu!);
+            setLoading(false);
+            restaurantStore.loadRestaurants();
+        })
+    }
+  },[props.id,loadMenu,restaurantStore.loadRestaurants]);
+
   const validationSchema = Yup.object({
     name: Yup.string().required('Name is required'),
   });
   
-  function handleFormSubmit(menuDto: Menu){
+  function handleFormSubmit(menu: Menu){
     const formData = new FormData();
-    formData.append('name',menuDto.name);
-    formData.append('description',menuDto.description);
-    formData.append('files',(document.getElementById('files')as HTMLInputElement).files![0]);
-    formData.append('restaurantId',menuDto.restaurantId);
-    
-createMenu(formData).then(()=>{
-  modalStore.closeModal();
-  navigate('dashboard/listMenus')}); 
-
+    formData.append('id',props.id!);
+    formData.append('name',menu.name);
+    formData.append('description',menu.description);
+    formData.append('restaurantId',menu.restaurantId);
+    formData.append('files',(document.getElementById('files') as HTMLInputElement).files![0]);
+    updateMenu(formData).then(()=>
+    {
+      modalStore.closeModal();
+      navigate('dashboard/listMenus')
+  }); 
   }
-  
-
-  
 
   return (
     
     <Formik
-    initialValues={menuDto}
+    initialValues={menu}
     onSubmit={handleFormSubmit}
     enableReinitialize
     validationSchema={validationSchema}
@@ -94,12 +101,11 @@ createMenu(formData).then(()=>{
             <label className="block text-white font-bold mb-2" htmlFor="restaurantId">
               Restaurant:
             </label>
-                   <Field component="select" name="restaurantId">
-                    <option>Nothing Selected</option>
-                    {getRestaurants.map((restaurant)=>(
-                      <option value={restaurant.id}>{restaurant.name}</option>
-                      ))}
-                   </Field>
+            <Field as="select" id="restaurantId" name="restaurantId" className="focus:shadow-primary-outline dark:bg-slate-850 dark:text-black text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none" >
+                        {restaurantStore.getRestaurants.map((restaurant)=>(
+                          <option key={restaurant.id!} value={restaurant.id!}>{restaurant.name}</option>
+                        ))}
+                        </Field>
             <ErrorMessage
               name="restaurantId"
               component="div"

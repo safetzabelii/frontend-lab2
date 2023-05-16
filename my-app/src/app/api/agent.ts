@@ -91,27 +91,27 @@ const request = {
 
 
 const Menus = {
-    list: () => request.get<Menu[]>("/Menu"),
-    details: (id: string) => request.get<Menu>(`/Menu/${id}`),
-    create: (menu: Menu) => axios.post<void>("/Menu", menu),
-    update: (menu: Menu) => axios.put<void>(`/Menu/${menu.id}`, menu),
-    delete: (id: string) => axios.delete<void>(`/Menu/${id}`),
+    list: () => request.get<Menu[]>("/Menu/GetAllMenus"),
+    details: (id: string) => request.get<Menu>(`/Menu/GetMenu/${id}`),
+    create: (menu: FormData) => axios.post<ServerError<Menu>>("/Menu/CreateMenu", menu),
+    update: (menu: FormData) => axios.put<ServerError<Menu>>("/Menu/EditMenu", menu),
+    delete: (id: string) => axios.delete<void>(`/Menu/DeleteMenu/${id}`),
   };
 
 const MenuItems = {
     list: () => request.get<MenuItem[]>("/MenuItem/GetAllMenuItem"),
     details: (id: string) => request.get<MenuItem>(`/MenuItem/GetMenuItem/${id}`),
-    create: (menuItem: MenuItem) => axios.post<void>("/MenuItem/CreateMenuItem", menuItem),
-    update: (menuItem: MenuItem) => axios.put<void>(`/MenuItem/EditMenuItem`, menuItem),
+    create: (menuItem: FormData) => axios.post<ServerError<MenuItem>>("/MenuItem/CreateMenuItem", menuItem),
+    update: (menuItem: FormData) => axios.put<ServerError<MenuItem>>(`/MenuItem/EditMenuItem`, menuItem),
     delete: (id: string) => axios.delete<void>(`/MenuItem/DeleteMenu/${id}`),
     };
 
 const Offers = {
-    list: () => request.get<OfferDto[]>("/Offer"),
-    details: (id: string) => request.get<Offer>(`/Offer/${id}`),
-    create: (offer: OfferDto) => axios.post<void>("/Offer", offer),
-    update: (offer: OfferDto) => axios.put<void>(`/Offer/${offer.id}`, offer),
-    delete: (id: string) => axios.delete<void>(`/Offer/${id}`),
+    list: () => request.get<OfferDto[]>("/Offer/GetAllOffers"),
+    details: (id: string) => request.get<Offer>(`/Offer/GetOffer/${id}`),
+    create: (offer: FormData) => axios.post<ServerError<Offer>>("/Offer/CreateOffer", offer),
+    update: (offer: FormData) => axios.put<ServerError<Offer>>('/Offer/EditOffer', offer),
+    delete: (id: string) => axios.delete<void>(`/Offer/DeleteOffer/${id}`),
     };
     
 const Orders = {

@@ -1,7 +1,7 @@
 
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { FaCoffee } from 'react-icons/fa';
@@ -9,32 +9,49 @@ import { FaCoffee } from 'react-icons/fa';
 import { observer } from 'mobx-react';
 import { useStore } from '../../../app/stores/store';
 import { OfferDto } from '../../../app/models/Menu/OfferDto';
+import { off } from 'process';
 
-export default observer(function OffersCreateForm(){
-  const {offerStore} = useStore();
+export default observer(function OfferCreateForm(){
+  const {offerStore,modalStore,restaurantStore} = useStore();
   const navigate = useNavigate();
 
   const{createOffer}=offerStore;
 
   const [offerDto, setOffer] = useState<OfferDto>({
-    id: '',
+    id:'',
     name: '',
     description: '',
-    image: '',
     discountPercent: 0,
-    startDate: new Date(),
-    endDate: new Date(),
+    price:0,
+    startDate: null,
+    endDate: null,
+    restaurantId:'',
+    files:'',
   });
+  useEffect(()=>{
+    restaurantStore.loadRestaurants();
+  },[restaurantStore])
 
   const validationSchema = Yup.object({
     name: Yup.string().required('Name is required'),
   });
   
   function handleFormSubmit(offerDto: OfferDto){
-    let newOfferDto = {
-      ...offerDto,
+    const formData = new FormData();
+    formData.append('name',offerDto.name);
+    formData.append('description',offerDto.description);
+    formData.append('files',(document.getElementById('files')as HTMLInputElement).files![0]);
+    formData.append('restaurantId',offerDto.restaurantId);
+    formData.append('discountPercent',offerDto.discountPercent.toString());
+    if(offerDto.price && offerDto.startDate && offerDto.endDate){
+    formData.append('price',offerDto.price.toString());
+    formData.append('startDate', offerDto.startDate.toISOString());
+    formData.append('endDate', offerDto.endDate.toISOString());
     }
-    createOffer(newOfferDto).then(()=>navigate('dashboard/listOffers')); 
+    createOffer(formData).then(()=>{
+      modalStore.closeModal();
+      navigate('dashboard/listOffers')
+    }); 
   }
 
   return (
@@ -79,28 +96,13 @@ export default observer(function OffersCreateForm(){
               className="text-red-500 text-sm mt-1"
             />
 
-            <label className="block text-white font-bold mb-2" htmlFor="image">
-              Image:
-            </label>
-            <Field
-              className="border border-gray-400 p-2 w-full rounded-md"
-              type="text"
-              name="image"
-              id="image"
-              placeholder="Enter offer image"
-            />
-            <ErrorMessage
-              name="image"
-              component="div"
-              className="text-red-500 text-sm mt-1"
-            />
-
+              
             <label className="block text-white font-bold mb-2" htmlFor="discountpercent">
               Discount percent:
             </label>
             <Field
               className="border border-gray-400 p-2 w-full rounded-md"
-              type="text"
+              type="number"
               name="discountpercent"
               id="discountpercent"
               placeholder="Enter discount percent"
@@ -110,16 +112,29 @@ export default observer(function OffersCreateForm(){
               component="div"
               className="text-red-500 text-sm mt-1"
             />
-
+            <label className="block text-white font-bold mb-2" htmlFor="price">
+              Price:
+            </label>
+            <Field
+              className="border border-gray-400 p-2 w-full rounded-md"
+              type="number"
+              name="price"
+              id="price"
+              placeholder="Enter price"
+            />
+            <ErrorMessage
+              name="price"
+              component="div"
+              className="text-red-500 text-sm mt-1"
+            />
             <label className="block text-white font-bold mb-2" htmlFor="startDate">
               Start Date:
             </label>
             <Field
               className="border border-gray-400 p-2 w-full rounded-md"
-              type="text"
+              type="date"
               name="startdate"
               id="startdate"
-              placeholder="Enter start date"
             />
             <ErrorMessage
               name="startdate"
@@ -132,18 +147,45 @@ export default observer(function OffersCreateForm(){
             </label>
             <Field
               className="border border-gray-400 p-2 w-full rounded-md"
-              type="text"
+              type="date"
               name="enddate"
               id="enddate"
-              placeholder="Enter end date"
             />
             <ErrorMessage
               name="enddate"
               component="div"
               className="text-red-500 text-sm mt-1"
             />
-
-            
+            <label className="block text-white font-bold mb-2" htmlFor="restaurantId">
+                          Restaurant:
+            </label>
+              <Field component="select" name="restaurantId">
+               <option>Nothing Selected</option>
+              {restaurantStore.getRestaurants.map((restaurant)=>(
+               <option value={restaurant.id}>{restaurant.name}</option>
+                ))}
+              </Field>
+            <ErrorMessage
+              name="restaurantId"
+              component="div"
+              className="text-red-500 text-sm mt-1"
+            />
+            <label className="block text-white font-bold mb-2" htmlFor="files">
+      Image:
+    </label>
+    <Field
+      className="border border-gray-400 p-2 w-full rounded-md"
+      type="file"
+      name="files"
+      id="files"
+      placeholder="Upload restaurant image"
+      accept="*"
+    />
+    <ErrorMessage
+      name="files"
+      component="div"
+      className="text-red-500 text-sm mt-1"
+    />
               </div>
               <div className="flex justify-end space-x-4">
                 <button

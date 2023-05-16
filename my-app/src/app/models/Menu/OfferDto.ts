@@ -3,8 +3,13 @@ export interface OfferDto {
     id: string;
     name: string;
     description: string;
-    image: string;
+    image?: string;
+    imagePath?:string;
     discountPercent: number;
-    startDate: Date;
-    endDate: Date;
+    startDate: Date|null;
+    endDate: Date|null;
+    price?:number;
+    restaurantId:string;
+    restaurant?:string;
+    files?:string;
   }

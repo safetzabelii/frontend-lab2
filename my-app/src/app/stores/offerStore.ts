@@ -5,8 +5,9 @@ import { off } from "process";
 import { OfferDto } from "../models/Menu/OfferDto";
 
 export default class OfferStore{
-offerRegistry = new Map<string,OfferDto>();
-    selectedOffer:OfferDto |undefined = undefined;
+offerRegistry = new Map<string,Offer>();
+    selectedOffer:Offer |undefined = undefined;
+    createdOffer:Offer|undefined = undefined;
     editMode =false;
     loading = false;
     loadingInitial = false;
@@ -30,8 +31,8 @@ offerRegistry = new Map<string,OfferDto>();
 
     loadOffers = async () => {
         try{
-            const offers = await agent.Offers.list();
-            offers.forEach((offer: Offer)=>{
+            const result = await agent.Offers.list();
+            result.data.forEach((offer: Offer)=>{
                 this.setOffer(offer);
             })
             this.setLoadingInitial(false);
@@ -44,12 +45,16 @@ offerRegistry = new Map<string,OfferDto>();
     setLoadingInitial = (state: boolean)=>{
         this.loadingInitial=state;
     }
-    createOffer = async (offer:OfferDto)=>{
+    createOffer = async (offer:FormData)=>{
         this.loading=true;
         try{
-            await agent.Offers.create(offer);
+            const response = await agent.Offers.create(offer);
             runInAction(()=>{
-                this.offerRegistry.set(offer.id!,offer);
+                if(response.data.data != null){
+                    this.createdOffer = response.data.data as Offer;
+                this.offerRegistry.set(this.createdOffer.id!,this.createdOffer);
+                    
+            }
                 this.editMode=false;
                 this.loading=false;
             })
@@ -61,13 +66,16 @@ offerRegistry = new Map<string,OfferDto>();
             
         }
     }
-    updateOffer = async (offer:Offer)=>{
+    updateOffer = async (offer:FormData)=>{
         this.loading= true;
         try{
-            await agent.Offers.update(offer);
+            const response = await agent.Offers.update(offer);
             runInAction(()=>{
-                this.offerRegistry.set(offer.id!,offer);
-                this.selectedOffer=offer;
+                if(response.data.data != null){
+                    this.createdOffer = response.data.data as Offer;
+                this.offerRegistry.set(this.createdOffer.id!,this.createdOffer);
+                this.selectedOffer=this.createdOffer;
+                }
                 this.editMode=false;
                 this.loading=false;
             })
@@ -102,13 +110,19 @@ offerRegistry = new Map<string,OfferDto>();
         else{
             this.loadingInitial=true;
             try{
-                offer = await  agent.Offers.details(id);
-                this.setOffer(offer!);
-                runInAction(()=>{
-                    this.selectedOffer=offer;
-                })
+                const response = await  agent.Offers.details(id);
+               
+                if(response.data !=null){
+                    this.setOffer(offer!);
+                    runInAction(()=>{
+                        this.selectedOffer=offer;
+                    })
+                }
+                else{
+                    return console.log("No menu was retrived");
+                }
                 this.setLoadingInitial(false);
-                return offer;
+                return response.data;
             }catch(error){
                 console.log(error);
                 this.setLoadingInitial(false);
@@ -120,7 +134,7 @@ offerRegistry = new Map<string,OfferDto>();
         return this.offerRegistry.get(id);
     }
 
-    private setOffer = (offer:OfferDto)=>{
+    private setOffer = (offer:Offer)=>{
         this.offerRegistry.set(offer.id!,offer);
     }
 }

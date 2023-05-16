@@ -137,7 +137,7 @@ restaurantRegistry = new Map<string,Restaurant>();
         else{
             this.loadingInitial=true;
             try{
-                var result = await  agent.Restaurants.details(id);
+                const result = await  agent.Restaurants.details(id);
                 if(result.data !=null){
                     this.setRestaurant(restaurant!);
                     runInAction(()=>{
@@ -162,6 +162,5 @@ restaurantRegistry = new Map<string,Restaurant>();
 
     private setRestaurant = (restaurant:Restaurant)=>{
         this.restaurantRegistry.set(restaurant.id!,restaurant);
-        console.log(this.restaurantRegistry);
     }
 }

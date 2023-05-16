@@ -28,15 +28,20 @@ import ForgotPassword from '../../features/user/User/forgotPassword';
 import VerifyAccount from '../../features/user/User/verifyAccount';
 import ChangePassword from '../../features/user/User/changePassword';
 import AdminNavbar from '../../features/admin/features/adminNavbar';
-import ListRestaurants from '../../features/admin/pages/listRestaurants';
+import ListRestaurants from '../../features/admin/restaurants/listRestaurants';
 import ListOffers from '../../features/admin/offers/listOffers';
 import ListUsers from '../../features/admin/users/listUsers';
 import UserDetails from '../../features/admin/users/userDetails';
 import ListMenus from '../../features/admin/menu/listMenus';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import RestaurantEditForm from '../../features/admin/pages/restaurantEditForm';
+import RestaurantEditForm from '../../features/admin/restaurants/restaurantEditForm';
 import MenuCreateForm from '../../features/admin/menu/menuCreateForm';
+import ListMenuItems from '../../features/admin/menuItem/listMenuItems';
+import MenuItemCreateForm from '../../features/admin/menuItem/menuItemCreateForm';
+import MenuItemEditForm from '../../features/admin/menuItem/menuItemEditForm';
+import OfferEditForm from '../../features/admin/offers/offerEditForm';
+import OfferCreateForm from '../../features/admin/offers/offerCreateForm';
 
 function App() {
   const verificationToken = store.commonStore.verificationToken;
@@ -153,7 +158,14 @@ function App() {
               <Route path="/dashboard/listUsers" element={<ListUsers />} />
               <Route path="/dashboard/listMenus" element={<ListMenus />} />
               <Route path="/dashboard/restaurantEditForm" element={<RestaurantEditForm/>}/>
-              <Route path="/dashboard/createMenuForm" element={<MenuCreateForm/>}/>
+              <Route path="/dashboard/menuCreateForm" element={<MenuCreateForm/>}/>
+              <Route path="/dashboard/menuItemCreateForm" element={<MenuItemCreateForm/>}/>
+              <Route path="/dashboard/menuItemEditForm" element={<MenuItemEditForm/>}/>
+              <Route path="/dashboard/listMenuItem" element={<ListMenuItems/>}/>
+              <Route path="/dashboard/listOffers" element={<ListOffers/>}/>
+              <Route path="/dashboard/offerCreateForm" element={<OfferCreateForm/>}/>
+              <Route path="/dashboard/offerEditForm" element={<OfferEditForm/>}/>
+              
             </Route>
           </Routes>
           </div>

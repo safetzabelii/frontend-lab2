@@ -4,6 +4,9 @@ export interface Menu {
     id: string;
     name: string;
     description: string;
-    image: string;
+    image?: string;
+    imagePath?:string;
     restaurantId: string;
+    restaurant?:string;
+    files:string;
   }

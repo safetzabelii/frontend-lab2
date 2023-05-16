@@ -1,29 +1,29 @@
 import { observer } from 'mobx-react-lite';
 import { SyntheticEvent, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useStore } from '../../../app/stores/store';
 import { RiDeleteBinLine as TrashIcon, RiPencilLine as PencilIcon } from 'react-icons/ri';
-import RestaurantCreateForm from './restaurantCreateForm';
-import RestaurantEditForm from './restaurantEditForm';
+import MenuItemCreateForm from './menuItemCreateForm';
+import MenuItemEditForm from './menuItemEditForm';
 
-export default observer(function ListRestaurants() {
-  const { restaurantStore, modalStore } = useStore();
+
+export default observer(function ListMenuItems() {
+  const { menuItemStore, modalStore } = useStore();
   const [target, setTarget] = useState('');
-  const { restaurantsByName, loading, loadRestaurants, deleteRestaurant,getRestaurants } = restaurantStore;
-
+  const { getMenuItems ,loading, loadMenuItems, deleteMenuItem } = menuItemStore;
+const navigate = useNavigate();
   useEffect(() => {
-    loadRestaurants().catch((error) => console.log(error));
-    
-  }, [loadRestaurants]);
+    loadMenuItems().catch((error) => console.log(error));
+  }, [loadMenuItems]);
 
   function openCreateForm() {
     modalStore.closeModal();
-    modalStore.openModal("Create Restaurant", <RestaurantCreateForm />);
+    modalStore.openModal("Create Menu", <MenuItemCreateForm />);
   }
 
-  function handleRestaurantDelete(e: SyntheticEvent<HTMLButtonElement>, id: string) {
+  function handleMenuDelete(e: SyntheticEvent<HTMLButtonElement>, id: string) {
     setTarget(e.currentTarget.name);
-    deleteRestaurant(id);
+    deleteMenuItem(id);
   }
 
   return (
@@ -38,7 +38,7 @@ export default observer(function ListRestaurants() {
                             type="button"
                             onClick={openCreateForm}
                             >
-                            Create Restaurant
+                            Create Menu Item
                             </button>
                         </div>
                         <table className="min-w-full divide-y divide-gray-200">
@@ -48,29 +48,32 @@ export default observer(function ListRestaurants() {
                                     scope="col"
                                     className="px-6 py-3 items-space-between text-center text-xs font-medium text-white uppercase tracking-wider"
                                     >
-                                    Restaurant Name
+                                    Name
                                     </th>
                                     <th
                                     scope="col"
                                     className="px-6 py-3 items-space-between text-center text-xs font-medium text-white uppercase tracking-wider"
                                     >
-                                    Restaurant Address
+                                    Description
                                     </th>
-
                                     <th
                                     scope="col"
                                     className="px-6 py-3 items-space-between text-center text-xs font-medium text-white uppercase tracking-wider"
                                     >
-                                    Phone Number
+                                    Price
                                     </th>
-
                                     <th
                                     scope="col"
                                     className="px-6 py-3 items-space-between text-center text-xs font-medium text-white uppercase tracking-wider"
                                     >
                                     Image
                                     </th>
-
+                                    <th
+                                    scope="col"
+                                    className="px-6 py-3 items-space-between text-center text-xs font-medium text-white uppercase tracking-wider"
+                                    >
+                                    Menu
+                                    </th>
                                     <th
                                     scope="col"
                                     className="px-6 py-3 text-center text-xs font-medium text-white uppercase tracking-wider"
@@ -80,37 +83,35 @@ export default observer(function ListRestaurants() {
                                 </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
-                                {getRestaurants.map((restaurant) => (
-                                    <tr key={restaurant.id}>
-                                        <td className="px-6 py-4 whitespace-nowrap text-center">
+                                {getMenuItems.map((menuItem) => (
+                                    <tr key={menuItem.id} >
+                                        <td className="px-6 py-4 whitespace-nowrap text-center" >
                                             <div className="flex items-center">
                                                 <div className="ml-4">
-                                                    <div className="text-sm font-medium text-gray-900">{restaurant.name}</div>
+                                                    <div className="text-sm font-medium text-gray-900">{menuItem.name}</div>
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="flex items-center">
                                                 <div className="ml-4">
-                                                    <div className="text-sm text-gray-500">{restaurant.address}</div>  
+                                                    <div className="text-sm text-gray-500">{menuItem.description}</div>  
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="flex items-center">
                                                 <div className="ml-4">
-                                                <div className="text-sm text-gray-500">{restaurant.phoneNumber}</div>
-                                                
+                                                    <div className="text-sm text-gray-500">{menuItem.price}$</div>  
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
+                                        <td className="px-6 py-4 whitespace-nowrap" >
                                             <div className="flex items-center">
                                                 <div className="ml-4">
-                                                <div className="text-sm text-gray-500">
                                                 <img
-                                                    src={`data:image/jpeg;base64,${restaurant.imagePath}`}
-                                                    alt="Restaurant Image"
+                                                    src={`data:image/jpeg;base64,${menuItem.imagePath}`}
+                                                    alt="Menu Image"
                                                     style={{
                                                         width: '50px', 
                                                         height: '50px', 
@@ -118,16 +119,23 @@ export default observer(function ListRestaurants() {
                                                         objectFit: 'cover', 
                                                     }}
                                                 />
-                                                <label>{restaurant.image}</label>
-                                                </div>                                               
+                                                <label>{menuItem.image}</label>
+                                                
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            <div className="flex items-center">
+                                                <div className="ml-4">
+                                                    <div className="text-sm text-gray-500">{menuItem.menu}</div>  
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <button type="button"onClick={()=>{modalStore.openModal("Update Restaurant", <RestaurantEditForm id={restaurant.id}/>)}} className="text-indigo-600 hover:text-indigo-900 mr-4">
+                                        <button type="button"onClick={()=>{modalStore.openModal("Update Menu", <MenuItemEditForm id={menuItem.id}/>)}} className="text-indigo-600 hover:text-indigo-900 mr-4">
                                             Edit
                                             </button>
-                                            <button className="text-red-600 hover:text-red-900" onClick={(e) => handleRestaurantDelete(e, restaurant.id!)}>
+                                            <button className="text-red-600 hover:text-red-900" onClick={(e) => handleMenuDelete(e, menuItem.id)}>
                                             Delete
                                             </button>
                                         </td>

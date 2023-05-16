@@ -3,10 +3,12 @@ export interface Offer {
     id: string;
     name: string;
     description: string;
-    image: string;
-    menuId: number;
+    image?: string;
+    imagePath?:string;
+    restaurantId: number;
     discountPercent: number;
-    startDate: Date;
-    endDate: Date;
-    menu: Menu;
+    price:number;
+    startDate: Date|null;
+    endDate: Date|null;
+    restaurant: string;
   }
