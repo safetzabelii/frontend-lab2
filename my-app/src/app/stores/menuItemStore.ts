@@ -3,7 +3,7 @@ import agent from "../api/agent";
 import { MenuItem } from "../models/Menu/MenuItem";
 
 export default class MenuItemStore {
-    menuItemRegistry = new Map<string, MenuItem>();
+    menuItemRegistry = new Map<number, MenuItem>();
     selectedMenuItem: MenuItem | undefined = undefined;
     createdMenuItem:MenuItem|undefined = undefined;
     editMode = false;
@@ -57,7 +57,7 @@ export default class MenuItemStore {
         }
     }
 
-    deleteMenuItem = async(id: string) =>{
+    deleteMenuItem = async(id: number) =>{
         this.loading = true;
         try{
             await agent.MenuItems.delete(id);
@@ -95,7 +95,7 @@ export default class MenuItemStore {
         }
     }
 
-    loadMenuItem = async(id:string) => {
+    loadMenuItem = async(id:number) => {
         let menuItem = this.getMenuItem(id);
         if(menuItem){
             this.selectedMenuItem = menuItem;
@@ -122,7 +122,7 @@ export default class MenuItemStore {
         }
     }
 
-    private getMenuItem = (id: string) => {
+    private getMenuItem = (id: number) => {
         return this.menuItemRegistry.get(id);
     }
 

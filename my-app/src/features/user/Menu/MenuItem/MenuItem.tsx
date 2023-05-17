@@ -9,7 +9,7 @@ export default observer(function MenuItems (){
     const {loadMenuItems, deleteMenuItem, getMenuItems} = menuItemStore;
     const [target, setTarget] = useState('');
 
-    function handleMenuItemDelete(e: SyntheticEvent<HTMLButtonElement>, id: string) {
+    function handleMenuItemDelete(e: SyntheticEvent<HTMLButtonElement>, id: number) {
       setTarget(e.currentTarget.name);
       deleteMenuItem(id);
     }

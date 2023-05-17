@@ -20,8 +20,9 @@ export default observer(function OfferEditForm(props: Props){
   const {offerStore,modalStore,restaurantStore} = useStore();
   const{loadOffer, updateOffer} =offerStore
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
-  const [offerDto, setOffer] = useState<OfferDto>({
+  
+  
+  const [offer, setOffer] = useState<Offer>({
     id:'',
     name: '',
     description: '',
@@ -32,33 +33,41 @@ export default observer(function OfferEditForm(props: Props){
     restaurantId:'',
     files:'',
   });
-  useEffect(()=>{
-    if(props.id){
-        loadOffer(props.id).then((loadedOffer:OfferDto|void)=>{
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    setLoading(true);
+    if (props.id) {
+      restaurantStore.loadRestaurants().then(()=>{
+        loadOffer(props.id!).then((loadedOffer: Offer | void) => {
+          if (loadedOffer != null) {
             setOffer(loadedOffer!);
-            setLoading(false);
-            restaurantStore.loadRestaurants();
-        })
+          } else {
+            navigate('/dashboard/listOffers');
+          }
+        });
+      })
+      setLoading(false);
     }
-  },[props.id,loadOffer,restaurantStore.loadRestaurants]);
-
+  }, [props.id]);
+  
+  
+  
   const validationSchema = Yup.object({
     name: Yup.string().required('Name is required'),
   });
   
-  function handleFormSubmit(offer: OfferDto){
+  function handleFormSubmit(offer: Offer){
     const formData = new FormData();
     formData.append('id',props.id!);
-    formData.append('name',offerDto.name);
-    formData.append('description',offerDto.description);
+    formData.append('name',offer.name);
+    formData.append('description',offer.description);
     formData.append('files',(document.getElementById('files')as HTMLInputElement).files![0]);
-    formData.append('restaurantId',offerDto.restaurantId);
-    formData.append('discountPercent',offerDto.discountPercent.toString());
-    if(offerDto.price && offerDto.startDate && offerDto.endDate){
-    formData.append('price',offerDto.price.toString());
-    formData.append('startDate', offerDto.startDate.toISOString());
-    formData.append('endDate', offerDto.endDate.toISOString());
-    }
+    formData.append('restaurantId',offer.restaurantId);
+    formData.append('discountPercent',offer.discountPercent.toString());
+    formData.append('price',offer.price!.toString());
+    formData.append('startDate', offer.startDate!.toString());
+    formData.append('endDate', offer.endDate!.toString());
+    
     updateOffer(formData).then(()=>
     {
       modalStore.closeModal();
@@ -67,9 +76,12 @@ export default observer(function OfferEditForm(props: Props){
   }
 
   return (
-    
+    <>
+    {loading ? (
+        <div>Loading...</div> 
+      ) :(
     <Formik
-    initialValues={offerDto}
+    initialValues={offer}
     onSubmit={handleFormSubmit}
     enableReinitialize
     validationSchema={validationSchema}
@@ -111,34 +123,49 @@ export default observer(function OfferEditForm(props: Props){
 
 
 
-    <label className="block text-white font-bold mb-2" htmlFor="discountpercent">
+    <label className="block text-white font-bold mb-2" htmlFor="discountPercent">
       Discount percent:
     </label>
     <Field
       className="border border-gray-400 p-2 w-full rounded-md"
-      type="text"
-      name="discountpercent"
-      id="discountpercent"
+      type="number"
+      name="discountPercent"
+      id="discountPercent"
       placeholder="Enter discount percent"
     />
     <ErrorMessage
-      name="discountpercent"
+      name="discountPercent"
       component="div"
       className="text-red-500 text-sm mt-1"
     />
-
+ <label className="block text-white font-bold mb-2" htmlFor="price">
+      Price:
+    </label>
+    <Field
+      className="border border-gray-400 p-2 w-full rounded-md"
+      type="number"
+      name="price"
+      id="price"
+      placeholder="Enter price"
+    />
+    <ErrorMessage
+      name="price"
+      component="div"
+      className="text-red-500 text-sm mt-1"
+    />
     <label className="block text-white font-bold mb-2" htmlFor="startDate">
       Start Date:
     </label>
     <Field
       className="border border-gray-400 p-2 w-full rounded-md"
-      type="text"
-      name="startdate"
-      id="startdate"
+      type="date"
+      name="startDate"
+      id="startDate"
       placeholder="Enter start date"
+      value={formik.values.startDate ? formik.values.startDate.toString().slice(0, 10) : ''}
     />
     <ErrorMessage
-      name="startdate"
+      name="startDate"
       component="div"
       className="text-red-500 text-sm mt-1"
     />
@@ -148,25 +175,31 @@ export default observer(function OfferEditForm(props: Props){
     </label>
     <Field
       className="border border-gray-400 p-2 w-full rounded-md"
-      type="text"
-      name="enddate"
-      id="enddate"
+      type="date"
+      name="endDate"
+      id="endDate"
       placeholder="Enter end date"
+      value={formik.values.endDate ? formik.values.endDate.toString().slice(0, 10) : ''}
     />
     <ErrorMessage
-      name="enddate"
+      name="endDate"
       component="div"
       className="text-red-500 text-sm mt-1"
     />
-    <label className="block text-white font-bold mb-2" htmlFor="restaurantId">
-                  Restaurant:
-    </label>
-      <Field component="select" name="restaurantId">
-       <option>Nothing Selected</option>
-      {restaurantStore.getRestaurants.map((restaurant)=>(
-       <option value={restaurant.id}>{restaurant.name}</option>
-        ))}
-      </Field>
+   <label htmlFor="restaurantId" className="inline-block mb-2 ml-1 font-bold text-xs text-slate-700 dark:text-black/80">Restaurant</label>
+   <Field
+  as="select"
+  id="restaurantId"
+  name="restaurantId"// Set the initial value
+  className="focus:shadow-primary-outline dark:bg-slate-850 dark:text-black text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
+>
+  {restaurantStore.restaurantsByName.map((restaurant) => (
+    <option key={restaurant.id!} value={restaurant.id!}>
+      {restaurant.name}
+    </option>
+  ))}
+</Field>
+
     <ErrorMessage
       name="restaurantId"
       component="div"
@@ -202,7 +235,8 @@ export default observer(function OfferEditForm(props: Props){
       
     </Form>
   )}
-</Formik>
+</Formik>)}
+</>
       
   );
 });

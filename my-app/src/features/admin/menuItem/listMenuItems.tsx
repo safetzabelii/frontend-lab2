@@ -18,10 +18,10 @@ const navigate = useNavigate();
 
   function openCreateForm() {
     modalStore.closeModal();
-    modalStore.openModal("Create Menu", <MenuItemCreateForm />);
+    modalStore.openModal("Create Menu Item", <MenuItemCreateForm />);
   }
 
-  function handleMenuDelete(e: SyntheticEvent<HTMLButtonElement>, id: string) {
+  function handleMenuDelete(e: SyntheticEvent<HTMLButtonElement>, id: number) {
     setTarget(e.currentTarget.name);
     deleteMenuItem(id);
   }
@@ -119,8 +119,6 @@ const navigate = useNavigate();
                                                         objectFit: 'cover', 
                                                     }}
                                                 />
-                                                <label>{menuItem.image}</label>
-                                                
                                                 </div>
                                             </div>
                                         </td>

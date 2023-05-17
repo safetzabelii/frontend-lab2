@@ -161,7 +161,7 @@ function App() {
               <Route path="/dashboard/menuCreateForm" element={<MenuCreateForm/>}/>
               <Route path="/dashboard/menuItemCreateForm" element={<MenuItemCreateForm/>}/>
               <Route path="/dashboard/menuItemEditForm" element={<MenuItemEditForm/>}/>
-              <Route path="/dashboard/listMenuItem" element={<ListMenuItems/>}/>
+              <Route path="/dashboard/listMenuItems" element={<ListMenuItems/>}/>
               <Route path="/dashboard/listOffers" element={<ListOffers/>}/>
               <Route path="/dashboard/offerCreateForm" element={<OfferCreateForm/>}/>
               <Route path="/dashboard/offerEditForm" element={<OfferEditForm/>}/>

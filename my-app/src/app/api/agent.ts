@@ -100,10 +100,10 @@ const Menus = {
 
 const MenuItems = {
     list: () => request.get<MenuItem[]>("/MenuItem/GetAllMenuItem"),
-    details: (id: string) => request.get<MenuItem>(`/MenuItem/GetMenuItem/${id}`),
+    details: (id: number) => request.get<MenuItem>(`/MenuItem/GetMenuItem/${id}`),
     create: (menuItem: FormData) => axios.post<ServerError<MenuItem>>("/MenuItem/CreateMenuItem", menuItem),
     update: (menuItem: FormData) => axios.put<ServerError<MenuItem>>(`/MenuItem/EditMenuItem`, menuItem),
-    delete: (id: string) => axios.delete<void>(`/MenuItem/DeleteMenu/${id}`),
+    delete: (id: number) => axios.delete<void>(`/MenuItem/DeleteMenu/${id}`),
     };
 
 const Offers = {

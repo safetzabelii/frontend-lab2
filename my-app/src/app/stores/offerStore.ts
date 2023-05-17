@@ -49,6 +49,7 @@ offerRegistry = new Map<string,Offer>();
         this.loading=true;
         try{
             const response = await agent.Offers.create(offer);
+
             runInAction(()=>{
                 if(response.data.data != null){
                     this.createdOffer = response.data.data as Offer;
@@ -111,18 +112,19 @@ offerRegistry = new Map<string,Offer>();
             this.loadingInitial=true;
             try{
                 const response = await  agent.Offers.details(id);
-               
+                console.log(response.data);
                 if(response.data !=null){
-                    this.setOffer(offer!);
+                    this.setOffer(response.data!);
                     runInAction(()=>{
-                        this.selectedOffer=offer;
+                        this.selectedOffer=response.data!;
                     })
+                    this.setLoadingInitial(false);
+                    return response.data;
                 }
                 else{
-                    return console.log("No menu was retrived");
+                    return console.log("No offer was retrived");
                 }
-                this.setLoadingInitial(false);
-                return response.data;
+                
             }catch(error){
                 console.log(error);
                 this.setLoadingInitial(false);

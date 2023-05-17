@@ -131,17 +131,10 @@ export default observer(function ListOffers() {
                                                         objectFit: 'cover', 
                                                     }}
                                                 />
-                                                <label>{offer.image}</label>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <div className="flex items-center">
-                                                <div className="ml-4">
-                                                <div className="text-sm text-gray-500">{offer.discountPercent}</div>                                               
-                                                </div>
-                                            </div>
-                                        </td>
+                                        
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="flex items-center">
                                                 <div className="ml-4">
@@ -152,14 +145,30 @@ export default observer(function ListOffers() {
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="flex items-center">
                                                 <div className="ml-4">
-                                                <div className="text-sm text-gray-500">{offer.startDate?.toLocaleString()}</div>                                               
+                                                <div className="text-sm text-gray-500">{offer.discountPercent}%</div>                                               
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="flex items-center">
                                                 <div className="ml-4">
-                                                <div className="text-sm text-gray-500">{offer.endDate?.toLocaleString()}</div>                                               
+                                                <div className="text-sm text-gray-500">
+                                                    {new Date(offer.startDate!).toLocaleDateString(undefined, {
+                                               month: 'long',
+                                               day: 'numeric',
+                                                year: 'numeric'
+                                                })}</div>                                               
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            <div className="flex items-center">
+                                                <div className="ml-4">
+                                                <div className="text-sm text-gray-500">{new Date(offer.endDate!).toLocaleDateString(undefined, {
+                                                day: 'numeric',
+                                                month: 'long',
+                                                year: 'numeric'
+                                                })}</div>                                               
                                                 </div>
                                             </div>
                                         </td>

@@ -272,6 +272,21 @@ export default observer(function AdminNavbar() {
               </svg>
               <span className="">Menus</span>
             </a>
+            <a
+              href="/dashboard/listMenuItems"
+              className="text-sm font-medium text-gray-700 py-2 px-2 hover:bg-teal-500 hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
+            >
+              <svg
+                className="w-6 h-6 fill-current inline-block"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd">
+                </path>
+              </svg>
+              <span className="">Menu Items</span>
+            </a>
           
           
           </div>{userStore.isLoggedIn ? (

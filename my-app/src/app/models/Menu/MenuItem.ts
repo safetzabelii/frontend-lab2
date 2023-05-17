@@ -1,11 +1,11 @@
 
 import { Menu } from './Menu';
 export interface MenuItem {
-    id: string;
+    id: number;
     name: string;
     description: string;
     price: number;
-    image: string;
+    image?: string;
     menuId: string;
     menu?: string;
     imagePath?:string;

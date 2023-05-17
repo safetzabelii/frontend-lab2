@@ -5,10 +5,11 @@ export interface Offer {
     description: string;
     image?: string;
     imagePath?:string;
-    restaurantId: number;
+    restaurantId: string;
     discountPercent: number;
     price:number;
     startDate: Date|null;
     endDate: Date|null;
-    restaurant: string;
+    restaurant?: string;
+    files?:string;
   }

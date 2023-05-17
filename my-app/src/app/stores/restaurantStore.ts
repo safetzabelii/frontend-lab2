@@ -139,15 +139,15 @@ restaurantRegistry = new Map<string,Restaurant>();
             try{
                 const result = await  agent.Restaurants.details(id);
                 if(result.data !=null){
-                    this.setRestaurant(restaurant!);
+                    this.setRestaurant(result.data!);
                     runInAction(()=>{
                         this.selectedRestaurant=restaurant;
                     })
                     this.setLoadingInitial(false);
-                    return result.data;;
+                    return result.data;
                 }
                 else{
-                    return console.log("No user was retrived");
+                    return console.log("No restaurant was retrived");
                 }
             }catch(error){
                 console.log(error);
