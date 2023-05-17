@@ -50,17 +50,16 @@ createMenu(formData).then(()=>{
   
 
   return (
-    
     <Formik
-    initialValues={menuDto}
-    onSubmit={handleFormSubmit}
-    enableReinitialize
-    validationSchema={validationSchema}
-  >
-    {(formik) => (
-      <Form className="mt-6">
-              <div className="mb-4">
-              <label className="block text-white font-bold mb-2" htmlFor="name">
+      initialValues={menuDto}
+      onSubmit={handleFormSubmit}
+      enableReinitialize
+      validationSchema={validationSchema}
+    >
+      {(formik) => (
+        <Form className="mt-6">
+          <div className="mb-4">
+            <label htmlFor="name" className="block text-black font-bold mb-2">
               Name:
             </label>
             <Field
@@ -75,8 +74,8 @@ createMenu(formData).then(()=>{
               component="div"
               className="text-red-500 text-sm mt-1"
             />
-
-            <label className="block text-white font-bold mb-2" htmlFor="description">
+  
+            <label htmlFor="description" className="block text-black font-bold mb-2">
               Description:
             </label>
             <Field
@@ -91,21 +90,29 @@ createMenu(formData).then(()=>{
               component="div"
               className="text-red-500 text-sm mt-1"
             />
-            <label className="block text-white font-bold mb-2" htmlFor="restaurantId">
+  
+            <label htmlFor="restaurantId" className="block text-black font-bold mb-2">
               Restaurant:
             </label>
-                   <Field component="select" name="restaurantId">
-                    <option>Nothing Selected</option>
-                    {getRestaurants.map((restaurant)=>(
-                      <option value={restaurant.id}>{restaurant.name}</option>
-                      ))}
-                   </Field>
+            <Field
+              component="select"
+              name="restaurantId"
+              className="border border-gray-400 p-2 w-full rounded-md"
+            >
+              <option value="">Select Restaurant</option>
+              {getRestaurants.map((restaurant) => (
+                <option key={restaurant.id} value={restaurant.id}>
+                  {restaurant.name}
+                </option>
+              ))}
+            </Field>
             <ErrorMessage
               name="restaurantId"
               component="div"
               className="text-red-500 text-sm mt-1"
             />
-           <label className="block text-white font-bold mb-2" htmlFor="files">
+  
+            <label htmlFor="files" className="block text-black font-bold mb-2">
               Image:
             </label>
             <Field
@@ -121,22 +128,20 @@ createMenu(formData).then(()=>{
               component="div"
               className="text-red-500 text-sm mt-1"
             />
-
-              </div>
-              <div className="flex justify-end space-x-4">
-                <button
-                  className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors duration-300 ease-in-out"
-                  type="submit"
-                  disabled={!formik.isValid || formik.isSubmitting}
-                >
-                  {formik.isSubmitting ? 'Submitting...' : 'Submit'}
-                </button>
-              </div>
-
-              
-              </Form>
-  )}
-</Formik>
-      
+          </div>
+  
+          <div className="flex justify-end space-x-4">
+            <button
+              className="bg-green-700 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors duration-300 ease-in-out"
+              type="submit"
+              disabled={!formik.isValid || formik.isSubmitting}
+            >
+              {formik.isSubmitting ? 'Submitting...' : 'Submit'}
+            </button>
+          </div>
+        </Form>
+      )}
+    </Formik>
   );
+  
 });

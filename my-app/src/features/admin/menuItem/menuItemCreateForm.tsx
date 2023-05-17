@@ -51,17 +51,16 @@ export default observer(function MenuItemCreateForm(){
   
 
   return (
-    
     <Formik
-    initialValues={menuItem}
-    onSubmit={handleFormSubmit}
-    enableReinitialize
-    validationSchema={validationSchema}
-  >
-    {(formik) => (
-      <Form className="mt-6">
-              <div className="mb-4">
-              <label className="block text-white font-bold mb-2" htmlFor="name">
+      initialValues={menuItem}
+      onSubmit={handleFormSubmit}
+      enableReinitialize
+      validationSchema={validationSchema}
+    >
+      {(formik) => (
+        <Form className="mt-6">
+          <div className="mb-4">
+            <label className="block text-black font-bold mb-2" htmlFor="name">
               Name:
             </label>
             <Field
@@ -76,8 +75,8 @@ export default observer(function MenuItemCreateForm(){
               component="div"
               className="text-red-500 text-sm mt-1"
             />
-
-            <label className="block text-white font-bold mb-2" htmlFor="description">
+  
+            <label className="block text-black font-bold mb-2" htmlFor="description">
               Description:
             </label>
             <Field
@@ -92,7 +91,8 @@ export default observer(function MenuItemCreateForm(){
               component="div"
               className="text-red-500 text-sm mt-1"
             />
-            <label className="block text-white font-bold mb-2" htmlFor="price">
+  
+            <label className="block text-black font-bold mb-2" htmlFor="price">
               Price:
             </label>
             <Field
@@ -107,19 +107,30 @@ export default observer(function MenuItemCreateForm(){
               component="div"
               className="text-red-500 text-sm mt-1"
             />
-            <label htmlFor="menuId" className="inline-block mb-2 ml-1 font-bold text-xs text-slate-700 dark:text-black/80">Menu</label>
-    <Field as="select" id="menuId" name="menuId" className="focus:shadow-primary-outline dark:bg-slate-850 dark:text-black text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none" >
-     <option>Nothing Selected</option>
-     {MenuByName.map((menu)=>(
-          <option key={menu.id!} value={menu.id!}>{menu.name}</option>
-       ))}
-    </Field>
-    <ErrorMessage
-      name="menuId"
-      component="div"
-      className="text-red-500 text-sm mt-1"
-    />
-           <label className="block text-white font-bold mb-2" htmlFor="files">
+  
+            <label htmlFor="menuId"  className="block text-black font-bold mb-2">
+             Menu:
+            </label>
+            <Field
+              as="select"
+              id="menuId"
+              name="menuId"
+              className="border border-gray-400 p-2 w-full rounded-md"
+            >
+              <option>Select Menu</option>
+              {MenuByName.map((menu) => (
+                <option key={menu.id!} value={menu.id!}>
+                  {menu.name}
+                </option>
+              ))}
+            </Field>
+            <ErrorMessage
+              name="menuId"
+              component="div"
+              className="text-red-500 text-sm mt-1"
+            />
+  
+            <label className="block text-black font-bold mb-2" htmlFor="files">
               Image:
             </label>
             <Field
@@ -135,22 +146,20 @@ export default observer(function MenuItemCreateForm(){
               component="div"
               className="text-red-500 text-sm mt-1"
             />
-
-              </div>
-              <div className="flex justify-end space-x-4">
-                <button
-                  className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors duration-300 ease-in-out"
-                  type="submit"
-                  disabled={!formik.isValid || formik.isSubmitting}
-                >
-                  {formik.isSubmitting ? 'Submitting...' : 'Submit'}
-                </button>
-              </div>
-
-              
-              </Form>
-  )}
-</Formik>
-      
+          </div>
+  
+          <div className="flex justify-end space-x-4">
+            <button
+              className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors duration-300 ease-in-out"
+              type="submit"
+              disabled={!formik.isValid || formik.isSubmitting}
+            >
+              {formik.isSubmitting ? 'Submitting...' : 'Submit'}
+            </button>
+          </div>
+        </Form>
+      )}
+    </Formik>
   );
+  
 });

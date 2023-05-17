@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 export default observer(function AdminNavbar() {
   const { userStore } = useStore();
-  const {logout} = userStore;
+  const {logout, user} = userStore;
   const navigate = useNavigate();
   const handleLogout = () => {
     logout()
@@ -57,9 +57,9 @@ export default observer(function AdminNavbar() {
               <h2
                 className="font-medium text-xs md:text-sm text-center text-teal-500"
               >
-                Eduard Pantazi
+                {user?.name}
               </h2>
-              <p className="text-xs text-gray-500 text-center">Administrator</p>
+              <p className="text-xs text-gray-500 text-center">{user?.role}</p>
             </div>
           </div>
           <div

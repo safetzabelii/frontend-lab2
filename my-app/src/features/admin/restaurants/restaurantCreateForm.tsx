@@ -57,7 +57,7 @@ export default observer(function RestaurantCreateForm(){
           {formik => (
             <Form className="mt-6" encType="multipart/form-data">
               <div className="mb-4">
-              <label className="block text-white font-bold mb-2" htmlFor="name">
+              <label className="block text-black font-bold mb-2" htmlFor="name">
               Name:
             </label>
             <Field
@@ -73,7 +73,7 @@ export default observer(function RestaurantCreateForm(){
               className="text-red-500 text-sm mt-1"
             />
 
-            <label className="block text-white font-bold mb-2" htmlFor="address">
+            <label className="block text-black font-bold mb-2" htmlFor="address">
               Address:
             </label>
             <Field
@@ -89,7 +89,7 @@ export default observer(function RestaurantCreateForm(){
               className="text-red-500 text-sm mt-1"
             />
 
-            <label className="block text-white font-bold mb-2" htmlFor="phoneNumber">
+            <label className="block text-black font-bold mb-2" htmlFor="phoneNumber">
               Phone Number:
             </label>
             <Field
@@ -105,7 +105,7 @@ export default observer(function RestaurantCreateForm(){
               className="text-red-500 text-sm mt-1"
             />
 
-            <label className="block text-white font-bold mb-2" htmlFor="files">
+            <label className="block text-black font-bold mb-2" htmlFor="files">
               Image:
             </label>
             <Field
@@ -124,7 +124,7 @@ export default observer(function RestaurantCreateForm(){
               </div>
               <div className="flex justify-end space-x-4">
                 <button
-                  className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors duration-300 ease-in-out"
+                  className="bg-green-700 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors duration-300 ease-in-out"
                   type="submit"
                   disabled={!formik.isValid || formik.isSubmitting}
                 >
