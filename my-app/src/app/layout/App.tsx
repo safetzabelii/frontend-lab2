@@ -41,7 +41,8 @@ import MenuItemCreateForm from '../../features/admin/menuItem/menuItemCreateForm
 import MenuItemEditForm from '../../features/admin/menuItem/menuItemEditForm';
 import OfferEditForm from '../../features/admin/offers/offerEditForm';
 import OfferCreateForm from '../../features/admin/offers/offerCreateForm';
-
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import 'react-perfect-scrollbar/dist/css/styles.css';
 function App() {
   const verificationToken = store.commonStore.verificationToken;
   const { commonStore, userStore } = useStore();
@@ -105,9 +106,12 @@ function App() {
       </div>
       ) : (
         <>
+       
           <ToastContainer position="top-right" hideProgressBar autoClose={2000} />
 
           <BrowserRouter>
+          <PerfectScrollbar>
+            <div className='scroll-container'>
             <ModalContainer />
 
             <div id="allContents">
@@ -169,7 +173,10 @@ function App() {
                 </>} />
               </Routes>
             </div>
+            </div>
+            </PerfectScrollbar>
           </BrowserRouter>
+          
         </>
       )}
     </>

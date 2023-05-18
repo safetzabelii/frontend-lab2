@@ -72,3 +72,28 @@
 
 
 }
+.max-height-scrollable {
+  max-height: 98vh; /* Set the desired maximum height */
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+/* Style the scrollbar track */
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
+
+/* Style the scrollbar thumb */
+::-webkit-scrollbar-thumb {
+  background-color: lightgray; /* Color of the scrollbar thumb */
+  border-radius: 9999px;
+}
+
+/* Change the appearance of the scrollbar thumb on hover */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+/* Add this CSS code to your global CSS file or component-specific CSS */
+
+/* Styling for the scrollbar track */
+::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
+}
