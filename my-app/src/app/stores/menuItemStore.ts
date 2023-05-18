@@ -35,7 +35,19 @@ export default class MenuItemStore {
             console.log(error);
         }
     }
-
+    getMenuItemsByMenuId = async (id:string) => {
+        try{
+            this.menuItemRegistry.clear();
+            const result = await agent.MenuItems.getMenuItemsByMenuId(id);
+            result.data.forEach((menuitem: MenuItem)=>{
+                this.setMenuItem(menuitem);
+            })
+            this.setLoadingInitial(false);
+        }catch(error){
+            this.setLoadingInitial(false);
+            console.log(error);
+        }
+    }
     createMenuItem = async (menuItem:FormData)=>{
         this.loading=true;
         try{

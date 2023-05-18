@@ -20,11 +20,9 @@ const Spinner = () => (
 export default observer(function OfferCreateForm() {
   const { offerStore, modalStore, restaurantStore, menuItemStore, menuStore } = useStore();
   const navigate = useNavigate();
-  const [selectedMenu, setSelectedMenu] = useState('');
-  const [filteredMenus, setFilteredMenus] = useState<Menu[]>([]);
   const [selectedRestaurant, setSelectedRestaurant] = useState<string>('');
   const [selectedItems, setSelectedItems] = useState<{ MenuItemId: number; Quantity: any; }[]>([]);
-  const [items, setItems] = useState<{ MenuItemId: number; Quantity: any; }[]>([]);
+  //const [items, setItems] = useState<{ MenuItemId: number; Quantity: any; }[]>([]);
   const { createOffer } = offerStore;
 
   const [offer, setOffer] = useState<OfferDto>({
@@ -40,34 +38,40 @@ export default observer(function OfferCreateForm() {
   });
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      await menuStore.loadMenus();
-      await menuItemStore.loadMenuItems();
+  // useEffect(() => {
+  //   menuStore.loadMenus().then(() => {
+  //     menuItemStore.loadMenuItems();
+  //     setLoading(false);
+  //     const filteredMenus = menuStore.MenuByName.filter((menu) => menu.restaurantId === selectedRestaurant);
+  //     setFilteredMenus(filteredMenus);
+  //   });
+  // }, [restaurantStore, menuItemStore, selectedRestaurant]);
 
-      const filteredMenus = menuStore.MenuByName.filter((menu) => menu.restaurantId === selectedRestaurant);
-      setFilteredMenus(filteredMenus);
-      setLoading(false);
-    };
-
-    fetchData();
-  }, [menuStore, menuItemStore, selectedRestaurant]);
-
-  useEffect(() => {
-    if (selectedMenu) {
-      const menuItems = menuItemStore.getMenuItems.filter((menuItem) => menuItem.menuId === selectedMenu);
-      setItems(menuItems.map((menuItem) => ({ MenuItemId: menuItem.id, Quantity: 0 })));
-    } else {
-      setItems([]);
-    }
-  }, [selectedMenu, menuItemStore]);
-
+  // useEffect(() => {
+  //   if (selectedMenu) {
+  //     const menuItems = menuItemStore.getMenuItems.filter((menuItem) => menuItem.menuId === selectedMenu);
+  //     setItems(menuItems.map((menuItem) => ({ MenuItemId: menuItem.id, Quantity: 0 })));
+  //   } else {
+  //     setItems([]);
+  //   }
+  // }, [selectedMenu]);
   useEffect(() => {
     restaurantStore.loadRestaurants().then(() => {
       setLoading(false);
     });
+    
   }, [restaurantStore]);
-
+  
+  function handleRestaurantSelection(e: string) {
+    
+    const selectedRestaurantId = e;
+    menuStore.getMenusByRestaurantId(selectedRestaurantId.toString());
+  }
+function handleMenuSelection(e: string) {
+    
+  const selectedMenuId = e;
+  menuItemStore.getMenuItemsByMenuId(selectedMenuId.toString());
+}
   const validationSchema = Yup.object({
     name: Yup.string().required('Name is required'),
   });
@@ -236,8 +240,8 @@ export default observer(function OfferCreateForm() {
                           value={selectedRestaurant}
                           onChange={(e: ChangeEvent<HTMLSelectElement>) => {
                             setSelectedRestaurant(e.target.value);
-                            setSelectedMenu('');
                             setSelectedItems([]);
+                            handleRestaurantSelection(e.target.value);
                           }}
                         >
                           <option value="">Select a restaurant</option>
@@ -262,13 +266,13 @@ export default observer(function OfferCreateForm() {
                       name="selectedMenu"
                       className="border border-gray-400 p-2 w-full rounded-md"
                       onChange={(e: ChangeEvent<HTMLSelectElement>) => {
-                        setSelectedMenu(e.target.value);
                         setSelectedItems([]);
+                        handleMenuSelection(e.target.value)
                       }}
                       disabled={!selectedRestaurant}
                     >
                        <option value="">Select a menu</option>
-                        {filteredMenus.map((menu) => (
+                        {menuStore.MenuByName.map((menu) => (
                           <option key={menu.id!} value={menu.id!}>
                             {menu.name}
                           </option>
@@ -292,12 +296,9 @@ export default observer(function OfferCreateForm() {
 
                 {/* Right Side */}
                 <div className="w-1/2 pl-4 border-l border-gray-400">
-                {selectedMenu && (
                     <>
                       <label className="block text-black font-bold mb-2">Menu Items:</label>
-                      {menuItemStore.getMenuItems
-                        .filter((menuItem) => menuItem.menuId === selectedMenu)
-                        .map((menuItem) => (
+                      {menuItemStore.getMenuItems.map((menuItem) => (
                           <div key={menuItem.id}>
                             <label htmlFor={`menuItem-${menuItem.id}`}>
                               <input
@@ -331,7 +332,7 @@ export default observer(function OfferCreateForm() {
                           </div>
                         ))}
                     </>
-                  )}
+                  
                 </div>
               </div>
 
