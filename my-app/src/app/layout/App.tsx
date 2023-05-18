@@ -1,6 +1,5 @@
-
 import './App.css';
-import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Signup from './Signup';
 import HomePage from './Homepage';
 import AboutUs from './Aboutus';
@@ -45,19 +44,20 @@ import OfferCreateForm from '../../features/admin/offers/offerCreateForm';
 
 function App() {
   const verificationToken = store.commonStore.verificationToken;
-  const {commonStore,userStore} = useStore();
+  const { commonStore, userStore } = useStore();
   const cookies = commonStore.getCookies();
   const [loading, setLoading] = useState(true);
   const [isUserLoaded, setIsUserLoaded] = useState(false);
   let token = null;
   if (cookies) {
-    token = cookies.token;  
+    token = cookies.token;
   }
   useEffect(() => {
     const token = commonStore.getToken;
-    
+
     if (token) {
-      userStore.getCurrentUser(token)
+      userStore
+        .getCurrentUser(token)
         .then(() => {
           setLoading(false);
           setIsUserLoaded(true);
@@ -72,21 +72,21 @@ function App() {
       setIsUserLoaded(true);
     }
   }, [commonStore, userStore]);
-  
+
   useEffect(() => {
-    if (isUserLoaded && userStore.user?.role === "Admin") {
+    if (isUserLoaded && userStore.user?.role === 'Admin') {
       const allContents = document.getElementById('allContents') as HTMLDivElement;
       if (allContents) {
-        allContents.className = "h-screen";
+        allContents.className = 'h-screen';
         allContents.style.display = 'flex';
         allContents.style.justifyContent = 'space-evenly';
       }
-      
+
       const contentContainerWrapper = document.getElementById('contentContainerWrapper') as HTMLDivElement;
       if (contentContainerWrapper) {
-        contentContainerWrapper.className = "flex-1";
+        contentContainerWrapper.className = 'flex-1';
       }
-      
+
       const contentContainer = document.querySelector('.contentContainer') as HTMLDivElement;
       if (contentContainer) {
         contentContainer.style.display = 'flex';
@@ -94,92 +94,86 @@ function App() {
       }
     }
   }, [isUserLoaded, userStore.user?.role]);
+
   return (
     <>
-    {loading ? (
-        <div>Loading...</div>
+      {loading ? (
+        <div className="flex items-center justify-center">
+        <div className="loading-spinner">
+          <div className="spinner border-4 border-t-4 border-green-800 rounded-full h-12 w-12"></div>
+        </div>
+      </div>
       ) : (
         <>
-           <ToastContainer 
-   position="top-right" 
-   hideProgressBar
-   autoClose={2000}
- 
-/>
-   <BrowserRouter>
-   <ModalContainer/>
-    
-    <div id="allContents">
-    <Routes>
-  <Route path={"/*"} element={<>
-    {userStore.user?.role === "Admin" ? (
-      <AdminNavbar />
-    ) : (
-        <Navbar />
-    )}
-        <div id="contentContainerWrapper">
-<div className="contentContainer">
-          <Routes>
-            {/* Routes for all users */}
-            <Route element={<UserAlreadyLoggedInRoute />}>
-              <Route path="/login" element={<LoginForm />} />
-              <Route path="/signup" element={<Signup />} />
-            </Route>
+          <ToastContainer position="top-right" hideProgressBar autoClose={2000} />
 
-            {/* Routes common for all users */}
-            <Route path="/" element={<HomePage />} />
-            <Route path="/aboutus" element={<AboutUs />} />
-            <Route path="/contactus" element={<ContactUs />} />
-            <Route path="/menu" element={<MenuItem />} />
-            <Route path="/restaurants" element={<Restaurants />} />
+          <BrowserRouter>
+            <ModalContainer />
 
-            {/* Routes continued */}
-            <Route path="/verifyaccount" element={<VerifyAccount />} />
-            {verificationToken ? (
-              <Route
-                path={`/verifyAccount/${verificationToken}`}
-                element={<AccountVerified verificationToken={verificationToken} />}
-              />
-            ) : null}
-            <Route path="/sendEmail" element={<SendEmailForgetPassword />} />
-            <Route path="/changepw" element={<ChangePassword />} />
-            {token ? (
-              <Route path={`/forgotPassword/${token}`} element={<ForgotPassword />} />
-            ) : null}
+            <div id="allContents">
+              <Routes>
+                <Route path={'/*'} element={<>
+                  {userStore.user?.role === 'Admin' ? <AdminNavbar /> : <Navbar />}
+                  <div id="contentContainerWrapper">
+                    <div className="contentContainer">
+                      <Routes>
+                        {/* Routes for all users */}
+                        <Route element={<UserAlreadyLoggedInRoute />}>
+                          <Route path="/login" element={<LoginForm />} />
+                          <Route path="/signup" element={<Signup />} />
+                        </Route>
 
-            {/* Routes for authenticated users */}
-            <Route element={<LoggedInUserRoute />}>
-              <Route path="/dashboard/listRoles" element={<ListRoles />} />
-              <Route path="/dashboard/roleCreateForm" element={<RoleCreateForm />} />
-              <Route path="/dashboard/roleEditForm" element={<RoleEditForm />} />
-              <Route path="/dashboard/listRestaurants" element={<ListRestaurants />} />
-              <Route path="/dashboard/listOffers" element={<ListOffers />} />
-              <Route path="/dashboard/userDetails/:id" element={<UserDetails />} />
-              <Route path="/dashboard/listUsers" element={<ListUsers />} />
-              <Route path="/dashboard/listMenus" element={<ListMenus />} />
-              <Route path="/dashboard/restaurantEditForm" element={<RestaurantEditForm/>}/>
-              <Route path="/dashboard/menuCreateForm" element={<MenuCreateForm/>}/>
-              <Route path="/dashboard/menuItemCreateForm" element={<MenuItemCreateForm/>}/>
-              <Route path="/dashboard/menuItemEditForm" element={<MenuItemEditForm/>}/>
-              <Route path="/dashboard/listMenuItems" element={<ListMenuItems/>}/>
-              <Route path="/dashboard/listOffers" element={<ListOffers/>}/>
-              <Route path="/dashboard/offerCreateForm" element={<OfferCreateForm/>}/>
-              <Route path="/dashboard/offerEditForm" element={<OfferEditForm/>}/>
-              
-            </Route>
-          </Routes>
-          </div>
-      </div>
-  </>} />
-</Routes>
-</div>
-    </BrowserRouter>
-    
+                        {/* Routes common for all users */}
+                        <Route path="/" element={<HomePage />} />
+                        <Route path="/aboutus" element={<AboutUs />} />
+                        <Route path="/contactus" element={<ContactUs />} />
+                        <Route path="/menu" element={<MenuItem />} />
+                        <Route path="/restaurants" element={<Restaurants />} />
+
+                        {/* Routes continued */}
+                        <Route path="/verifyaccount" element={<VerifyAccount />} />
+                        {verificationToken ? (
+                          <Route
+                            path={`/verifyAccount/${verificationToken}`}
+                            element={<AccountVerified verificationToken={verificationToken} />}
+                          />
+                        ) : null}
+                        <Route path="/sendEmail" element={<SendEmailForgetPassword />} />
+                        <Route path="/changepw" element={<ChangePassword />} />
+                        {token ? (
+                          <Route path={`/forgotPassword/${token}`} element={<ForgotPassword />} />
+                        ) : null}
+
+                        {/* Routes for authenticated users */}
+                        <Route element={<LoggedInUserRoute />}>
+                          <Route path="/dashboard/listRoles" element={<ListRoles />} />
+                          <Route path="/dashboard/roleCreateForm" element={<RoleCreateForm />} />
+                          <Route path="/dashboard/roleEditForm" element={<RoleEditForm />} />
+                          <Route path="/dashboard/listRestaurants" element={<ListRestaurants />} />
+                          <Route path="/dashboard/listOffers" element={<ListOffers />} />
+                          <Route path="/dashboard/userDetails/:id" element={<UserDetails />} />
+                          <Route path="/dashboard/listUsers" element={<ListUsers />} />
+                          <Route path="/dashboard/listMenus" element={<ListMenus />} />
+                          <Route path="/dashboard/restaurantEditForm" element={<RestaurantEditForm />} />
+                          <Route path="/dashboard/menuCreateForm" element={<MenuCreateForm />} />
+                          <Route path="/dashboard/menuItemCreateForm" element={<MenuItemCreateForm />} />
+                          <Route path="/dashboard/menuItemEditForm" element={<MenuItemEditForm />} />
+                          <Route path="/dashboard/listMenuItems" element={<ListMenuItems />} />
+                          <Route path="/dashboard/listOffers" element={<ListOffers />} />
+                          <Route path="/dashboard/offerCreateForm" element={<OfferCreateForm />} />
+                          <Route path="/dashboard/offerEditForm" element={<OfferEditForm />} />
+                        </Route>
+                      </Routes>
+                    </div>
+                  </div>
+                </>} />
+              </Routes>
+            </div>
+          </BrowserRouter>
         </>
       )}
-  
     </>
-    
   );
 }
+
 export default App;

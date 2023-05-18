@@ -12,6 +12,11 @@ import { off } from 'process';
 import { Restaurant } from '../../../app/models/Menu/Restaurant';
 import { Menu } from '../../../app/models/Menu/Menu';
 
+const Spinner = () => (
+  <div className="flex items-center justify-center h-full">
+    <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-gray-900"></div>
+  </div>
+);
 export default observer(function OfferCreateForm() {
   const { offerStore, modalStore, restaurantStore, menuItemStore, menuStore } = useStore();
   const navigate = useNavigate();
@@ -21,7 +26,6 @@ export default observer(function OfferCreateForm() {
   const [selectedItems, setSelectedItems] = useState<{ MenuItemId: number; Quantity: any; }[]>([]);
   const [items, setItems] = useState<{ MenuItemId: number; Quantity: any; }[]>([]);
   const { createOffer } = offerStore;
-
 
   const [offer, setOffer] = useState<OfferDto>({
     id: 0,
@@ -37,13 +41,17 @@ export default observer(function OfferCreateForm() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    menuStore.loadMenus().then(() => {
-      menuItemStore.loadMenuItems();
-      setLoading(false);
+    const fetchData = async () => {
+      await menuStore.loadMenus();
+      await menuItemStore.loadMenuItems();
+
       const filteredMenus = menuStore.MenuByName.filter((menu) => menu.restaurantId === selectedRestaurant);
       setFilteredMenus(filteredMenus);
-    });
-  }, [restaurantStore, menuItemStore, selectedRestaurant]);
+      setLoading(false);
+    };
+
+    fetchData();
+  }, [menuStore, menuItemStore, selectedRestaurant]);
 
   useEffect(() => {
     if (selectedMenu) {
@@ -52,14 +60,13 @@ export default observer(function OfferCreateForm() {
     } else {
       setItems([]);
     }
-  }, [selectedMenu]);
+  }, [selectedMenu, menuItemStore]);
+
   useEffect(() => {
     restaurantStore.loadRestaurants().then(() => {
       setLoading(false);
     });
   }, [restaurantStore]);
-  
-  
 
   const validationSchema = Yup.object({
     name: Yup.string().required('Name is required'),
@@ -103,11 +110,16 @@ export default observer(function OfferCreateForm() {
     const selectedItem = selectedItems.find((item) => item.MenuItemId === MenuItemId);
     return selectedItem ? selectedItem.Quantity : 0;
   };
+  
+  if (restaurantStore.loading || menuStore.loading) {
+    return <Spinner />;
+  }
+  
 
   return (
     <>
       {loading ? (
-        <div>Loading...</div>
+        <Spinner />
       ) : (
         <Formik
           initialValues={offer}

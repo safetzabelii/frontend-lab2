@@ -9,6 +9,13 @@ import Select from "react-select";
 import { Restaurant } from '../../../app/models/Menu/Restaurant';
 import ModalStore from '../../../app/stores/modalStore';
 import { MenuItem } from '../../../app/models/Menu/MenuItem';
+
+const Spinner = () => (
+  <div className="flex items-center justify-center h-full">
+    <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-gray-900"></div>
+  </div>
+);
+
 export default observer(function MenuItemCreateForm(){
   const {menuItemStore,menuStore,modalStore} = useStore();
   const navigate = useNavigate();
@@ -45,6 +52,10 @@ export default observer(function MenuItemCreateForm(){
   modalStore.closeModal();
   navigate('dashboard/listMenuItems')}); 
 
+  }
+  
+  if (menuItemStore.loading || menuStore.loading) {
+    return <Spinner />;
   }
   
 

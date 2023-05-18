@@ -8,6 +8,16 @@ import { Menu } from '../../../app/models/Menu/Menu';
 import Select from "react-select";
 import { Restaurant } from '../../../app/models/Menu/Restaurant';
 import ModalStore from '../../../app/stores/modalStore';
+
+
+
+const Spinner = () => (
+  <div className="flex items-center justify-center h-full">
+    <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-gray-900"></div>
+  </div>
+);
+
+
 export default observer(function MenuCreateForm(){
   const {menuStore,restaurantStore,modalStore} = useStore();
   const navigate = useNavigate();
@@ -15,6 +25,7 @@ export default observer(function MenuCreateForm(){
   const{createMenu}=menuStore;
   const{getRestaurantsForSelect,getRestaurants}=restaurantStore;
   const [val, setVal] = useState(null);
+  
 
   const [menuDto, setMenu] = useState<Menu>({
     id: '',
@@ -47,7 +58,10 @@ createMenu(formData).then(()=>{
   }
   
 
-  
+  if (menuStore.loading || restaurantStore.loading) {
+    return <Spinner />;
+  }
+ 
 
   return (
     <Formik

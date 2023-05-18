@@ -6,6 +6,7 @@ import { RiDeleteBinLine as TrashIcon, RiPencilLine as PencilIcon } from 'react-
 import MenuCreateForm from './menuCreateForm';
 import MenuEditForm from './menuEditForm';
 
+
 export default observer(function ListMenus() {
   const { menuStore, modalStore } = useStore();
   const [target, setTarget] = useState('');
