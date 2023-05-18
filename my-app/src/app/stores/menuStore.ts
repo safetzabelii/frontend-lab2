@@ -60,6 +60,24 @@ menuRegistry = new Map<string,Menu>();
             
         }
     }
+    getMenusByRestaurantId = async (id:string) => {
+        try{
+            this.menuRegistry.clear();
+            const result = await agent.Menus.getMenusByRestaurantId(id);
+            result.data.forEach((menu: Menu)=>{
+                this.setMenu(menu);
+            })
+            this.setLoadingInitial(false);
+        }catch(error){
+            
+            this.setLoadingInitial(false);
+           
+            
+            console.log(error);
+            
+        }
+    }
+
 
     setLoadingInitial = (state: boolean)=>{
         this.loadingInitial=state;

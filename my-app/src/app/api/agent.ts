@@ -96,6 +96,7 @@ const Menus = {
     create: (menu: FormData) => axios.post<ServerError<Menu>>("/Menu/CreateMenu", menu),
     update: (menu: FormData) => axios.put<ServerError<Menu>>("/Menu/EditMenu", menu),
     delete: (id: string) => axios.delete<void>(`/Menu/DeleteMenu/${id}`),
+    getMenusByRestaurantId:(restaurantId:string) =>request.get<Menu[]>(`/Menu/GetMenusByRestaurantId/${restaurantId}`),
   };
 
 const MenuItems = {
@@ -104,6 +105,7 @@ const MenuItems = {
     create: (menuItem: FormData) => axios.post<ServerError<MenuItem>>("/MenuItem/CreateMenuItem", menuItem),
     update: (menuItem: FormData) => axios.put<ServerError<MenuItem>>(`/MenuItem/EditMenuItem`, menuItem),
     delete: (id: number) => axios.delete<void>(`/MenuItem/DeleteMenu/${id}`),
+    getMenuItemsByMenuId: (menuId:string)=>request.get<MenuItem[]>(`/MenuItem/GetMenuItemsByMenuId/${menuId}`),
     };
 
 const Offers = {
