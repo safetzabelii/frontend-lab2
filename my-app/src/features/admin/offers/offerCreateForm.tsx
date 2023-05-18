@@ -15,6 +15,7 @@ export default observer(function OfferCreateForm(){
   const {offerStore,modalStore,restaurantStore,menuItemStore, menuStore} = useStore();
   const navigate = useNavigate();
   const [selectedMenu, setSelectedMenu] = useState('');
+  const [selectedRestaurant, setSelectedRestaurant] = useState('');
   const [selectedItems, setSelectedItems] = useState<{ MenuItemId: number; Quantity: any; }[]>([]);
   const [items, setItems] = useState<{ MenuItemId: number; Quantity: any; }[]>([]);
   const{createOffer}=offerStore;
@@ -121,9 +122,114 @@ export default observer(function OfferCreateForm(){
                       component="div"
                       className="text-red-500 text-sm mt-1"
                     />
+                    <label className="block text-black font-bold mb-2" htmlFor="description">
+                          Description:
+                        </label>
+                        <Field
+                          className="border border-gray-400 p-2 w-full rounded-md"
+                          type="text"
+                          name="description"
+                          id="description"
+                          placeholder="Enter offer description"
+                        />
+                        <ErrorMessage
+                          name="description"
+                          component="div"
+                          className="text-red-500 text-sm mt-1"
+                        />
+                      
+                    <label className="block text-black font-bold mb-2" htmlFor="discountPercent">
+                        Discount percent:
+                      </label>
+                      <Field
+                        className="border border-gray-400 p-2 w-full rounded-md"
+                        name="discountpercent"
+                        id="discountpercent"
+                        type="number"
+                        placeholder="Enter discount percent"
+                      />
+                      <ErrorMessage
+                        name="discountpercent"
+                        component="div"
+                        className="text-red-500 text-sm mt-1"
+                      />
+                  <label className="block text-black font-bold mb-2" htmlFor="price">
+                        Price:
+                      </label>
+                      <Field
+                        className="border border-gray-400 p-2 w-full rounded-md"
+                        type="number"
+                        name="price"
+                        id="price"
+                        placeholder="Enter price"
+                      />
+                      <ErrorMessage
+                        name="price"
+                        component="div"
+                        className="text-red-500 text-sm mt-1"
+                      />
 
-                   
-                    <label htmlFor="selectedMenu" className="block text-black font-bold mb-2">
+                      <label className="block text-black font-bold mb-2" htmlFor="startDate">
+                        Start Date:
+                      </label>
+                      <Field
+                        className="border border-gray-400 p-2 w-full rounded-md"
+                        name="startdate"
+                        id="startdate"
+                        type="date"
+                        placeholder="Enter start date"
+                        value={formik.values.startDate ? formik.values.startDate.toString().slice(0, 10) : ''}
+                      />
+                      <ErrorMessage
+                        name="startdate"
+                        component="div"
+                        className="text-red-500 text-sm mt-1"
+                      />
+      
+                    <ErrorMessage
+                      name="selectedMenu"
+                      component="div"
+                      className="text-red-500 text-sm mt-1"
+                    />
+                     <label className="block text-black font-bold mb-2" htmlFor="endDate">
+                       End Date:
+                  </label>
+                  <Field
+                    className="border border-gray-400 p-2 w-full rounded-md"
+                    id="enddate"
+                    type="date"
+                    name="endDate"
+                    placeholder="Enter end date"
+                    value={formik.values.endDate ? formik.values.endDate.toString().slice(0, 10) : ''}
+                  />
+                  <ErrorMessage
+                    name="enddate"
+                    component="div"
+                    className="text-red-500 text-sm mt-1"
+                  />
+                  
+                  <label className="block text-black font-bold mb-2" htmlFor="restaurantId">
+                      Restaurant:
+                  </label>
+                    <Field
+                    as="select"
+                    id="restaurantId"
+                    name="restaurantId"
+                    className="border border-gray-400 p-2 w-full rounded-md"
+                  >
+                      <option value="">Select a restaurant</option>
+                    {restaurantStore.restaurantsByName.map((restaurant) => (
+                      <option key={restaurant.id!} value={restaurant.id!}>
+                        {restaurant.name}
+                      </option>
+                    ))}
+                  </Field>
+                    <ErrorMessage
+                    name="restaurantId"
+                    component="div"
+                    className="text-red-500 text-sm mt-1"
+                  />
+                  <label htmlFor="selectedMenu" className="block text-black font-bold mb-2">
                       Menu:
                     </label>
                     <Field
@@ -142,11 +248,22 @@ export default observer(function OfferCreateForm(){
                         </option>
                       ))}
                     </Field>
-                    <ErrorMessage
-                      name="selectedMenu"
-                      component="div"
-                      className="text-red-500 text-sm mt-1"
-                    />
+                    <label className="block text-black font-bold mb-2" htmlFor="files">
+                        Image:
+                      </label>
+                      <Field
+                        className="border border-gray-400 p-2 w-full rounded-md"
+                        type="file"
+                        name="files"
+                        id="files"
+                        placeholder="Upload restaurant image"
+                        accept="*"
+                      />
+                      <ErrorMessage
+                        name="files"
+                        component="div"
+                        className="text-red-500 text-sm mt-1"
+                      />
                   </div>
                 </div>
 
