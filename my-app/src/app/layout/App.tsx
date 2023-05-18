@@ -5,7 +5,7 @@ import HomePage from './Homepage';
 import AboutUs from './Aboutus';
 import ContactUs from './Contactus';
 import LoginForm from './LoginForm';
-
+import { css } from '@emotion/react';
 import Navbar from './navbar';
 
 import LoggedInUserRoute from './ProtectedRoutes/LoggedInUserRoute';
@@ -41,6 +41,7 @@ import MenuItemCreateForm from '../../features/admin/menuItem/menuItemCreateForm
 import MenuItemEditForm from '../../features/admin/menuItem/menuItemEditForm';
 import OfferEditForm from '../../features/admin/offers/offerEditForm';
 import OfferCreateForm from '../../features/admin/offers/offerCreateForm';
+import { CircleLoader, SyncLoader } from 'react-spinners';
 
 function App() {
   const verificationToken = store.commonStore.verificationToken;
@@ -95,14 +96,21 @@ function App() {
     }
   }, [isUserLoaded, userStore.user?.role]);
 
+  const override = css`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+`
+
   return (
     <>
       {loading ? (
-        <div className="flex items-center justify-center">
-        <div className="loading-spinner">
-          <div className="spinner border-4 border-t-4 border-green-800 rounded-full h-12 w-12"></div>
-        </div>
-      </div>
+     <div className="fixed inset-0 flex items-center justify-center bg-green-900 bg-opacity-50 z-50">
+     <div className="loading-spinner">
+       <CircleLoader color="#ffffff" size={30} loading={true} />
+     </div>
+   </div>
       ) : (
         <>
           <ToastContainer position="top-right" hideProgressBar autoClose={2000} />
@@ -111,11 +119,12 @@ function App() {
             <ModalContainer />
 
             <div id="allContents">
-              <Routes>
-                <Route path={'/*'} element={<>
-                  {userStore.user?.role === 'Admin' ? <AdminNavbar /> : <Navbar />}
-                  <div id="contentContainerWrapper">
-                    <div className="contentContainer">
+        <Routes>
+          <Route path={'/*'} element={<>
+            {/* Render the appropriate navbar based on the user role */}
+            {userStore.user?.role === 'Admin' ? <AdminNavbar /> : <Navbar />}
+            <div id="contentContainerWrapper">
+              <div className="contentContainer">
                       <Routes>
                         {/* Routes for all users */}
                         <Route element={<UserAlreadyLoggedInRoute />}>

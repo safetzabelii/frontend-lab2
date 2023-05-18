@@ -37,6 +37,8 @@ export default observer(function OfferCreateForm() {
     files: '',
   });
   const [loading, setLoading] = useState(true);
+  const [menuItemsLoading, setMenuItemsLoading] = useState(false); // Add state for menu items loading
+
 
   // useEffect(() => {
   //   menuStore.loadMenus().then(() => {
@@ -59,22 +61,29 @@ export default observer(function OfferCreateForm() {
     restaurantStore.loadRestaurants().then(() => {
       setLoading(false);
     });
-    
   }, [restaurantStore]);
   
   function handleRestaurantSelection(e: string) {
-    
     const selectedRestaurantId = e;
-    menuStore.getMenusByRestaurantId(selectedRestaurantId.toString());
+    setLoading(true);
+    menuStore.getMenusByRestaurantId(selectedRestaurantId.toString()).then(() => {
+      setLoading(false);
+      setMenuItemsLoading(true); // Reset menu items loading state
+    });
   }
-function handleMenuSelection(e: string) {
-    
-  const selectedMenuId = e;
-  menuItemStore.getMenuItemsByMenuId(selectedMenuId.toString());
-}
+  
+  function handleMenuSelection(e: string) {
+    const selectedMenuId = e;
+    setMenuItemsLoading(true);
+    menuItemStore.getMenuItemsByMenuId(selectedMenuId.toString()).then(() => {
+      setMenuItemsLoading(false);
+    });
+  }
+  
   const validationSchema = Yup.object({
     name: Yup.string().required('Name is required'),
   });
+  
 
   function handleFormSubmit(offer: OfferDto) {
     const formData = new FormData();
@@ -95,13 +104,23 @@ function handleMenuSelection(e: string) {
     });
   }
 
-  const handleMenuItemChange = (e: ChangeEvent<HTMLInputElement>, MenuItemId: number) => {
-    if (e.target.checked) {
-      setSelectedItems((prevItems) => [...prevItems, { MenuItemId, Quantity: 0 }]);
-    } else {
-      setSelectedItems((prevItems) => prevItems.filter((item) => item.MenuItemId !== MenuItemId));
-    }
+  const handleMenuItemChange = (MenuItemId: number) => {
+    setSelectedItems((prevItems) => {
+      const selectedItemIndex = prevItems.findIndex((item) => item.MenuItemId === MenuItemId);
+      if (selectedItemIndex !== -1) {
+        // Increase the quantity if the item is already selected
+        const updatedItems = [...prevItems];
+        updatedItems[selectedItemIndex].Quantity += 1;
+        return updatedItems;
+      } else {
+        // Add a new item with quantity 1 if the item is not selected
+        return [...prevItems, { MenuItemId, Quantity: 1 }];
+      }
+    });
   };
+  
+  
+  
 
   const handleQuantityChange = (e: ChangeEvent<HTMLInputElement>, MenuItemId: number) => {
     const newQuantity = parseInt(e.target.value);
@@ -109,11 +128,14 @@ function handleMenuSelection(e: string) {
       prevItems.map((item) => (item.MenuItemId === MenuItemId ? { ...item, Quantity: newQuantity } : item))
     );
   };
+  
+  
 
   const getMenuItemQuantity = (MenuItemId: number) => {
     const selectedItem = selectedItems.find((item) => item.MenuItemId === MenuItemId);
     return selectedItem ? selectedItem.Quantity : 0;
   };
+  
   
   if (restaurantStore.loading || menuStore.loading) {
     return <Spinner />;
@@ -294,46 +316,83 @@ function handleMenuSelection(e: string) {
                   </div>
                 </div>
 
-                {/* Right Side */}
-                <div className="w-1/2 pl-4 border-l border-gray-400">
-                    <>
-                      <label className="block text-black font-bold mb-2">Menu Items:</label>
-                      {menuItemStore.getMenuItems.map((menuItem) => (
-                          <div key={menuItem.id}>
-                            <label htmlFor={`menuItem-${menuItem.id}`}>
-                              <input
-                                type="checkbox"
-                                id={`menuItem-${menuItem.id}`}
-                                value={menuItem.id}
-                                onChange={(e) => handleMenuItemChange(e, menuItem.id)}
-                              />
-                              {menuItem.name}
-                              <img
-                                src={`data:image/jpeg;base64,${menuItem.imagePath}`}
-                                alt={menuItem.image}
-                                style={{
-                                  width: '50px',
-                                  height: '50px',
-                                  borderRadius: '50%',
-                                  objectFit: 'cover',
-                                }}
-                              />
-                            </label>
-                            <label className="block text-black font-bold mb-2">Quantity:</label>
-                            <input
-                              className="border border-gray-400 p-2 w-full rounded-md"
-                              type="number"
-                              min="0"
-                              id={`quantity-${menuItem.id}`}
-                              value={getMenuItemQuantity(menuItem.id)}
-                              onChange={(e) => handleQuantityChange(e, menuItem.id)}
-                              disabled={!selectedItems.find((item) => item.MenuItemId === menuItem.id)}
-                            />
-                          </div>
-                        ))}
-                    </>
-                  
-                </div>
+            {/* Right Side */}
+<div className="w-1/2 pl-4 border-l border-gray-400">
+  {menuItemsLoading ? (
+    <Spinner />
+  ) : (
+    <>
+      <div className="mb-4">
+        <h2 className="text-lg font-bold">Menu Items:</h2>
+        {menuItemStore.getMenuItems.map((menuItem) => {
+          const isSelected = selectedItems.find((item) => item.MenuItemId === menuItem.id);
+          const quantity = getMenuItemQuantity(menuItem.id);
+
+          return (
+            <div
+              key={menuItem.id}
+              className={`flex items-center py-2 cursor-pointer ${
+                isSelected ? 'bg-gray-200 rounded-lg' : ''
+              }`}
+              onClick={() => handleMenuItemChange(menuItem.id)}
+              style={{ marginBottom: '10px' }} // Add margin bottom for distance
+            >
+              <div className="flex items-center space-x-2">
+                <img
+                  src={`data:image/jpeg;base64,${menuItem.imagePath}`}
+                  alt={menuItem.image}
+                  className="w-12 h-12 rounded-full object-cover"
+                />
+                <span className="text-lg font-bold">{menuItem.name}</span>
+              </div>
+              <div className="ml-auto">
+              <label htmlFor={`quantity-${menuItem.id}`} className="block text-black font-bold">
+                Quantity:
+              </label>
+              <div className="flex">
+                  <input
+                    className="border border-gray-400 px-2 py-1 w-16 rounded-md text-center"
+                    type="number"
+                    min="0"
+                    id={`quantity-${menuItem.id}`}
+                    value={quantity}
+                    onChange={(e) => handleQuantityChange(e, menuItem.id)}
+                    onClick={(e) => e.stopPropagation()}
+                    disabled={!isSelected}
+                  />
+                   <button
+              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-2 ml-2 rounded focus:outline-none focus:shadow-outline"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleMenuItemChange(menuItem.id);
+              }}
+            >
+              Add
+            </button>
+          </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Container with selected items count and remove selection */}
+      <div className="flex items-bottom justify-center mt-6">
+        <div className="flex items-center bg-gray-200 rounded-md p-2">
+          <span className="mr-2 font-bold">{selectedItems.length}</span>
+          <span className="mr-2">item(s) selected</span>
+          <button
+            className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            onClick={() => setSelectedItems([])}
+          >
+            Remove Selection
+          </button>
+        </div>
+      </div>
+    </>
+  )}
+</div>
+
               </div>
 
               <div className="flex items-center justify-end mt-6">
