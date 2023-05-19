@@ -43,6 +43,7 @@ import OfferEditForm from '../../features/admin/offers/offerEditForm';
 import OfferCreateForm from '../../features/admin/offers/offerCreateForm';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
+import { CircleLoader } from 'react-spinners';
 function App() {
   const verificationToken = store.commonStore.verificationToken;
   const { commonStore, userStore } = useStore();

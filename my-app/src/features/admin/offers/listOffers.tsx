@@ -3,8 +3,9 @@ import { SyntheticEvent, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useStore } from '../../../app/stores/store';
 import { RiDeleteBinLine as TrashIcon, RiPencilLine as PencilIcon } from 'react-icons/ri';
-import OfferCreateForm from './offerCreateForm';
+
 import OfferEditForm from './offerEditForm';
+import OfferCreateForm from './offerCreateForm';
 
 
 export default observer(function ListOffers() {
