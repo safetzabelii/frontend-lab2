@@ -44,6 +44,7 @@ import OfferCreateForm from '../../features/admin/offers/offerCreateForm';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import { CircleLoader } from 'react-spinners';
+import AdminDashboard from '../../features/admin/features/adminDashboard';
 function App() {
   const verificationToken = store.commonStore.verificationToken;
   const { commonStore, userStore } = useStore();
@@ -176,6 +177,7 @@ function App() {
                           <Route path="/dashboard/listOffers" element={<ListOffers />} />
                           <Route path="/dashboard/offerCreateForm" element={<OfferCreateForm />} />
                           <Route path="/dashboard/offerEditForm" element={<OfferEditForm />} />
+                          <Route path="/dashboard" element={<AdminDashboard />} />
                         </Route>
                       </Routes>
                     </div>

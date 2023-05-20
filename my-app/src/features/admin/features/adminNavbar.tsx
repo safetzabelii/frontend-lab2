@@ -52,7 +52,7 @@ export default observer(function AdminNavbar() {
             <ul className="space-y-2">
               <li className="px-4 py-2 rounded">
                 <a
-                  href="/adminDashboard"
+                  href="/dashboard"
                   className="flex items-center space-x-2 text-gray-300 hover:text-white"
                 >
                   <RiDashboardLine className="w-5 h-5" />
