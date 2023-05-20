@@ -106,6 +106,7 @@ function App() {
 
   return (
     <>
+    {/* <div className='App flex'> */}
       {loading ? (
      <div className="fixed inset-0 flex items-center justify-center bg-green-900 bg-opacity-50 z-50">
      <div className="loading-spinner">
@@ -187,9 +188,14 @@ function App() {
           </BrowserRouter>
           
         </>
+
       )}
+      {/* </div> */}
     </>
+    
+    
   );
+  
 }
 
 export default App;

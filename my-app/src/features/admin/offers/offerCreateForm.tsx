@@ -49,9 +49,10 @@ export default observer(function OfferCreateForm() {
   function handleRestaurantSelection(e: string) {
     const selectedRestaurantId = e;
     setSelectedRestaurant(selectedRestaurantId); // Update the state with the selected restaurantId
-  
+    setLoading(true);
     menuStore.getMenusByRestaurantId(selectedRestaurantId.toString()).then(() => {
-      // Rest of the code
+      setLoading(false);
+      setMenuItemsLoading(true);
     });
   }
   
@@ -119,9 +120,9 @@ export default observer(function OfferCreateForm() {
         >
           {(formik) => (
             <Form className="mt-6">
-              <div className="flex">
+              <div className="flex flex-wrap">
                 {/* Left Side */}
-                <div className="w-1/2 pr-4">
+                <div className="w-full md:w-1/2 pr-4">
                   <div className="mb-4">
                     <label className="block text-black font-bold mb-2" htmlFor="name">
                       Name:
@@ -273,11 +274,12 @@ export default observer(function OfferCreateForm() {
                       accept="*"
                     />
                     <ErrorMessage name="files" component="div" className="text-red-500 text-sm mt-1" />
-                  </div>
+                    </div>
                 </div>
 
-            {/* Right Side */}
-<div className="w-1/2 pl-4 border-l border-gray-400">
+                {/* Right Side */}
+                <div className="w-full md:w-1/2 pl-4 border-l border-gray-400">
+                  
   {menuItemsLoading ? (
     <Spinner />
   ) : (
@@ -350,7 +352,6 @@ export default observer(function OfferCreateForm() {
 </div>
 
               </div>
-
               <div className="flex items-center justify-end mt-6">
                 <button
                   type="submit"
@@ -371,4 +372,5 @@ export default observer(function OfferCreateForm() {
       )}
     </>
   );
+
 });

@@ -8,6 +8,7 @@ import { FaCoffee } from 'react-icons/fa';
 import { observer } from 'mobx-react';
 import { useStore } from '../stores/store';
 import Navbar from './navbar';
+import { Sidebar } from 'semantic-ui-react';
 
 export default observer(function LoginForm(){
   const {userStore} = useStore();
@@ -27,14 +28,12 @@ export default observer(function LoginForm(){
   };
   const onSubmit = (values: any, { setSubmitting }: any) => {
     userStore.login(values).then(()=>
-    navigate('/'))    
+    navigate('/'))   
     setSubmitting(false);
-
   };
+  
 
   return(
-  
-    
 
     <div style={{backgroundImage: "url('backgroundlogin.png')", backgroundSize: 'cover', backgroundRepeat: 'no-repeat', height: '100vh'}}  className="min-h-screen flex flex-col justify-center py-0 px-4 sm:px-6 lg:px-8">
     <div className="min-h-screen flex flex-col  py-12 px-4 sm:px-6 lg:px-8 mt-20">
@@ -172,7 +171,6 @@ export default observer(function LoginForm(){
   </div>
 </div>
   )
-}
-)
+})
 
 
