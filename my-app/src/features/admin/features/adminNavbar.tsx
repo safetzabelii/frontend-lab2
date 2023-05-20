@@ -79,7 +79,7 @@ export default observer(function AdminNavbar() {
               </li>
               <li className="px-4 py-2 rounded">
                 <a
-                  href="/restaurants"
+                  href="/dashboard/listRestaurants"
                   className="flex items-center space-x-2 text-gray-300 hover:text-white"
                 >
                   <FaPizzaSlice className="w-5 h-5" />

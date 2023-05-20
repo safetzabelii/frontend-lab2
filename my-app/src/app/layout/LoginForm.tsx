@@ -9,9 +9,10 @@ import { observer } from 'mobx-react';
 import { useStore } from '../stores/store';
 import Navbar from './navbar';
 import { Sidebar } from 'semantic-ui-react';
+import commonStore from '../stores/commonStore';
 
 export default observer(function LoginForm(){
-  const {userStore} = useStore();
+  const {userStore, commonStore} = useStore();
   const navigate = useNavigate();
   const initialValues = {
     email: '',
@@ -26,10 +27,21 @@ export default observer(function LoginForm(){
   const toggleShowPassword = () => {
     setShowPassword((prev) => !prev);
   };
-  const onSubmit = (values: any, { setSubmitting }: any) => {
-    userStore.login(values).then(()=>
-    navigate('/'))   
-    setSubmitting(false);
+  const onSubmit = async (values: any, { setSubmitting }: any) => {
+    try {
+      await userStore.login(values).then(()=>{
+       
+      const token = commonStore.getToken;
+      userStore.getCurrentUser(token!);
+        
+      navigate('/homepage');    
+      });
+      
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setSubmitting(false);
+    }
   };
   
 

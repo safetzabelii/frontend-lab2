@@ -3,6 +3,7 @@ import Footer from "./footer";
 
 
 const HomePage = () => {
+  
   return (
     <div>
       <div

@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import {  Route, Routes, BrowserRouter } from 'react-router-dom';
 import Signup from './Signup';
 import HomePage from './Homepage';
 import AboutUs from './Aboutus';
@@ -51,6 +51,8 @@ function App() {
   const cookies = commonStore.getCookies();
   const [loading, setLoading] = useState(true);
   const [isUserLoaded, setIsUserLoaded] = useState(false);
+  
+
   let token = null;
   if (cookies) {
     token = cookies.token;
@@ -139,7 +141,7 @@ function App() {
                         </Route>
 
                         {/* Routes common for all users */}
-                        <Route path="/" element={<HomePage />} />
+                        <Route path="/homepage" element={<HomePage />} />
                         <Route path="/aboutus" element={<AboutUs />} />
                         <Route path="/contactus" element={<ContactUs />} />
                         <Route path="/menu" element={<MenuItem />} />
