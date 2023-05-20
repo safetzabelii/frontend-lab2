@@ -26,7 +26,7 @@ import SendEmailForgetPassword from '../../features/user/User/sendEmailForgetPas
 import ForgotPassword from '../../features/user/User/forgotPassword';
 import VerifyAccount from '../../features/user/User/verifyAccount';
 import ChangePassword from '../../features/user/User/changePassword';
-import AdminNavbar from '../../features/admin/features/adminNavbar';
+import AdminNavbar from '../../features/admin/dashboard/adminNavbar';
 import ListRestaurants from '../../features/admin/restaurants/listRestaurants';
 import ListOffers from '../../features/admin/offers/listOffers';
 import ListUsers from '../../features/admin/users/listUsers';
@@ -44,7 +44,7 @@ import OfferCreateForm from '../../features/admin/offers/offerCreateForm';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import { CircleLoader } from 'react-spinners';
-import AdminDashboard from '../../features/admin/features/adminDashboard';
+import AdminDashboard from '../../features/admin/dashboard/adminDashboard';
 function App() {
   const verificationToken = store.commonStore.verificationToken;
   const { commonStore, userStore } = useStore();

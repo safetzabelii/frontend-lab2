@@ -21,9 +21,10 @@ import {
   UserIcon,
 } from "@heroicons/react/24/outline";
 import { observer } from "mobx-react";
-import StatisticsCard from "../assets/statistics-card";
-import StatisticsChart from "../assets/statistics-chart";
-import statisticsChartsData from "../assets/statistics-charts-data";
+import StatisticsCard from "./statistics-card";
+import statisticsChartsData from "./statistics-charts-data";
+import StatisticsChart from "./statistics-chart";
+
 
 
 export default observer(function AdminDashboard(){
@@ -34,6 +35,7 @@ export default observer(function AdminDashboard(){
     return (
         <div className="mt-12">
           <div className="mb-12 grid gap-y-10 gap-x-6 md:grid-cols-2 xl:grid-cols-4">
+              // eslint-disable-next-line react/jsx-no-undef
               <StatisticsCard
                     key={"title"}
 
