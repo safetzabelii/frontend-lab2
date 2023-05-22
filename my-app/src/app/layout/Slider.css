@@ -1,16 +1,52 @@
-  
 .mx-auto {
-  /* Add your custom styles for the slider images */
-  display: block;
-  margin: 0 auto;
-  margin-top: 100px;
-  margin-bottom: 20px;
-  max-width: 100%;
-  max-height: 400px;
-  border-radius: 10px;
-  transition: transform 0.5s;
-}
-
-.mx-auto:hover {
+    display: block;
+    margin: 0 auto;
+    margin-top: 100px;
+    margin-bottom: 20px;
+    max-width: 100%;
+    max-height: 400px;
+    border-radius: 10px;
+    transition: transform 0.5s;
+  }
+  
+  .mx-auto:hover {
     transform: scale(1.1);
-}
+  }
+  
+  .slider {
+    width: 100%;
+    max-width: 960px;
+    margin: 0 auto;
+    background-color: #ffffff; 
+    padding: 20px;
+    border-radius: 10px;
+    position: relative; 
+  }
+  
+  .slider .swiper-pagination {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    z-index: 1; 
+  }
+  
+  .slider .swiper-pagination .swiper-pagination-bullet {
+    width: 10px;
+    height: 10px;
+    background-color: #a2a2a2; 
+    border-radius: 50%;
+    margin: 0 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .slider .swiper-pagination .swiper-pagination-bullet.swiper-pagination-bullet-active {
+    background-color: #393939; 
+  }
+  
