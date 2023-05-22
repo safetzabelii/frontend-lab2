@@ -20,7 +20,7 @@ const Navbar = () => {
     
     <nav className="flex justify-between items-center text-green-900 px-8 py-4 border border-gray-300">
       <div className="flex items-center">
-        <a href="/" className="mr-8">
+        <a href="/homepage" className="mr-8">
           <button className="flex items-center bg-green-700 hover:bg-green-800 text-white font-bold py-4 px-8 rounded-full shadow-lg transition duration-300">
             <FaHome className="mr-2" />
             Home
@@ -67,33 +67,14 @@ const Navbar = () => {
         </div>
       </div>
 
-      <div className="flex items-center">
-        <div className="relative mr-8">
-          <button
-            className="flex items-center"
-            onClick={() => setIsLanguageOpen(!isLanguageOpen)}
-          >
-            <FaLanguage className="mr-2" />
-            <span className="mr-2">EN</span>
-          </button>
-
-          {isLanguageOpen && (
-            <div className="absolute right-0 mt-2 w-24 bg-white rounded-lg shadow-xl z-10">
-              <a
-                href="/"
-                className="flex items-center hover:bg-green-50 bg-white text-green-800 font-bold py-4 px-8  shadow-lg transition duration-300"
-              >
-                EN
-              </a>
-              <a
-                href="/"
-                className="flex items-center hover:bg-green-50 bg-white text-green-800 font-bold py-4 px-8  shadow-lg transition duration-300"
-              >
-                AL
-              </a>
-            </div>
-          )}
-        </div>
+      <div className="flex items-center">    
+        <div className="mr-4">
+          <a href={`/cartDetails/${userStore.user?.id}`}>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+          </svg>
+          </a>
+          </div>
         {userStore.isLoggedIn ? (
   <>
     <button onClick={handleLogout} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-8">

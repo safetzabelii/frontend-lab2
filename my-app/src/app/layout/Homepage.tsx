@@ -1,8 +1,11 @@
-
+import { observer } from "mobx-react";
 import Footer from "./footer";
+import MostOrderedItems from "./MostOrderedItems";
+import Slider from "./Slider";
 
 
-const HomePage = () => {
+
+export default observer(function HomePage() {
   
   return (
     <div>
@@ -32,11 +35,14 @@ const HomePage = () => {
           
         </div>
     </div>
+
+    <Slider/>
+
+    <MostOrderedItems/>
     <Footer/>
     </div>
     
 
   );
-};
+});
 
-export default HomePage;

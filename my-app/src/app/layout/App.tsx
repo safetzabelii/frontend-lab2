@@ -45,6 +45,9 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import { CircleLoader } from 'react-spinners';
 import AdminDashboard from '../../features/admin/dashboard/adminDashboard';
+import CartDetails from '../../features/user/Cart/cartDetails';
+
+
 function App() {
   const verificationToken = store.commonStore.verificationToken;
   const { commonStore, userStore } = useStore();
@@ -134,6 +137,7 @@ function App() {
             <div id="contentContainerWrapper">
               <div className="contentContainer">
                       <Routes>
+                      <Route path="/homepage" element={<HomePage />} />
                         {/* Routes for all users */}
                         <Route element={<UserAlreadyLoggedInRoute />}>
                           <Route path="/login" element={<LoginForm />} />
@@ -141,11 +145,12 @@ function App() {
                         </Route>
 
                         {/* Routes common for all users */}
-                        <Route path="/homepage" element={<HomePage />} />
+                        
                         <Route path="/aboutus" element={<AboutUs />} />
                         <Route path="/contactus" element={<ContactUs />} />
                         <Route path="/menu" element={<MenuItem />} />
                         <Route path="/restaurants" element={<Restaurants />} />
+                        <Route path="/cartDetails/:id" element={<CartDetails/>}/>
 
                         {/* Routes continued */}
                         <Route path="/verifyaccount" element={<VerifyAccount />} />
