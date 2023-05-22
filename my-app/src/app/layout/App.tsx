@@ -49,6 +49,7 @@ import CartDetails from '../../features/user/Cart/cartDetails';
 import Orders from '../../features/user/Orders/Orders';
 
 
+
 function App() {
   const verificationToken = store.commonStore.verificationToken;
   const { commonStore, userStore } = useStore();
@@ -156,12 +157,14 @@ function App() {
 
                         {/* Routes continued */}
                         <Route path="/verifyaccount" element={<VerifyAccount />} />
+
+
                         {verificationToken ? (
                           <Route
                             path={`/verifyAccount/${verificationToken}`}
                             element={<AccountVerified verificationToken={verificationToken} />}
                           />
-                        ) : null}
+                        ) :null}
                         <Route path="/sendEmail" element={<SendEmailForgetPassword />} />
                         <Route path="/changepw" element={<ChangePassword />} />
                         {token ? (

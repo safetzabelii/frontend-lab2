@@ -35,6 +35,7 @@ const CartDetails: React.FC = observer(() => {
             quantity={1}
             price="$12.99"
           />
+
         </div>
         <div className="mt-6 h-full rounded-lg border bg-white p-6 shadow-md md:mt-0 md:w-1/3">
           <CartSummary subtotal="$44.97" shipping="$5.00" total="$49.97 USD" />
