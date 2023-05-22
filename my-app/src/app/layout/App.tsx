@@ -46,6 +46,7 @@ import 'react-perfect-scrollbar/dist/css/styles.css';
 import { CircleLoader } from 'react-spinners';
 import AdminDashboard from '../../features/admin/dashboard/adminDashboard';
 import CartDetails from '../../features/user/Cart/cartDetails';
+import Orders from '../../features/user/Orders/Orders';
 
 
 function App() {
@@ -151,6 +152,7 @@ function App() {
                         <Route path="/menu" element={<MenuItem />} />
                         <Route path="/restaurants" element={<Restaurants />} />
                         <Route path="/cartDetails/:id" element={<CartDetails/>}/>
+                        <Route path="/orders" element={<Orders/>} />
 
                         {/* Routes continued */}
                         <Route path="/verifyaccount" element={<VerifyAccount />} />
