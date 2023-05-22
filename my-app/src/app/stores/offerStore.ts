@@ -4,6 +4,7 @@ import { Offer } from "../models/Menu/Offer";
 import { off } from "process";
 import { OfferDto } from "../models/Menu/OfferDto";
 
+
 export default class OfferStore{
 offerRegistry = new Map<string,Offer>();
     selectedOffer:Offer |undefined = undefined;
@@ -28,6 +29,8 @@ offerRegistry = new Map<string,Offer>();
     get offers(){
         return Array.from(this.offerRegistry.values());
     }
+
+      
 
     loadOffers = async () => {
         try{
