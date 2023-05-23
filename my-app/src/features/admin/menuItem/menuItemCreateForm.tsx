@@ -8,7 +8,7 @@ import { Menu } from '../../../app/models/Menu/Menu';
 import Select from "react-select";
 import { Restaurant } from '../../../app/models/Menu/Restaurant';
 import ModalStore from '../../../app/stores/modalStore';
-import { MenuItem } from '../../../app/models/Menu/MenuItem';
+import { MenuItem } from '../../../app/models/MenuItem/MenuItem';
 
 const Spinner = () => (
   <div className="flex items-center justify-center h-full">

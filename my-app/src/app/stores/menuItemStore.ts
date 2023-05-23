@@ -1,6 +1,6 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
-import { MenuItem } from "../models/Menu/MenuItem";
+import { MenuItem } from "../models/MenuItem/MenuItem";
 
 export default class MenuItemStore {
     menuItemRegistry = new Map<number, MenuItem>();

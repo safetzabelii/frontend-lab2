@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import { Menu } from "../models/Menu/Menu";
-import { MenuItem } from "../models/Menu/MenuItem";
-import { Offer } from "../models/Menu/Offer";
+import { MenuItem } from "../models/MenuItem/MenuItem";
+import { Offer } from "../models/Offer/Offer";
 import { Restaurant } from "../models/Menu/Restaurant";
 import { Role } from "../models/Role/Role";
 
@@ -15,12 +15,14 @@ import { ChangePassword } from "../models/User/Dto/ChangePassword";
 import { ForgotPasswordEmailDto } from "../models/User/Dto/ForgotPasswordEmailDto";
 import { config } from "process";
 import { ForgotPasswordEmailResponseDto } from "../models/User/Dto/ForgotPasswordEmailResponseDto";
-import { OfferDto } from "../models/Menu/OfferDto";
+import { OfferDto } from "../models/Offer/OfferDto";
 import { UserEditDto } from "../models/User/Dto/UserEditDto";
 import { store } from "../stores/store";
 import { toast } from "react-toastify";
 import { ServerError } from "../models/Error/ServerError";
 import { Server } from "http";
+import { Cart } from "../models/Cart/Cart";
+import { CartForEditDto } from "../models/Cart/CartForEditDto";
 
 
 axios.defaults.baseURL = "http://localhost:7017/api";
@@ -89,7 +91,22 @@ const request = {
     del: <T>(url: string) => axios.delete<T>(url).then(responseBody),
   };
 
-
+const Carts = {
+  details: (id:string) => request.get<Cart>(`/Cart/GetCartByUserId/${id}`),
+  addToCart: (cart: CartForEditDto) => axios.put<ServerError<Cart>>("/Cart/AddToCart",cart),
+  removeMenuItem: (cartId:number,menuItemId:number)=>axios.delete<void>('/Cart/RemoveMenuItemFromCart', {
+    params: {
+      cartId: cartId,
+      menuItemId: menuItemId
+    }
+  }),
+  removeOffer: (cartId:number,offerId:number) => axios.delete<void>('/Cart/RemoveOfferFromCart',{
+    params:{
+      cartId:cartId,
+      offerId : offerId
+    }
+  })
+}
 const Menus = {
     list: () => request.get<Menu[]>("/Menu/GetAllMenus"),
     details: (id: string) => request.get<Menu>(`/Menu/GetMenu/${id}`),
@@ -171,7 +188,8 @@ const Roles = {
     Roles,
     Users,
     Orders,
-    OrderItems
+    OrderItems,
+    Carts,
 
   };
   

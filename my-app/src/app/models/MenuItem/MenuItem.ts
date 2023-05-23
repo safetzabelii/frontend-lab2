@@ -1,5 +1,5 @@
 
-import { Menu } from './Menu';
+import { Menu } from '../Menu/Menu';
 export interface MenuItem {
     id: number;
     name: string;

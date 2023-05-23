@@ -1,4 +1,4 @@
-import { Menu } from './Menu';
+import { Menu } from '../Menu/Menu';
 export interface Offer {
     id: string;
     name: string;

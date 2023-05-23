@@ -10,7 +10,7 @@ import { observer } from 'mobx-react';
 import { useStore } from '../../../app/stores/store';
 import { Restaurant } from '../../../app/models/Menu/Restaurant';
 import { Menu } from '../../../app/models/Menu/Menu';
-import { MenuItem } from '../../../app/models/Menu/MenuItem';
+import { MenuItem } from '../../../app/models/MenuItem/MenuItem';
 
 interface Props {
     id?: number;

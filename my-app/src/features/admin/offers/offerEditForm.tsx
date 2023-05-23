@@ -4,8 +4,8 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import { useStore } from '../../../app/stores/store';
-import { OfferDto } from '../../../app/models/Menu/OfferDto';
-import { MenuItem } from '../../../app/models/Menu/MenuItem';
+import { OfferDto } from '../../../app/models/Offer/OfferDto';
+import { MenuItem } from '../../../app/models/MenuItem/MenuItem';
 import { CircleLoader } from 'react-spinners';
 interface Props {
   id?: string;

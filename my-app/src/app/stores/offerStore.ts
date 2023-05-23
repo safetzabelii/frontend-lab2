@@ -1,8 +1,8 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
-import { Offer } from "../models/Menu/Offer";
+import { Offer } from "../models/Offer/Offer";
 import { off } from "process";
-import { OfferDto } from "../models/Menu/OfferDto";
+import { OfferDto } from "../models/Offer/OfferDto";
 
 export default class OfferStore{
 offerRegistry = new Map<string,Offer>();

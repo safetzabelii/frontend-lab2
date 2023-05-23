@@ -1,4 +1,4 @@
-import { Menu } from './Menu';
+import { Menu } from '../Menu/Menu';
 export interface OfferDto {
     id: number;
     name: string;
