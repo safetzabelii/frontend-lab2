@@ -47,7 +47,7 @@ import { CircleLoader } from 'react-spinners';
 import AdminDashboard from '../../features/admin/dashboard/adminDashboard';
 import CartDetails from '../../features/user/Cart/cartDetails';
 import Orders from '../../features/user/Orders/Orders';
-
+import Slider from './Slider';
 
 
 function App() {
@@ -56,7 +56,7 @@ function App() {
   const cookies = commonStore.getCookies();
   const [loading, setLoading] = useState(true);
   const [isUserLoaded, setIsUserLoaded] = useState(false);
-  
+
 
   let token = null;
   if (cookies) {
@@ -154,6 +154,7 @@ function App() {
                         <Route path="/restaurants" element={<Restaurants />} />
                         <Route path="/cartDetails/:id" element={<CartDetails/>}/>
                         <Route path="/orders" element={<Orders/>} />
+                        <Route path="/slider" element={<Slider/>}/>
 
                         {/* Routes continued */}
                         <Route path="/verifyaccount" element={<VerifyAccount />} />
