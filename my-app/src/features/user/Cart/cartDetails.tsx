@@ -1,12 +1,15 @@
 import { observer } from "mobx-react";
-import React from "react";
+import React, { useEffect } from "react";
+import { useStore } from "../../../app/stores/store";
+import { useParams } from "react-router-dom";
 
 interface CartItemProps {
   imageUrl: string;
   title: string;
   description: string;
   quantity: number;
-  price: string;
+  price: number;
+  onRemove:()=>void;
 }
 
 interface CartSummaryProps {
@@ -16,26 +19,54 @@ interface CartSummaryProps {
 }
 
 const CartDetails: React.FC = observer(() => {
+  const {cartStore} = useStore();
+  const {id} = useParams();
+  const {selectedCart,loadCart,removeMenuItem,removeOffer} = cartStore;
+  const cartId = Number(selectedCart?.id);
+  useEffect(()=>{
+    loadCart(id!);
+  },[cartStore]);
+  function handleRemoveMenuItem(cartId:number,menuItemId:number){
+    removeMenuItem(cartId,menuItemId).then(()=> loadCart(id!));
+  }
+  function handleRemoveOffer(cartId:number,offerId:number){
+    removeOffer(cartId,offerId).then(()=>loadCart(id!));
+  }
   return (
     <div className="h-screen bg-gray-100 pt-20">
       <h1 className="mb-10 text-center text-2xl font-bold">Cart Items</h1>
       <div className="mx-auto max-w-5xl justify-center px-6 md:flex md:space-x-6 xl:px-0">
         <div className="rounded-lg md:w-2/3">
-          <CartItem
-            imageUrl="https://images.unsplash.com/photo-1560807707-1cc682b138db"
-            title="Pizza Margherita"
-            description="Freshly baked thin-crust pizza with tomato sauce, mozzarella cheese, and basil."
-            quantity={2}
-            price="$15.99"
-          />
-          <CartItem
-            imageUrl="https://images.unsplash.com/photo-1588755618959-4d86f63b6d93"
-            title="Chicken Biryani"
-            description="Aromatic rice dish cooked with flavorful spices and tender chicken pieces."
-            quantity={1}
-            price="$12.99"
-          />
-
+        {selectedCart && (selectedCart?.menuItems?.length > 0 || selectedCart?.offers?.length > 0) ? (
+  <>
+    <h1><b>Menu Items</b></h1>
+    {selectedCart?.menuItems?.map((menuItem) => (
+      <CartItem
+        imageUrl={menuItem.imagePath}
+        title={menuItem.name}
+        description={menuItem.description}
+        quantity={menuItem.quantity}
+        price={menuItem.price}
+        onRemove={() => handleRemoveMenuItem(cartId, menuItem.id)}
+      />
+    ))}
+    <hr />
+    <h1><b>Offers</b></h1>
+    {selectedCart?.offers?.map((offer) => (
+      <CartItem
+        imageUrl={offer.imagePath}
+        title={offer.name}
+        description={offer.description}
+        quantity={offer.quantity}
+        price={offer.price}
+        onRemove={() => handleRemoveOffer(cartId, offer.id)}
+      />
+    ))}
+  </>
+) : (
+  <h1><b>There are no items in your cart</b></h1>
+)}
+          
         </div>
         <div className="mt-6 h-full rounded-lg border bg-white p-6 shadow-md md:mt-0 md:w-1/3">
           <CartSummary subtotal="$44.97" shipping="$5.00" total="$49.97 USD" />
@@ -48,10 +79,13 @@ const CartDetails: React.FC = observer(() => {
   );
 });
 
-const CartItem: React.FC<CartItemProps> = ({ imageUrl, title, description, quantity, price }) => {
+const CartItem: React.FC<CartItemProps> = ({ imageUrl, title, description, quantity, price ,onRemove}) => {
+  const handleRemoveClick = () => {
+    onRemove();
+  };
   return (
     <div className="justify-between mb-6 rounded-lg bg-white p-6 shadow-md sm:flex sm:justify-start">
-      <img src={imageUrl} alt="product-image" className="w-full rounded-lg sm:w-40" />
+      <img src={`data:image/jpeg;base64,${imageUrl}`} alt="product-image" className="w-full rounded-lg sm:w-40" />
       <div className="sm:ml-4 sm:flex sm:w-full sm:justify-between">
         <div className="mt-5 sm:mt-0">
           <h2 className="text-lg font-bold text-gray-900">{title}</h2>
@@ -73,7 +107,7 @@ const CartItem: React.FC<CartItemProps> = ({ imageUrl, title, description, quant
             </span>
           </div>
           <div className="flex items-center space-x-4">
-            <p className="text-sm">{price}</p>
+            <p className="text-sm">{price}$</p>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -81,6 +115,7 @@ const CartItem: React.FC<CartItemProps> = ({ imageUrl, title, description, quant
               strokeWidth="1.5"
               stroke="currentColor"
               className="h-5 w-5 cursor-pointer duration-150 hover:text-red-500"
+              onClick={handleRemoveClick}
             >
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>

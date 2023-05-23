@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper.min.css';
 import { Link } from "react-router-dom";
+import '../layout/Slider.css';
 
 
 import SwiperCore, { Navigation, Pagination } from 'swiper';

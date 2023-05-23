@@ -10,6 +10,7 @@ import OrderItemStore from "./orderItemStore";
 import CommonStore from "./commonStore";
 import ModalStore from "./modalStore";
 import { NavigateFunction } from "react-router-dom";
+import CartStore from "./cartStore";
 
 
 
@@ -26,6 +27,7 @@ interface Store{
     orderStore: OrderStore;
     orderItemStore: OrderItemStore;
     modalStore: ModalStore;
+    cartStore: CartStore;
 
 
 }
@@ -42,7 +44,7 @@ export const store:Store={
     orderStore: new OrderStore(),
     orderItemStore: new OrderItemStore(),
     modalStore: new ModalStore(),
-
+    cartStore: new CartStore(),
 }
 
 export const StoreContext = createContext(store);

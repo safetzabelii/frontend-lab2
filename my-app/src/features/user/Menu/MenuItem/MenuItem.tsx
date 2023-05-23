@@ -1,20 +1,56 @@
 import { observer } from "mobx-react";
 import { useEffect, useState } from "react";
 import { useStore } from "../../../../app/stores/store";
+import { CartForEditDto } from "../../../../app/models/Cart/CartForEditDto";
+import { MenuItemForCartEditDto } from "../../../../app/models/MenuItem/MenuItemForCartEditDto";
 
 export default observer(function MenuItems() {
-  const { menuItemStore } = useStore();
+  const { menuItemStore,userStore,cartStore } = useStore();
   const { loadMenuItems, deleteMenuItem, getMenuItems } = menuItemStore;
+  const {user} = userStore;
+  const {loadCart,selectedCart} = cartStore;
   const [target, setTarget] = useState("");
-
+  const [cart, setCart] = useState<CartForEditDto>({
+    id:'',
+    userId:'',
+    cartMenuItems:[],
+    }
+  )
+  const [menuItem, setMenuItem] = useState<MenuItemForCartEditDto>({
+    menuItemId:0,
+    quantity:0,
+  })
+  
   useEffect(() => {
     loadMenuItems();
   }, [loadMenuItems]);
 
-  function handleMenuItemDelete(e: any, id: string) {
-    // setTarget(e.currentTarget.name);
-    // deleteMenuItem(id);
+  function handleAddMenuItemToCart(id: number) {
+    setMenuItem((prevMenuItem) => ({
+      ...prevMenuItem,
+      menuItemId: id,
+      quantity: 1
+    }));
   }
+  
+  const addToCart = async () => {
+    if (cart && cart.cartMenuItems) {
+      const updatedCart = {
+        ...cart,
+        id: selectedCart?.id!,
+        userId: user?.id!,
+        cartMenuItems: [...cart.cartMenuItems, menuItem]
+      };
+  
+      await cartStore.addToCart(updatedCart);
+    }
+  };
+  
+  const handleAddToCartClick = async () => {
+    loadCart(user?.id!);
+    await addToCart();
+  };
+  
 
   return (
     <div className="container mx-auto py-8">
@@ -48,7 +84,7 @@ export default observer(function MenuItems() {
                   </p>
                   <button
                     className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                    // onClick={(e) => handleMenuItemDelete(e, menuitem.id)}
+                    onClick={handleAddToCartClick}
                     name={menuitem.name}
                   >
                     {target === menuitem.name ? "Adding..." : "Add to cart"}

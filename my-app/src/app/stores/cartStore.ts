@@ -84,13 +84,6 @@ export default class CartStore{
         }
     }
     loadCart = async (id:string)=>{
-        let cart = this.getCart(id);
-        if(cart){
-            this.selectedCart = cart;
-            return cart;
-        }
-        else{
-            this.loadingInitial=true;
             try{
                 const result = await  agent.Carts.details(id);
                 if(result.data != null){
@@ -108,7 +101,6 @@ export default class CartStore{
                 console.log(error);
                 this.setLoadingInitial(false);
             }
-        }
     }
 
     private getCart = (id:string)=>{

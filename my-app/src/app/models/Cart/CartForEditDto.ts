@@ -6,6 +6,6 @@ import { OfferForCartEditDto } from "../Offer/OfferForCartEditDto";
 export interface CartForEditDto{
     id: string,
     userId: string,
-    cartMenuItems: MenuItemForCartEditDto[];
-    cartOffers: OfferForCartEditDto[];
+    cartMenuItems?: MenuItemForCartEditDto[];
+    cartOffers?: OfferForCartEditDto[];
 }
