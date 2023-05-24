@@ -14,7 +14,8 @@ export default class CartStore{
     loading = false;
     loadingInitial = false;
     createMenuForm = false;
-    
+    numberOfItemInCart:number|undefined = undefined;
+    cartTotal:number|null = null;
 
     constructor(){
         makeAutoObservable(this)
@@ -29,7 +30,8 @@ export default class CartStore{
         this.selectedCart = cart;
       };
 
-    addToCart = async (cart:CartForEditDto)=>{
+   
+      addToCart = async (cart:CartForEditDto)=>{
         this.loading= true;
         try{
             const response = await agent.Carts.addToCart(cart);
@@ -37,7 +39,29 @@ export default class CartStore{
                 if(response.data.data != null){
                     this.createdCart = response.data.data as Cart;
                 this.cartReqistry.set( this.createdCart.id!, this.createdCart);
-                this.createdCart= this.createdCart;
+                //this.createdCart= this.createdCart;
+                }
+                this.editMode=false;
+                this.loading=false;
+                
+            })
+        }catch(error){
+            console.log(error);
+            runInAction(()=>{
+                this.loading=false;
+            })
+            
+        }
+    }
+    updateCartState = async (cart:CartForEditDto)=>{
+        this.loading= true;
+        try{
+            const response = await agent.Carts.updateCartState(cart);
+            runInAction(()=>{
+                if(response.data.data != null){
+                    this.createdCart = response.data.data as Cart;
+                this.cartReqistry.set( this.createdCart.id!, this.createdCart);
+                //this.createdCart= this.createdCart;
                 }
                 this.editMode=false;
                 this.loading=false;
@@ -101,6 +125,42 @@ export default class CartStore{
                 console.log(error);
                 this.setLoadingInitial(false);
             }
+    }
+    getNumberOfItemsInCart = async (id:string)=>{
+        try{
+            const result = await  agent.Carts.getNumberOfItemsInCart(id);
+            if(result.data != null){
+                runInAction(()=>{
+                    this.numberOfItemInCart=result.data;
+                })
+            }
+            else{
+                return console.error("test");
+            }
+            this.setLoadingInitial(false);
+            return result.data;
+        }catch(error){
+            console.log(error);
+            this.setLoadingInitial(false);
+        }
+    }
+    calculateCartTotalForCheckout = async (id:string)=>{
+        try{
+            const result = await  agent.Carts.calculateTotalForCheckout(id);
+            if(result.data != null){
+                runInAction(()=>{
+                   this.cartTotal = result.data;
+                })
+            }
+            else{
+                return console.error("test");
+            }
+            this.setLoadingInitial(false);
+            return result.data;
+        }catch(error){
+            console.log(error);
+            this.setLoadingInitial(false);
+        }
     }
 
     private getCart = (id:string)=>{

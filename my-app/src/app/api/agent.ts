@@ -94,6 +94,9 @@ const request = {
 const Carts = {
   details: (id:string) => request.get<Cart>(`/Cart/GetCartByUserId/${id}`),
   addToCart: (cart: CartForEditDto) => axios.put<ServerError<Cart>>("/Cart/AddToCart",cart),
+  updateCartState:(cart:CartForEditDto)=>axios.put<ServerError<Cart>>("/Cart/UpdateCartState",cart),
+  getNumberOfItemsInCart: (id:string)=>request.get<ServerError<number>>(`/Cart/GetNumberOfItemsInCart/${id}`),
+  calculateTotalForCheckout: (id:string)=>request.get<ServerError<number>>(`/Cart/CalculateCartTotalForCheckout/${id}`),
   removeMenuItem: (cartId:number,menuItemId:number)=>axios.delete<void>('/Cart/RemoveMenuItemFromCart', {
     params: {
       cartId: cartId,

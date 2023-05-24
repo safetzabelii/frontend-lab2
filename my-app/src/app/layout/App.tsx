@@ -52,7 +52,8 @@ import Slider from './Slider';
 
 function App() {
   const verificationToken = store.commonStore.verificationToken;
-  const { commonStore, userStore } = useStore();
+  const { commonStore, userStore,cartStore } = useStore();
+  const{getNumberOfItemsInCart} = cartStore;
   const cookies = commonStore.getCookies();
   const [loading, setLoading] = useState(true);
   const [isUserLoaded, setIsUserLoaded] = useState(false);
@@ -62,6 +63,12 @@ function App() {
   if (cookies) {
     token = cookies.token;
   }
+  useEffect(()=>{
+    setLoading(true);
+    getNumberOfItemsInCart(userStore.user?.id!).then(()=>{
+      setLoading(false);
+    });
+  },[getNumberOfItemsInCart,userStore.user?.id]);
   useEffect(() => {
     const token = commonStore.getToken;
 

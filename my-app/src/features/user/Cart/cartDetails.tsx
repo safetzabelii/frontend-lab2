@@ -1,7 +1,10 @@
 import { observer } from "mobx-react";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useStore } from "../../../app/stores/store";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { MenuItemForCartEditDto } from "../../../app/models/MenuItem/MenuItemForCartEditDto";
+import { OfferForCartEditDto } from "../../../app/models/Offer/OfferForCartEditDto";
+import { CartForEditDto } from "../../../app/models/Cart/CartForEditDto";
 
 interface CartItemProps {
   imageUrl: string;
@@ -10,6 +13,7 @@ interface CartItemProps {
   quantity: number;
   price: number;
   onRemove:()=>void;
+  onQuantityChange:(quantity:number)=>void;
 }
 
 interface CartSummaryProps {
@@ -19,19 +23,87 @@ interface CartSummaryProps {
 }
 
 const CartDetails: React.FC = observer(() => {
-  const {cartStore} = useStore();
+  const {cartStore,userStore} = useStore();
   const {id} = useParams();
   const {selectedCart,loadCart,removeMenuItem,removeOffer} = cartStore;
   const cartId = Number(selectedCart?.id);
+  const [menuItems, setMenuItems] = useState<MenuItemForCartEditDto[]>([]);
+const [offers, setOffers] = useState<OfferForCartEditDto[]>([]);
+const [cart, setCart] = useState<CartForEditDto>({
+  id:'',
+  userId:'',
+  cartMenuItems:[],
+  }
+)
   useEffect(()=>{
     loadCart(id!);
   },[cartStore]);
+
+  useEffect(() => {
+    if (selectedCart) {
+      const updatedMenuItems = selectedCart.menuItems.map((menuItem) => {
+
+        return {
+          menuItemId: menuItem.id,
+          quantity: menuItem.quantity,
+
+        };
+      });
+      setMenuItems(updatedMenuItems);
+      const updatedOffers = selectedCart.offers.map((offer) => {
+
+        return {
+          offerId: offer.id,
+          quantity: offer.quantity,
+        };
+      });
+      setOffers(updatedOffers);
+    }
+
+  }, [selectedCart]);
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      if (selectedCart) {
+        const cart = {
+          id: selectedCart.id,
+          userId: userStore.user?.id!,
+          cartMenuItems: [...menuItems],
+          cartOffers: [...offers]
+        };
+        cartStore.updateCartState(cart);
+      }
+    };
+  
+    window.addEventListener('beforeunload', handleBeforeUnload);
+  
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [menuItems, offers, selectedCart, cart, userStore.user?.id]);
+
   function handleRemoveMenuItem(cartId:number,menuItemId:number){
     removeMenuItem(cartId,menuItemId).then(()=> loadCart(id!));
   }
   function handleRemoveOffer(cartId:number,offerId:number){
     removeOffer(cartId,offerId).then(()=>loadCart(id!));
   }
+  const handleQuantityChange = (
+    index: number,
+    type: 'menuItems' | 'offers',
+    quantity: number
+  ) => {
+    if (type === 'menuItems') {
+      const updatedMenuItems = [...menuItems];
+      updatedMenuItems[index].quantity = quantity;
+      setMenuItems(updatedMenuItems);
+    } else if (type === 'offers') {
+      const updatedOffers = [...offers];
+      updatedOffers[index].quantity = quantity;
+      setOffers(updatedOffers);
+    }
+  };
+  const navigate = useNavigate();
   return (
     <div className="h-screen bg-gray-100 pt-20">
       <h1 className="mb-10 text-center text-2xl font-bold">Cart Items</h1>
@@ -40,26 +112,32 @@ const CartDetails: React.FC = observer(() => {
         {selectedCart && (selectedCart?.menuItems?.length > 0 || selectedCart?.offers?.length > 0) ? (
   <>
     <h1><b>Menu Items</b></h1>
-    {selectedCart?.menuItems?.map((menuItem) => (
+    {selectedCart?.menuItems?.map((menuItem,index) => (
       <CartItem
+        key={menuItem.id}
         imageUrl={menuItem.imagePath}
         title={menuItem.name}
         description={menuItem.description}
         quantity={menuItem.quantity}
         price={menuItem.price}
         onRemove={() => handleRemoveMenuItem(cartId, menuItem.id)}
+        onQuantityChange={(quantity) => handleQuantityChange(index, 'menuItems', quantity)
+        }
       />
     ))}
     <hr />
     <h1><b>Offers</b></h1>
-    {selectedCart?.offers?.map((offer) => (
+    {selectedCart?.offers?.map((offer,index) => (
       <CartItem
+        key={offer.id}
         imageUrl={offer.imagePath}
         title={offer.name}
         description={offer.description}
         quantity={offer.quantity}
         price={offer.price}
         onRemove={() => handleRemoveOffer(cartId, offer.id)}
+        onQuantityChange={(quantity) => handleQuantityChange(index, 'offers', quantity)
+        }
       />
     ))}
   </>
@@ -69,8 +147,7 @@ const CartDetails: React.FC = observer(() => {
           
         </div>
         <div className="mt-6 h-full rounded-lg border bg-white p-6 shadow-md md:mt-0 md:w-1/3">
-          <CartSummary subtotal="$44.97" shipping="$5.00" total="$49.97 USD" />
-          <button className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600">
+          <button className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600" onClick={()=>navigate(`/Checkout/${userStore.user?.id}`)}>
             Check out
           </button>
         </div>
@@ -79,10 +156,28 @@ const CartDetails: React.FC = observer(() => {
   );
 });
 
-const CartItem: React.FC<CartItemProps> = ({ imageUrl, title, description, quantity, price ,onRemove}) => {
+const CartItem: React.FC<CartItemProps> = ({ imageUrl, title, description, quantity:initialQuantity, price, onRemove, onQuantityChange }) => {
+  const [quantity, setQuantity] = useState(initialQuantity);
   const handleRemoveClick = () => {
     onRemove();
   };
+
+  const handleQuantityDecrement = () => {
+    if (quantity === 0) {
+      return;
+    }
+
+    const newQuantity = quantity - 1;
+    setQuantity(newQuantity);
+    onQuantityChange(newQuantity);
+  };
+
+  const handleQuantityIncrement = () => {
+    const newQuantity = quantity + 1;
+    setQuantity(newQuantity);
+    onQuantityChange(newQuantity);
+  };
+
   return (
     <div className="justify-between mb-6 rounded-lg bg-white p-6 shadow-md sm:flex sm:justify-start">
       <img src={`data:image/jpeg;base64,${imageUrl}`} alt="product-image" className="w-full rounded-lg sm:w-40" />
@@ -93,7 +188,10 @@ const CartItem: React.FC<CartItemProps> = ({ imageUrl, title, description, quant
         </div>
         <div className="mt-4 flex justify-between sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
           <div className="flex items-center border-gray-100">
-            <span className="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-blue-500 hover:text-blue-50">
+            <span
+              className="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-blue-500 hover:text-blue-50"
+              onClick={handleQuantityDecrement}
+            >
               -
             </span>
             <input
@@ -101,8 +199,12 @@ const CartItem: React.FC<CartItemProps> = ({ imageUrl, title, description, quant
               type="number"
               value={quantity}
               min="1"
+              readOnly
             />
-            <span className="cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-blue-500 hover:text-blue-50">
+            <span
+              className="cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-blue-500 hover:text-blue-50"
+              onClick={handleQuantityIncrement}
+            >
               +
             </span>
           </div>
@@ -126,27 +228,5 @@ const CartItem: React.FC<CartItemProps> = ({ imageUrl, title, description, quant
   );
 };
 
-const CartSummary: React.FC<CartSummaryProps> = ({ subtotal, shipping, total }) => {
-  return (
-    <>
-      <div className="mb-2 flex justify-between">
-        <p className="text-gray-700">Subtotal</p>
-        <p className="text-gray-700">{subtotal}</p>
-      </div>
-      <div className="flex justify-between">
-        <p className="text-gray-700">Shipping</p>
-        <p className="text-gray-700">{shipping}</p>
-      </div>
-      <hr className="my-4" />
-      <div className="flex justify-between">
-        <p className="text-lg font-bold">Total</p>
-        <div>
-          <p className="mb-1 text-lg font-bold">{total}</p>
-          <p className="text-sm text-gray-700">including VAT</p>
-        </div>
-      </div>
-    </>
-  );
-};
 
 export default CartDetails;
