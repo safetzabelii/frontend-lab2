@@ -23,34 +23,20 @@ export default observer(function MenuItems() {
   
   useEffect(() => {
     loadMenuItems();
-  }, [loadMenuItems]);
+    loadCart(user?.id!);
+  }, [loadMenuItems,loadCart,user?.id]);
 
   function handleAddMenuItemToCart(id: number) {
-    setMenuItem((prevMenuItem) => ({
-      ...prevMenuItem,
-      menuItemId: id,
-      quantity: 1
-    }));
+    menuItem.menuItemId = id;
+    menuItem.quantity = 1;
+      if (cart && cart.cartMenuItems) {
+      cart.id = selectedCart?.id!;
+      cart.userId = user?.id!;
+      cart.cartMenuItems.push(menuItem);
+      cartStore.addToCart(cart);
+      cart.cartMenuItems.pop();
+      }
   }
-  
-  const addToCart = async () => {
-    if (cart && cart.cartMenuItems) {
-      const updatedCart = {
-        ...cart,
-        id: selectedCart?.id!,
-        userId: user?.id!,
-        cartMenuItems: [...cart.cartMenuItems, menuItem]
-      };
-  
-      await cartStore.addToCart(updatedCart);
-    }
-  };
-  
-  const handleAddToCartClick = async () => {
-    loadCart(user?.id!);
-    await addToCart();
-  };
-  
 
   return (
     <div className="container mx-auto py-8">
@@ -84,7 +70,7 @@ export default observer(function MenuItems() {
                   </p>
                   <button
                     className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                    onClick={handleAddToCartClick}
+                    onClick={()=>handleAddMenuItemToCart(menuitem.id)}
                     name={menuitem.name}
                   >
                     {target === menuitem.name ? "Adding..." : "Add to cart"}
