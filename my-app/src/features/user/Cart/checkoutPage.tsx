@@ -1,130 +1,155 @@
-
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { useEffect, useState } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import { FaCoffee } from 'react-icons/fa';
-
+import { FormEvent, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import { useStore } from '../../../app/stores/store';
-import { Restaurant } from '../../../app/models/Menu/Restaurant';
-import { Checkout } from '../../../app/models/Cart/Checkout';
+import { PaymentProcess } from '../../../app/models/Stripe/PaymentProcess';
+import { useStripe, CardNumberElement, CardExpiryElement, CardCvcElement, Elements, useElements, CardElement } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+import { Stripe } from 'stripe';
 
-export default observer(function CheckoutPage(){
-  const {cartStore,modalStore,userStore} = useStore();
+const stripePromise = loadStripe('pk_test_51NBdqZGbDJlqfZigjONZE93ydckUNK6t8b1x60W45NOeU3mGo4kyjXVWlymJJi1KMyCnk2cn2KNSMlE5QDE4lDlj00mGXUC2dH');
+const  CheckoutPage= () =>{
+  const { cartStore, userStore } = useStore();
   const navigate = useNavigate();
-  const {user} = userStore;
-  const{calculateCartTotalForCheckout,cartTotal}=cartStore;
-  const [amount,setAmount] = useState(0);
-  useEffect(()=>{
-   calculateCartTotalForCheckout(user?.id!).then(()=>{
-    setAmount(cartTotal!);
-   });
-  },[calculateCartTotalForCheckout]);
-  const [checkout, setCheckout] = useState<Checkout>({
-    id: ''
+  const { user } = userStore;
+  const { calculateCartTotalForCheckout, cartTotal } = cartStore;
+ 
+  const elements = useElements();
+
+  const stripe = useStripe();
+  useEffect(() => {
+    calculateCartTotalForCheckout(user?.id!).then(() => {
+
+    });
+  }, [calculateCartTotalForCheckout]);
+
+  const [payment, setPayment] = useState<PaymentProcess>({
+    userId: user?.id!,
+    stripeCustomer: {
+      email: '',
+      name: '',
+      cardToken: '',
+    },
+    paymentIntent: {
+      amount: cartTotal!,
+      currency: 'EUR',
+      description: 'test',
+      deliveryAddress: '',
+      paymentMethod:'',
+      stripeCustomerId: '',
+    },
   });
+
+  const cardElementOptions = {
+    style: {
+      base: {
+        fontSize: '16px',
+        color: '#32325d',
+        '::placeholder': {
+          color: '#aab7c4',
+        },
+      },
+      invalid: {
+        color: '#fa755a',
+      },
+    },
+  };
+  async function handleFormSubmit(payment:PaymentProcess) {
+    calculateCartTotalForCheckout(user?.id!).then( async ()=>{
+      if (!elements || !stripe) {
+       
+        return;
+      }
   
-  function handleFormSubmit(checkout: Checkout){
-    let newCheckout = {
-      ...checkout,
-    }
-   /* processPayment(newCheckout).then(()=>
-    {
-      modalStore.closeModal();
-      navigate('/menuItem')
-  }); */
+      const cardElement = elements.getElement(CardElement);
+      
+  
+      if (!cardElement) {
+        // Card elements not available, handle accordingly
+        return;
+      }
+      const { token,error  } = await stripe.createToken(cardElement);
+  
+      if (error) {
+        // Handle error
+        console.log(error);
+      } else {
+        let newPayment = {
+          ...payment,
+          ...payment.paymentIntent,
+          ...payment.stripeCustomer
+        }
+        newPayment.stripeCustomer.cardToken = token.id;
+        newPayment.paymentIntent.amount = cartTotal!;
+        cartStore.processPayment(newPayment);
+      }
+    });
+
+   
   }
 
+
   return (
-    
-        <Formik
-          initialValues={checkout}
-          onSubmit={handleFormSubmit}
-        >
-          {formik => (
-            <Form className="mt-6" encType="multipart/form-data">
-              <div className="mb-4">
-              <label className="block text-black font-bold mb-2" htmlFor="name">
-              Name:
-            </label>
-            <Field
-              className="border border-gray-400 p-2 w-full rounded-md"
-              type="text"
-              name="name"
-              id="name"
-              placeholder="Enter restaurant name"
-            />
-            <ErrorMessage
-              name="name"
-              component="div"
-              className="text-red-500 text-sm mt-1"
-            />
-
-            <label className="block text-black font-bold mb-2" htmlFor="address">
-              Address:
-            </label>
-            <Field
-              className="border border-gray-400 p-2 w-full rounded-md"
-              type="text"
-              name="address"
-              id="address"
-              placeholder="Enter restaurant address"
-            />
-            <ErrorMessage
-              name="address"
-              component="div"
-              className="text-red-500 text-sm mt-1"
-            />
-
-            <label className="block text-black font-bold mb-2" htmlFor="phoneNumber">
-              Phone Number:
-            </label>
-            <Field
-              className="border border-gray-400 p-2 w-full rounded-md"
-              type="text"
-              name="phoneNumber"
-              id="phoneNumber"
-              placeholder="Enter restaurant phone"
-            />
-            <ErrorMessage
-              name="phoneNumber"
-              component="div"
-              className="text-red-500 text-sm mt-1"
-            />
-
-            <label className="block text-black font-bold mb-2" htmlFor="files">
-              Image:
-            </label>
-            <Field
-              className="border border-gray-400 p-2 w-full rounded-md"
-              type="file"
-              name="files"
-              id="files"
-              placeholder="Upload restaurant image"
-              accept="*"
-            />
-            <ErrorMessage
-              name="files"
-              component="div"
-              className="text-red-500 text-sm mt-1"
-            />
-              </div>
-              <div className="flex justify-end space-x-4">
-                <button
-                  className="bg-green-700 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors duration-300 ease-in-out"
-                  type="submit"
-                  disabled={!formik.isValid || formik.isSubmitting}
-                >
-                  {formik.isSubmitting ? 'Submitting...' : 'Submit'}
-                </button>
-              </div>
-
-              
-            </Form>
-          )}
-        </Formik>
-      
+      <main className="mt-4 p-4">
+        <h1 className="text-xl font-semibold text-gray-700 text-center">Card payment</h1>
+        <div className="">
+          <Formik
+            initialValues={payment}
+            onSubmit={handleFormSubmit}
+          >
+            {formik => (
+              <Form className="mt-6">
+                {user?.stripeCustomerId == null ? (
+                <div className="my-3">
+                <h1 className="block text-black font-bold mb-2" >
+                  Card Information:
+                </h1>
+                <CardElement className="block w-full px-5 py-2 border rounded-lg bg-white shadow-lg placeholder-gray-400 text-gray-700 focus:ring focus:outline-none" options={cardElementOptions} />
+                </div>
+                ):(
+                    null
+                )}
+               
+                <label className="block text-white font-bold mb-2" htmlFor="deliveryAddress">
+                  Delivery Address:
+                </label>
+                <Field
+                  className="border border-gray-400 p-2 w-full rounded-md"
+                  type="text"
+                  name="paymentIntent.deliveryAddress"
+                  id="deliveryAddress"
+                  placeholder="Enter the delivery address"
+                />
+                <ErrorMessage
+                  name="paymentIntent.deliveryAddress"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+                <h1 className="block text-white font-bold mb-2" >
+                  Total: {cartTotal}
+                </h1>
+                
+                <div className="flex justify-end space-x-4">
+                  <button
+                    className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors duration-300 ease-in-out"
+                    type="submit"
+                    disabled={!formik.isValid || formik.isSubmitting}
+                  >
+                    {formik.isSubmitting ? 'Paying...' : 'Pay'}
+                  </button>
+                </div>
+              </Form>
+            )}
+          </Formik>
+        </div>
+      </main>
   );
-});
+};
+const Wrapper = ()=>(
+<Elements stripe={stripePromise}>
+<CheckoutPage/>
+</Elements>
+);
+export default Wrapper;

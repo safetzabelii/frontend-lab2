@@ -4,6 +4,7 @@ import { Menu } from "../models/Menu/Menu";
 import { MenuDto } from "../models/Menu/MenuDto";
 import { Cart } from "../models/Cart/Cart";
 import { CartForEditDto } from "../models/Cart/CartForEditDto";
+import { PaymentProcess } from "../models/Stripe/PaymentProcess";
 
 export default class CartStore{
   
@@ -142,6 +143,25 @@ export default class CartStore{
         }catch(error){
             console.log(error);
             this.setLoadingInitial(false);
+        }
+    }
+    processPayment = async (payment:PaymentProcess)=>{
+        this.loading=true;
+        try{
+            const response = await agent.Carts.processPayment(payment);
+            runInAction(()=>{
+                if(response.data.data != null){
+                    console.log(response.data.message);
+                }
+                this.editMode=false;
+                this.loading=false;
+            })
+        }catch(error){
+            console.log(error);
+            runInAction(()=>{
+                this.loading=false;
+            })
+            
         }
     }
     calculateCartTotalForCheckout = async (id:string)=>{

@@ -23,6 +23,7 @@ import { ServerError } from "../models/Error/ServerError";
 import { Server } from "http";
 import { Cart } from "../models/Cart/Cart";
 import { CartForEditDto } from "../models/Cart/CartForEditDto";
+import { PaymentProcess } from "../models/Stripe/PaymentProcess";
 
 
 axios.defaults.baseURL = "http://localhost:7017/api";
@@ -97,6 +98,7 @@ const Carts = {
   updateCartState:(cart:CartForEditDto)=>axios.put<ServerError<Cart>>("/Cart/UpdateCartState",cart),
   getNumberOfItemsInCart: (id:string)=>request.get<ServerError<number>>(`/Cart/GetNumberOfItemsInCart/${id}`),
   calculateTotalForCheckout: (id:string)=>request.get<ServerError<number>>(`/Cart/CalculateCartTotalForCheckout/${id}`),
+  processPayment:(paymentProcess:PaymentProcess)=>axios.post<ServerError<string>>("/Cart/ProcessPayment",paymentProcess),
   removeMenuItem: (cartId:number,menuItemId:number)=>axios.delete<void>('/Cart/RemoveMenuItemFromCart', {
     params: {
       cartId: cartId,
@@ -109,6 +111,7 @@ const Carts = {
       offerId : offerId
     }
   })
+
 }
 const Menus = {
     list: () => request.get<Menu[]>("/Menu/GetAllMenus"),

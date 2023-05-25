@@ -48,6 +48,7 @@ import AdminDashboard from '../../features/admin/dashboard/adminDashboard';
 import CartDetails from '../../features/user/Cart/cartDetails';
 import Orders from '../../features/user/Orders/Orders';
 import Slider from './Slider';
+import Wrapper from '../../features/user/Cart/checkoutPage';
 
 
 function App() {
@@ -161,8 +162,7 @@ function App() {
                         <Route path="/restaurants" element={<Restaurants />} />
                         <Route path="/cartDetails/:id" element={<CartDetails/>}/>
                         <Route path="/orders" element={<Orders/>} />
-                        <Route path="/slider" element={<Slider/>}/>
-
+                        <Route path="/checkout/:id" element={<Wrapper/>}/>
                         {/* Routes continued */}
                         <Route path="/verifyaccount" element={<VerifyAccount />} />
 
