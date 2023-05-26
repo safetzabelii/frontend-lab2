@@ -12,8 +12,8 @@ interface CartItemProps {
   description: string;
   quantity: number;
   price: number;
-  onRemove:()=>void;
-  onQuantityChange:(quantity:number)=>void;
+  onRemove: () => void;
+  onQuantityChange: (quantity: number) => void;
 }
 
 interface CartSummaryProps {
@@ -23,35 +23,32 @@ interface CartSummaryProps {
 }
 
 const CartDetails: React.FC = observer(() => {
-  const {cartStore,userStore} = useStore();
-  const {id} = useParams();
-  const {selectedCart,loadCart,removeMenuItem,removeOffer} = cartStore;
+  const { cartStore, userStore } = useStore();
+  const { id } = useParams();
+  const { selectedCart, loadCart, removeMenuItem, removeOffer } = cartStore;
   const cartId = Number(selectedCart?.id);
   const [menuItems, setMenuItems] = useState<MenuItemForCartEditDto[]>([]);
-const [offers, setOffers] = useState<OfferForCartEditDto[]>([]);
-const [cart, setCart] = useState<CartForEditDto>({
-  id:'',
-  userId:'',
-  cartMenuItems:[],
-  }
-)
-  useEffect(()=>{
+  const [offers, setOffers] = useState<OfferForCartEditDto[]>([]);
+  const [cart, setCart] = useState<CartForEditDto>({
+    id: "",
+    userId: "",
+    cartMenuItems: [],
+  });
+
+  useEffect(() => {
     loadCart(id!);
-  },[cartStore]);
+  }, [cartStore]);
 
   useEffect(() => {
     if (selectedCart) {
       const updatedMenuItems = selectedCart.menuItems.map((menuItem) => {
-
         return {
           menuItemId: menuItem.id,
           quantity: menuItem.quantity,
-
         };
       });
       setMenuItems(updatedMenuItems);
       const updatedOffers = selectedCart.offers.map((offer) => {
-
         return {
           offerId: offer.id,
           quantity: offer.quantity,
@@ -59,21 +56,22 @@ const [cart, setCart] = useState<CartForEditDto>({
       });
       setOffers(updatedOffers);
     }
-
   }, [selectedCart]);
-function updateCartState(){
-  if (selectedCart) {
-    const cart = {
-      id: selectedCart.id,
-      userId: userStore.user?.id!,
-      cartMenuItems: [...menuItems],
-      cartOffers: [...offers]
-    };
-    cartStore.updateCartState(cart).then(()=>{
-navigate(`/Checkout/${userStore.user?.id}`)
-    });
+
+  function updateCartState() {
+    if (selectedCart) {
+      const cart = {
+        id: selectedCart.id,
+        userId: userStore.user?.id!,
+        cartMenuItems: [...menuItems],
+        cartOffers: [...offers],
+      };
+      cartStore.updateCartState(cart).then(() => {
+        navigate(`/Checkout/${userStore.user?.id}`);
+      });
+    }
   }
-}
+
   useEffect(() => {
     const handleBeforeUnload = () => {
       if (selectedCart) {
@@ -81,85 +79,98 @@ navigate(`/Checkout/${userStore.user?.id}`)
           id: selectedCart.id,
           userId: userStore.user?.id!,
           cartMenuItems: [...menuItems],
-          cartOffers: [...offers]
+          cartOffers: [...offers],
         };
         cartStore.updateCartState(cart);
       }
     };
-  
-    window.addEventListener('beforeunload', handleBeforeUnload);
-  
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
     return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, [menuItems, offers, selectedCart, cart, userStore.user?.id]);
 
-  function handleRemoveMenuItem(cartId:number,menuItemId:number){
-    removeMenuItem(cartId,menuItemId).then(()=> loadCart(id!));
+  function handleRemoveMenuItem(cartId: number, menuItemId: number) {
+    removeMenuItem(cartId, menuItemId).then(() => loadCart(id!));
   }
-  function handleRemoveOffer(cartId:number,offerId:number){
-    removeOffer(cartId,offerId).then(()=>loadCart(id!));
+
+  function handleRemoveOffer(cartId: number, offerId: number) {
+    removeOffer(cartId, offerId).then(() => loadCart(id!));
   }
+
   const handleQuantityChange = (
     index: number,
-    type: 'menuItems' | 'offers',
+    type: "menuItems" | "offers",
     quantity: number
   ) => {
-    if (type === 'menuItems') {
+    if (type === "menuItems") {
       const updatedMenuItems = [...menuItems];
       updatedMenuItems[index].quantity = quantity;
       setMenuItems(updatedMenuItems);
-    } else if (type === 'offers') {
+    } else if (type === "offers") {
       const updatedOffers = [...offers];
       updatedOffers[index].quantity = quantity;
       setOffers(updatedOffers);
     }
   };
+
   const navigate = useNavigate();
+
+  const isCartEmpty = !selectedCart || (selectedCart.menuItems.length === 0 && selectedCart.offers.length === 0);
+
   return (
     <div className="h-screen bg-gray-100 pt-20">
       <h1 className="mb-10 text-center text-2xl font-bold">Cart Items</h1>
       <div className="mx-auto max-w-5xl justify-center px-6 md:flex md:space-x-6 xl:px-0">
         <div className="rounded-lg md:w-2/3">
-        {selectedCart && (selectedCart?.menuItems?.length > 0 || selectedCart?.offers?.length > 0) ? (
-  <>
-    <h1><b>Menu Items</b></h1>
-    {selectedCart?.menuItems?.map((menuItem,index) => (
-      <CartItem
-        key={menuItem.id}
-        imageUrl={menuItem.imagePath}
-        title={menuItem.name}
-        description={menuItem.description}
-        quantity={menuItem.quantity}
-        price={menuItem.price}
-        onRemove={() => handleRemoveMenuItem(cartId, menuItem.id)}
-        onQuantityChange={(quantity) => handleQuantityChange(index, 'menuItems', quantity)
-        }
-      />
-    ))}
-    <hr />
-    <h1><b>Offers</b></h1>
-    {selectedCart?.offers?.map((offer,index) => (
-      <CartItem
-        key={offer.id}
-        imageUrl={offer.imagePath}
-        title={offer.name}
-        description={offer.description}
-        quantity={offer.quantity}
-        price={offer.price}
-        onRemove={() => handleRemoveOffer(cartId, offer.id)}
-        onQuantityChange={(quantity) => handleQuantityChange(index, 'offers', quantity)
-        }
-      />
-    ))}
-  </>
-) : (
-  <h1><b>There are no items in your cart</b></h1>
-)}
-          
+          {isCartEmpty ? (
+            <h1>
+              <b>There are no items in your cart</b>
+            </h1>
+          ) : (
+            <>
+              <h1>
+                <b>Menu Items</b>
+              </h1>
+              {selectedCart?.menuItems?.map((menuItem, index) => (
+                <CartItem
+                  key={menuItem.id}
+                  imageUrl={menuItem.imagePath}
+                  title={menuItem.name}
+                  description={menuItem.description}
+                  quantity={menuItem.quantity}
+                  price={menuItem.price}
+                  onRemove={() => handleRemoveMenuItem(cartId, menuItem.id)}
+                  onQuantityChange={(quantity) => handleQuantityChange(index, "menuItems", quantity)}
+                />
+              ))}
+              <hr />
+              <h1>
+                <b>Offers</b>
+              </h1>
+              {selectedCart?.offers?.map((offer, index) => (
+                <CartItem
+                  key={offer.id}
+                  imageUrl={offer.imagePath}
+                  title={offer.name}
+                  description={offer.description}
+                  quantity={offer.quantity}
+                  price={offer.price}
+                  onRemove={() => handleRemoveOffer(cartId, offer.id)}
+                  onQuantityChange={(quantity) => handleQuantityChange(index, "offers", quantity)}
+                />
+              ))}
+            </>
+          )}
         </div>
         <div className="mt-6 h-full rounded-lg border bg-white p-6 shadow-md md:mt-0 md:w-1/3">
-          <button className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600" onClick={updateCartState}>
+          <button
+            className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600"
+            onClick={updateCartState}
+            disabled={isCartEmpty}
+          >
             Check out
           </button>
         </div>
@@ -168,7 +179,7 @@ navigate(`/Checkout/${userStore.user?.id}`)
   );
 });
 
-const CartItem: React.FC<CartItemProps> = ({ imageUrl, title, description, quantity:initialQuantity, price, onRemove, onQuantityChange }) => {
+const CartItem: React.FC<CartItemProps> = ({ imageUrl, title, description, quantity: initialQuantity, price, onRemove, onQuantityChange }) => {
   const [quantity, setQuantity] = useState(initialQuantity);
   const handleRemoveClick = () => {
     onRemove();
@@ -239,6 +250,5 @@ const CartItem: React.FC<CartItemProps> = ({ imageUrl, title, description, quant
     </div>
   );
 };
-
 
 export default CartDetails;
