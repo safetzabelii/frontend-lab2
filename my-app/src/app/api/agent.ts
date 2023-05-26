@@ -4,7 +4,6 @@ import { MenuItem } from "../models/MenuItem/MenuItem";
 import { Offer } from "../models/Offer/Offer";
 import { Restaurant } from "../models/Menu/Restaurant";
 import { Role } from "../models/Role/Role";
-
 import { LogInResponseObject } from "../models/User/LogIn";
 import { User } from "../models/User/User";
 import { SignUp } from "../models/User/SignUp";
@@ -13,17 +12,15 @@ import { OrderItem } from "../models/Order/OrderItem";
 import { ForgotPassword } from "../models/User/Dto/ForgotPassword";
 import { ChangePassword } from "../models/User/Dto/ChangePassword";
 import { ForgotPasswordEmailDto } from "../models/User/Dto/ForgotPasswordEmailDto";
-import { config } from "process";
 import { ForgotPasswordEmailResponseDto } from "../models/User/Dto/ForgotPasswordEmailResponseDto";
 import { OfferDto } from "../models/Offer/OfferDto";
 import { UserEditDto } from "../models/User/Dto/UserEditDto";
-import { store } from "../stores/store";
 import { toast } from "react-toastify";
 import { ServerError } from "../models/Error/ServerError";
-import { Server } from "http";
 import { Cart } from "../models/Cart/Cart";
 import { CartForEditDto } from "../models/Cart/CartForEditDto";
 import { PaymentProcess } from "../models/Stripe/PaymentProcess";
+
 
 
 axios.defaults.baseURL = "http://localhost:7017/api";

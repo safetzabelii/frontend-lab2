@@ -2,14 +2,15 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { FormEvent, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { observer } from 'mobx-react';
+import { Observer, observer } from 'mobx-react';
 import { useStore } from '../../../app/stores/store';
 import { PaymentProcess } from '../../../app/models/Stripe/PaymentProcess';
-import { useStripe, CardNumberElement, CardExpiryElement, CardCvcElement, Elements, useElements, CardElement } from '@stripe/react-stripe-js';
+import { useStripe, Elements, useElements, CardElement } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import { Stripe } from 'stripe';
+import axios from 'axios';
 
-const stripePromise = loadStripe('pk_test_51NBdqZGbDJlqfZigjONZE93ydckUNK6t8b1x60W45NOeU3mGo4kyjXVWlymJJi1KMyCnk2cn2KNSMlE5QDE4lDlj00mGXUC2dH');
+
+const stripePromise = loadStripe('pk_test_51NByv0LIvU3mbLX7aWldO7KAtClxzQGp9QZTxf4hWm3fv9BMUBMCnGfGIJGDieBi6ddmT8g1DjwhCibZwnvaoJYi00TJeg65Ve');
 const  CheckoutPage= () =>{
   const { cartStore, userStore } = useStore();
   const navigate = useNavigate();
@@ -19,10 +20,8 @@ const  CheckoutPage= () =>{
   const elements = useElements();
 
   const stripe = useStripe();
-  useEffect(() => {
-    calculateCartTotalForCheckout(user?.id!).then(() => {
-
-    });
+  useEffect( () => {
+    calculateCartTotalForCheckout(user?.id!);
   }, [calculateCartTotalForCheckout]);
 
   const [payment, setPayment] = useState<PaymentProcess>({
@@ -57,23 +56,17 @@ const  CheckoutPage= () =>{
     },
   };
   async function handleFormSubmit(payment:PaymentProcess) {
-    calculateCartTotalForCheckout(user?.id!).then( async ()=>{
+    await calculateCartTotalForCheckout(user?.id!).then( async ()=>{
       if (!elements || !stripe) {
-       
         return;
       }
-  
-      const cardElement = elements.getElement(CardElement);
-      
-  
+      if(user?.stripeCustomerId == null){
+        const cardElement = elements.getElement(CardElement);
       if (!cardElement) {
-        // Card elements not available, handle accordingly
         return;
       }
       const { token,error  } = await stripe.createToken(cardElement);
-  
       if (error) {
-        // Handle error
         console.log(error);
       } else {
         let newPayment = {
@@ -83,20 +76,33 @@ const  CheckoutPage= () =>{
         }
         newPayment.stripeCustomer.cardToken = token.id;
         newPayment.paymentIntent.amount = cartTotal!;
-        cartStore.processPayment(newPayment);
+        await cartStore.processPayment(newPayment);
+       }
       }
-    });
+      else{
+        let newPayment = {
+          ...payment,
+          ...payment.paymentIntent,
+          ...payment.stripeCustomer
+        }
+        newPayment.paymentIntent.amount = cartTotal!;
+        await cartStore.processPayment(newPayment);
+      }
+      });
+      };
 
    
-  }
+  
 
 
   return (
+
       <main className="mt-4 p-4">
         <h1 className="text-xl font-semibold text-gray-700 text-center">Card payment</h1>
         <div className="">
           <Formik
             initialValues={payment}
+            enableReinitialize
             onSubmit={handleFormSubmit}
           >
             {formik => (
@@ -127,8 +133,8 @@ const  CheckoutPage= () =>{
                   component="div"
                   className="text-red-500 text-sm mt-1"
                 />
-                <h1 className="block text-white font-bold mb-2" >
-                  Total: {cartTotal}
+                <h1 className="block text-black font-bold mb-2" >
+                  Total: {cartTotal!/100}$
                 </h1>
                 
                 <div className="flex justify-end space-x-4">
@@ -146,10 +152,12 @@ const  CheckoutPage= () =>{
         </div>
       </main>
   );
-};
+}
 const Wrapper = ()=>(
+
 <Elements stripe={stripePromise}>
 <CheckoutPage/>
 </Elements>
+
 );
 export default Wrapper;
