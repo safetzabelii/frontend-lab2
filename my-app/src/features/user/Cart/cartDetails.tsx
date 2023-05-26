@@ -61,7 +61,19 @@ const [cart, setCart] = useState<CartForEditDto>({
     }
 
   }, [selectedCart]);
-
+function updateCartState(){
+  if (selectedCart) {
+    const cart = {
+      id: selectedCart.id,
+      userId: userStore.user?.id!,
+      cartMenuItems: [...menuItems],
+      cartOffers: [...offers]
+    };
+    cartStore.updateCartState(cart).then(()=>{
+navigate(`/Checkout/${userStore.user?.id}`)
+    });
+  }
+}
   useEffect(() => {
     const handleBeforeUnload = () => {
       if (selectedCart) {
@@ -147,7 +159,7 @@ const [cart, setCart] = useState<CartForEditDto>({
           
         </div>
         <div className="mt-6 h-full rounded-lg border bg-white p-6 shadow-md md:mt-0 md:w-1/3">
-          <button className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600" onClick={()=>navigate(`/Checkout/${userStore.user?.id}`)}>
+          <button className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600" onClick={updateCartState}>
             Check out
           </button>
         </div>

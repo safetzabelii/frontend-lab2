@@ -171,6 +171,7 @@ export default class CartStore{
                 runInAction(()=>{
                    this.cartTotal = result.data;
                 })
+                return result.data
             }
             else{
                 return console.error("test");

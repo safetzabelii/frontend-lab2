@@ -16,13 +16,15 @@ const  CheckoutPage= () =>{
   const navigate = useNavigate();
   const { user } = userStore;
   const { calculateCartTotalForCheckout, cartTotal } = cartStore;
- 
   const elements = useElements();
-
+  const [loading, setLoading] = useState(false);
   const stripe = useStripe();
   useEffect( () => {
-    calculateCartTotalForCheckout(user?.id!);
-  }, [calculateCartTotalForCheckout]);
+    setLoading(true); // Start loading
+    calculateCartTotalForCheckout(user?.id!).then(() => {
+      setLoading(false); // Stop loading when calculation is finished
+    });
+  }, [calculateCartTotalForCheckout,user?.id]);
 
   const [payment, setPayment] = useState<PaymentProcess>({
     userId: user?.id!,
@@ -76,7 +78,9 @@ const  CheckoutPage= () =>{
         }
         newPayment.stripeCustomer.cardToken = token.id;
         newPayment.paymentIntent.amount = cartTotal!;
-        await cartStore.processPayment(newPayment);
+        await cartStore.processPayment(newPayment).then(()=>{
+          navigate('/menu');
+        });
        }
       }
       else{
@@ -86,7 +90,9 @@ const  CheckoutPage= () =>{
           ...payment.stripeCustomer
         }
         newPayment.paymentIntent.amount = cartTotal!;
-        await cartStore.processPayment(newPayment);
+        await cartStore.processPayment(newPayment).then(()=>{
+          navigate('/menu');
+        });
       }
       });
       };
@@ -98,6 +104,10 @@ const  CheckoutPage= () =>{
   return (
 
       <main className="mt-4 p-4">
+         {loading ? (
+        <div className="text-center">Loading...</div> // Display loader while loading is true
+      ) : (
+        <>
         <h1 className="text-xl font-semibold text-gray-700 text-center">Card payment</h1>
         <div className="">
           <Formik
@@ -150,6 +160,8 @@ const  CheckoutPage= () =>{
             )}
           </Formik>
         </div>
+        </>
+        )}
       </main>
   );
 }
