@@ -20,6 +20,8 @@ import { ServerError } from "../models/Error/ServerError";
 import { Cart } from "../models/Cart/Cart";
 import { CartForEditDto } from "../models/Cart/CartForEditDto";
 import { PaymentProcess } from "../models/Stripe/PaymentProcess";
+import { OrderForDisplayDto } from "../models/Order/OrderForDisplayDto";
+import MostOrderedItems from "../layout/MostOrderedItems";
 
 
 
@@ -137,11 +139,15 @@ const Offers = {
     };
     
 const Orders = {
-      list: () => request.get<Order[]>("/Order"),
-      details: (id: string) => request.get<Order>(`/Order/${id}`),
+      list: () => request.get<ServerError<OrderForDisplayDto[]>>("/Order/GetAllOrders"),
+      details: (id: string) => request.get<ServerError<OrderForDisplayDto>>(`/Order/GetById/${id}`),
       create: (order: Order) => axios.post<void>("/Order", order),
       update: (order: Order) => axios.put<void>(`/Order/${order.orderid}`, order),
       delete: (id: string) => axios.delete<void>(`/Order/${id}`),
+      acceptOrder: (orderId: number, userId: string) => axios.put<ServerError<string>>(`/Order/AcceptOrder?orderId=${orderId}&userId=${userId}`)
+  .then((response) => response.data),
+      getActiveOrderForAgent: (agentId: string) => axios.get<ServerError<OrderForDisplayDto>>(`/Order/GetActiveOrderForAgent/${agentId}`),
+      updateOrderStatus: (orderId:string,orderStatus:number) => axios.put<ServerError<OrderForDisplayDto>>(`/Order/UpdateOrderStatus/${orderId}/${orderStatus}`)
       };
 
 const OrderItems = {

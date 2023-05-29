@@ -2,10 +2,11 @@ import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
 import { off } from "process";
 import { Order } from "../models/Order/Order";
+import { OrderForDisplayDto } from "../models/Order/OrderForDisplayDto";
 
 export default class OrderStore{
-orderRegistry = new Map<string,Order>();
-    selectedOrder:Order |undefined = undefined;
+orderRegistry = new Map<string,OrderForDisplayDto>();
+    selectedOrder:OrderForDisplayDto |undefined = undefined;
     editMode =false;
     loading = false;
     loadingInitial = false;
@@ -17,7 +18,7 @@ orderRegistry = new Map<string,Order>();
     }
     
     get orderById(){
-        return Array.from(this.orderRegistry.values()).sort((a, b)=> Number(a.orderid) - Number(b.orderid) );
+        return Array.from(this.orderRegistry.values()).sort((a, b)=> Number(a.id) - Number(b.id) );
     }
     
     get orders(){
@@ -26,8 +27,8 @@ orderRegistry = new Map<string,Order>();
 
     loadOrders = async () => {
         try{
-            const orders = await agent.Orders.list();
-            orders.forEach((order: Order)=>{
+            const response = await agent.Orders.list();
+            response.data.forEach((order: OrderForDisplayDto)=>{
                 this.setOrder(order);
             })
             this.setLoadingInitial(false);
@@ -40,40 +41,7 @@ orderRegistry = new Map<string,Order>();
     setLoadingInitial = (state: boolean)=>{
         this.loadingInitial=state;
     }
-    createOrder = async (order:Order)=>{
-        this.loading=true;
-        try{
-            await agent.Orders.create(order);
-            runInAction(()=>{
-                this.orderRegistry.set(order.orderid!,order);
-                this.editMode=false;
-                this.loading=false;
-            })
-        }catch(error){
-            console.log(error);
-            runInAction(()=>{
-                this.loading=false;
-            })
-            
-        }
-    }
-    updateOrder = async (order:Order)=>{
-        this.loading= true;
-        try{
-            await agent.Orders.update(order);
-            runInAction(()=>{
-                this.orderRegistry.set(order.orderid!,order);
-                this.selectedOrder=order;
-                this.editMode=false;
-                this.loading=false;
-            })
-        }catch(error){
-            console.log(error);
-            runInAction(()=>{
-                this.loading=false;
-            })
-        }
-    }
+   
     deleteOrder = async(id:string)=>{
         this.loading=true;
         try{
@@ -89,6 +57,24 @@ orderRegistry = new Map<string,Order>();
             })
         }
     }
+    getActiveOrderForAgent = async(agentId:string)=>{
+        try{
+            var response = await agent.Orders.getActiveOrderForAgent(agentId); 
+            if(response){
+            this.setOrder(response.data.data!);
+            runInAction(()=>{
+                this.selectedOrder=response.data.data;
+            })
+            this.setLoadingInitial(false);
+            return response.data;
+        }else{
+            return null;
+        }
+        }catch(error){
+            console.log(error);
+            this.setLoadingInitial(false);
+        }
+    }
     loadOrder = async (id:string)=>{
         let order = this.getOrder(id);
         if(order){
@@ -98,10 +84,10 @@ orderRegistry = new Map<string,Order>();
         else{
             this.loadingInitial=true;
             try{
-                order = await  agent.Orders.details(id);
-                this.setOrder(order!);
+                var response = await  agent.Orders.details(id);
+                this.setOrder(response.data!);
                 runInAction(()=>{
-                    this.selectedOrder=order;
+                    this.selectedOrder=response.data;
                 })
                 this.setLoadingInitial(false);
                 return order;
@@ -111,12 +97,43 @@ orderRegistry = new Map<string,Order>();
             }
         }
     }
-
+    updateOrderStatus = async(orderId:string,orderStatus:number)=>{
+        this.loading= true;
+        try{
+            var response = await agent.Orders.updateOrderStatus(orderId,orderStatus);
+                runInAction(()=>{
+                    this.orderRegistry.set(response.data.data?.id!,response.data.data!);
+                    this.selectedOrder=response.data.data;
+                    this.editMode=false;
+                    this.loading=false;
+                    
+                })
+           
+        }catch(error){
+            runInAction(()=>{
+                this.loading=false;
+            })
+            
+        }
+    }
+    acceptOrder = async(orderId:number,userId:string)=>{
+        try{
+            var response = await  agent.Orders.acceptOrder(orderId,userId);
+            runInAction(()=>{
+                agent.Orders.list();
+            })
+            this.setLoadingInitial(false);
+            return response.data;
+        }catch(error){
+            console.log(error);
+            this.setLoadingInitial(false);
+        }
+    }
     private getOrder = (id:string)=>{
         return this.orderRegistry.get(id);
     }
 
-    private setOrder = (order:Order)=>{
-        this.orderRegistry.set(order.orderid!,order);
+    private setOrder = (order:OrderForDisplayDto)=>{
+        this.orderRegistry.set(order.id!,order);
     }
 }

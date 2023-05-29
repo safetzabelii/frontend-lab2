@@ -49,23 +49,29 @@ import CartDetails from '../../features/user/Cart/cartDetails';
 import Orders from '../../features/user/Orders/Orders';
 import Slider from './Slider';
 import Wrapper from '../../features/user/Cart/checkoutPage';
+import ListOrders from '../../features/admin/order/listOrders';
+import MenageOrder from '../../features/admin/order/menageOrder';
 
 
 function App() {
   const verificationToken = store.commonStore.verificationToken;
   const { commonStore, userStore,cartStore } = useStore();
+  const {getCurrentUser} = userStore;
   const{getNumberOfItemsInCart} = cartStore;
   const cookies = commonStore.getCookies();
   const [loading, setLoading] = useState(true);
   const [isUserLoaded, setIsUserLoaded] = useState(false);
 
 
-  let token = null;
+  let token = "";
   if (cookies) {
     token = cookies.token;
   }
   useEffect(()=>{
     setLoading(true);
+    if(token.length >0){
+      getCurrentUser(token);
+    }
     getNumberOfItemsInCart(userStore.user?.id!).then(()=>{
       setLoading(false);
     });
@@ -92,7 +98,7 @@ function App() {
   }, [commonStore, userStore]);
 
   useEffect(() => {
-    if (isUserLoaded && userStore.user?.role === 'Admin') {
+    if (isUserLoaded && (userStore.user?.role === 'Admin'|| userStore.user?.role ==="Agent")) {
       const allContents = document.getElementById('allContents') as HTMLDivElement;
       if (allContents) {
         allContents.className = 'h-screen';
@@ -143,7 +149,7 @@ function App() {
         <Routes>
           <Route path={'/*'} element={<>
             {/* Render the appropriate navbar based on the user role */}
-            {userStore.user?.role === 'Admin' ? <AdminNavbar /> : <Navbar />}
+            {userStore.user?.role === 'Admin'||userStore.user?.role ==='Agent' ? <AdminNavbar /> : <Navbar />}
             <div id="contentContainerWrapper">
               <div className="contentContainer">
                       <Routes>
@@ -197,6 +203,9 @@ function App() {
                           <Route path="/dashboard/listOffers" element={<ListOffers />} />
                           <Route path="/dashboard/offerCreateForm" element={<OfferCreateForm />} />
                           <Route path="/dashboard/offerEditForm" element={<OfferEditForm />} />
+                          <Route path="/dashboard/listOrders" element={<ListOrders/>}/>
+                          <Route path="/dashboard/menageOrder" element={<MenageOrder/>}/>
+
                           <Route path="/dashboard" element={<AdminDashboard />} />
                         </Route>
                       </Routes>

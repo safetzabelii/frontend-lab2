@@ -79,11 +79,11 @@ export default observer(function Order() {
       ) : (
         <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {filteredOrders.map((order) => (
-            <li key={order.orderid} className="bg-white rounded-lg shadow-lg overflow-hidden">
+            <li key={order.id} className="bg-white rounded-lg shadow-lg overflow-hidden">
               <div className="p-4">
                 <div className="flex items-center justify-between mb-2">
-                  <h2 className="text-xl font-semibold">{order.userid}</h2>
-                  <span className="text-gray-600">Order ID: {order.orderid}</span>
+                  <h2 className="text-xl font-semibold">{order.user}</h2>
+                  <span className="text-gray-600">Order ID: {order.id}</span>
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold mb-2">Order Items:</h3>
@@ -98,7 +98,7 @@ export default observer(function Order() {
                     <span className="font-semibold">Total:</span> {order.total}
                   </p>
                   <p className="text-gray-600 mb-2">
-                    <span className="font-semibold">User:</span> {order.userid}
+                    <span className="font-semibold">User:</span> {order.user}
                   </p>
                 </div>
               </div>

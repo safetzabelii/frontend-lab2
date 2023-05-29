@@ -79,7 +79,8 @@ const  CheckoutPage= () =>{
         newPayment.stripeCustomer.cardToken = token.id;
         newPayment.paymentIntent.amount = cartTotal!;
         await cartStore.processPayment(newPayment).then(()=>{
-          navigate('/menu');
+            cartStore.cartTotal = null;
+            navigate('/menu');
         });
        }
       }

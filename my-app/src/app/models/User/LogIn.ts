@@ -11,4 +11,5 @@ export interface LogIn {
     role : string,
     token:string,
     stripeCustomerId?:string,
+    agentHasOrder?:boolean
   }
