@@ -92,26 +92,15 @@ const CheckoutPage = () => {
           ...payment.stripeCustomer,
         };
         newPayment.paymentIntent.amount = cartTotal!;
-
         await cartStore.processPayment(newPayment).then(()=>{
             cartStore.cartTotal = null;
             navigate('/menu');
         });
        }
-      }
-      else{
-        let newPayment = {
-          ...payment,
-          ...payment.paymentIntent,
-          ...payment.stripeCustomer
-        }
-        newPayment.paymentIntent.amount = cartTotal!;
-        
-        await cartStore.processPayment(newPayment).then(() => {
-          navigate('/menu');
-        });
-      }
-  }
+     
+      })
+    };
+  
 
   return (
     <main className="flex justify-center items-center mt-10">
