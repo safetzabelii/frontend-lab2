@@ -8,7 +8,6 @@ import { LogInResponseObject } from "../models/User/LogIn";
 import { User } from "../models/User/User";
 import { SignUp } from "../models/User/SignUp";
 import { Order } from "../models/Order/Order";
-import { OrderItem } from "../models/Order/OrderItem";
 import { ForgotPassword } from "../models/User/Dto/ForgotPassword";
 import { ChangePassword } from "../models/User/Dto/ChangePassword";
 import { ForgotPasswordEmailDto } from "../models/User/Dto/ForgotPasswordEmailDto";
@@ -150,13 +149,7 @@ const Orders = {
       updateOrderStatus: (orderId:string,orderStatus:number) => axios.put<ServerError<OrderForDisplayDto>>(`/Order/UpdateOrderStatus/${orderId}/${orderStatus}`)
       };
 
-const OrderItems = {
-        list: () => request.get<OrderItem[]>("/OrderItem"),
-        details: (id: string) => request.get<OrderItem>(`/OrderItem/${id}`),
-        create: (orderitem: OrderItem) => axios.post<void>("/OrderItem", orderitem),
-        update: (orderitem: OrderItem) => axios.put<void>(`/OrderItem/${orderitem.orderitemid}`, orderitem),
-        delete: (id: string) => axios.delete<void>(`/OrderItem/${id}`),
-        };     
+  
 
 const Restaurants = {
     list: () => request.get<Restaurant[]>("/Restaurant/GetAllRestaurant"),
@@ -197,7 +190,6 @@ const Roles = {
     Roles,
     Users,
     Orders,
-    OrderItems,
     Carts,
 
   };

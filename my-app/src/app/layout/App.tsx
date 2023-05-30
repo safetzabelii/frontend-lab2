@@ -51,6 +51,7 @@ import Slider from './Slider';
 import Wrapper from '../../features/user/Cart/checkoutPage';
 import ListOrders from '../../features/admin/order/listOrders';
 import MenageOrder from '../../features/admin/order/menageOrder';
+import TrackOrder from '../../features/admin/order/trackOrder';
 
 
 function App() {
@@ -59,7 +60,7 @@ function App() {
   const {getCurrentUser} = userStore;
   const{getNumberOfItemsInCart} = cartStore;
   const cookies = commonStore.getCookies();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [isUserLoaded, setIsUserLoaded] = useState(false);
 
 
@@ -67,57 +68,57 @@ function App() {
   if (cookies) {
     token = cookies.token;
   }
-  useEffect(()=>{
-    setLoading(true);
-    if(token.length >0){
-      getCurrentUser(token);
-    }
-    getNumberOfItemsInCart(userStore.user?.id!).then(()=>{
-      setLoading(false);
-    });
-  },[getNumberOfItemsInCart,userStore.user?.id]);
-  useEffect(() => {
-    const token = commonStore.getToken;
+  // useEffect(()=>{
+  //   setLoading(true);
+  //   if(token.length >0){
+  //     getCurrentUser(token);
+  //   }
+  //   getNumberOfItemsInCart(userStore.user?.id!).then(()=>{
+  //     setLoading(false);
+  //   });
+  // },[getNumberOfItemsInCart,userStore.user?.id]);
+  // useEffect(() => {
+  //   const token = commonStore.getToken;
 
-    if (token) {
-      userStore
-        .getCurrentUser(token)
-        .then(() => {
-          setLoading(false);
-          setIsUserLoaded(true);
-        })
-        .catch((error) => {
-          console.log(error);
-          setLoading(false);
-          setIsUserLoaded(true);
-        });
-    } else {
-      setLoading(false);
-      setIsUserLoaded(true);
-    }
-  }, [commonStore, userStore]);
+  //   if (token) {
+  //     userStore
+  //       .getCurrentUser(token)
+  //       .then(() => {
+  //         setLoading(false);
+  //         setIsUserLoaded(true);
+  //       })
+  //       .catch((error) => {
+  //         console.log(error);
+  //         setLoading(false);
+  //         setIsUserLoaded(true);
+  //       });
+  //   } else {
+  //     setLoading(false);
+  //     setIsUserLoaded(true);
+  //   }
+  // }, [commonStore, userStore]);
 
-  useEffect(() => {
-    if (isUserLoaded && (userStore.user?.role === 'Admin'|| userStore.user?.role ==="Agent")) {
-      const allContents = document.getElementById('allContents') as HTMLDivElement;
-      if (allContents) {
-        allContents.className = 'h-screen';
-        allContents.style.display = 'flex';
-        allContents.style.justifyContent = 'space-evenly';
-      }
+  // useEffect(() => {
+  //   if (isUserLoaded && (userStore.user?.role === 'Admin'|| userStore.user?.role ==="Agent")) {
+  //     const allContents = document.getElementById('allContents') as HTMLDivElement;
+  //     if (allContents) {
+  //       allContents.className = 'h-screen';
+  //       allContents.style.display = 'flex';
+  //       allContents.style.justifyContent = 'space-evenly';
+  //     }
 
-      const contentContainerWrapper = document.getElementById('contentContainerWrapper') as HTMLDivElement;
-      if (contentContainerWrapper) {
-        contentContainerWrapper.className = 'flex-1';
-      }
+  //     const contentContainerWrapper = document.getElementById('contentContainerWrapper') as HTMLDivElement;
+  //     if (contentContainerWrapper) {
+  //       contentContainerWrapper.className = 'flex-1';
+  //     }
 
-      const contentContainer = document.querySelector('.contentContainer') as HTMLDivElement;
-      if (contentContainer) {
-        contentContainer.style.display = 'flex';
-        contentContainer.style.justifyContent = 'space-evenly';
-      }
-    }
-  }, [isUserLoaded, userStore.user?.role]);
+  //     const contentContainer = document.querySelector('.contentContainer') as HTMLDivElement;
+  //     if (contentContainer) {
+  //       contentContainer.style.display = 'flex';
+  //       contentContainer.style.justifyContent = 'space-evenly';
+  //     }
+  //   }
+  // }, [isUserLoaded, userStore.user?.role]);
 
   const override = css`
   display: flex;
@@ -153,7 +154,7 @@ function App() {
             <div id="contentContainerWrapper">
               <div className="contentContainer">
                       <Routes>
-                      <Route path="/homepage" element={<HomePage />} />
+                      <Route path="/" element={<HomePage />} />
                         {/* Routes for all users */}
                         <Route element={<UserAlreadyLoggedInRoute />}>
                           <Route path="/login" element={<LoginForm />} />
@@ -205,6 +206,7 @@ function App() {
                           <Route path="/dashboard/offerEditForm" element={<OfferEditForm />} />
                           <Route path="/dashboard/listOrders" element={<ListOrders/>}/>
                           <Route path="/dashboard/menageOrder" element={<MenageOrder/>}/>
+                          <Route path="/dashboard/trackOrder" element={<TrackOrder to={"Prishtine"}/>}/>
 
                           <Route path="/dashboard" element={<AdminDashboard />} />
                         </Route>

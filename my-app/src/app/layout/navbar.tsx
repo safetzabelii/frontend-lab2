@@ -21,7 +21,7 @@ const Navbar = () => {
     
     <nav className="flex justify-between items-center text-green-900 px-8 py-4 border border-gray-300">
       <div className="flex items-center">
-        <a href="/homepage" className="mr-8">
+        <a href="/" className="mr-8">
           <button className="flex items-center bg-green-700 hover:bg-green-800 text-white font-bold py-4 px-8 rounded-full shadow-lg transition duration-300">
             <FaHome className="mr-2" />
             Home

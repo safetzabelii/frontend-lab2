@@ -6,7 +6,6 @@ import RestaurantStore from "./restaurantStore";
 import OfferStore from "./offerStore";
 import roleStore from "./roleStore";
 import OrderStore from "./orderStore";
-import OrderItemStore from "./orderItemStore";
 import CommonStore from "./commonStore";
 import ModalStore from "./modalStore";
 import { NavigateFunction } from "react-router-dom";
@@ -25,7 +24,6 @@ interface Store{
     offerStore: OfferStore;
     roleStore:roleStore;
     orderStore: OrderStore;
-    orderItemStore: OrderItemStore;
     modalStore: ModalStore;
     cartStore: CartStore;
 
@@ -42,7 +40,6 @@ export const store:Store={
     offerStore: new OfferStore(),
     roleStore: new roleStore(),
     orderStore: new OrderStore(),
-    orderItemStore: new OrderItemStore(),
     modalStore: new ModalStore(),
     cartStore: new CartStore(),
 }

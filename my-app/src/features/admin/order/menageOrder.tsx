@@ -1,20 +1,28 @@
 import { observer } from 'mobx-react-lite';
-import { SyntheticEvent, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
 import { useStore } from '../../../app/stores/store';
-import { RiDeleteBinLine as TrashIcon, RiPencilLine as PencilIcon } from 'react-icons/ri';
-import BadgeComponent from '../assets/BadgeComponent';
+
 
 export default observer(function MenageOrder() {
   const { orderStore, userStore } = useStore();
 
-  const {getActiveOrderForAgent,selectedOrder} = orderStore;
+  const {getActiveOrderForAgent,selectedOrder,updateOrderStatus} = orderStore;
 
 
   useEffect(() => {
     getActiveOrderForAgent(userStore.user?.id!);
   }, [getActiveOrderForAgent]);
-  
+  const handleStatusChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const newStatus = parseInt(event.target.value);
+    updateOrderStatus(selectedOrder?.id!, newStatus);
+  };  
+  const badgeOptions = [
+    { id: 1, text: 'Order Selected' },
+    { id: 2, text: 'Order On Its Way' },
+    { id: 3, text: 'Order Has Arrived' },
+    { id: 4, text: 'Order Is Delivered' },
+    // Add more options as needed
+  ];
   return (
     <div className="bg-white shadow-lg rounded-lg overflow-hidden">
     <div className="bg-gray-100 px-4 py-3">
@@ -27,7 +35,7 @@ export default observer(function MenageOrder() {
       </div>
       <div className="mb-4">
         <h3 className="text-lg font-medium text-gray-700">Total Amount</h3>
-        <p className="text-sm text-gray-500">{selectedOrder?.total}</p>
+        <p className="text-sm text-gray-500">{selectedOrder?.total} $</p>
       </div>
       <div className="mb-4">
         <h3 className="text-lg font-medium text-gray-700">Delivery Address</h3>
@@ -35,7 +43,19 @@ export default observer(function MenageOrder() {
       </div>
       <div className="mb-4">
         <h3 className="text-lg font-medium text-gray-700">Order Status</h3>
-        <p className="text-sm text-gray-500"><BadgeComponent id={selectedOrder?.orderStatus!}/></p>
+        <div className="flex items-center">
+          <select
+            value={selectedOrder?.orderStatus}
+            onChange={handleStatusChange}
+            className="block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          >
+            {badgeOptions.map(({ id, text }) => (
+              <option key={id} value={id}>
+                {text}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
       <div className="mb-4">
         <h3 className="text-lg font-medium text-gray-700">Agent</h3>
