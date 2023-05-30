@@ -2,11 +2,28 @@ import { observer } from "mobx-react";
 import Footer from "./footer";
 import MostOrderedItems from "./MostOrderedItems";
 import Slider from "./Slider";
+import { useEffect, useState } from "react";
+import { useStore } from "../stores/store";
 
 
 
 export default observer(function HomePage() {
-  
+  const {userStore,commonStore,cartStore} = useStore();
+  const [loading,setLoading] = useState(false);
+  const {getNumberOfItemsInCart} = cartStore;
+  const loadUser = async () => {
+    setLoading(true);
+    const token = commonStore.getToken;
+    
+    if (token) {
+      await userStore.getCurrentUser(token);
+    }
+    
+    setLoading(false);
+  };
+  useEffect(() => {
+   loadUser();
+  }, []);
   return (
     <div>
       <div

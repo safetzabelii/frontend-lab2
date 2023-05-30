@@ -12,7 +12,7 @@ export default observer(function MenageOrder() {
 
   useEffect(() => {
     getActiveOrderForAgent(userStore.user?.id!);
-  }, [getActiveOrderForAgent]);
+  }, [getActiveOrderForAgent,userStore.user?.id]);
   const handleStatusChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newStatus = parseInt(event.target.value);
     updateOrderStatus(selectedOrder?.id!, newStatus);

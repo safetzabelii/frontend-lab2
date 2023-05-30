@@ -169,18 +169,30 @@ export default class UserStore {
             throw error;
         }
     }
-    getCurrentUser = async(token:string)=>{
-        try{
-            const result = await agent.Users.getCurrentUser(token); 
-            runInAction(()=>{
-                if(result.data.data != null){
-                this.user = result.data.data as unknown as LogInResponseObject;
+    getCurrentUser = async (token: string) => {
+        try {
+          const result = await agent.Users.getCurrentUser(token);
+          runInAction(() => {
+            if (result.data.data != null) {
+              this.user = result.data.data as unknown as LogInResponseObject;
             }
-            })
-        }catch(error){
-            throw error;
+          });
+        } catch (error) {
+          throw error;
         }
-    }
+      };
+       getCurrentUserSync = async (token: string) => {
+        try {
+          await this.getCurrentUser(token);
+          // Optionally, you can return the user object here if needed
+          return this.user;
+        } catch (error) {
+          // Handle errors here if necessary
+          console.error(error);
+          return null;
+        }
+      };
+   
     signup = async (creds: SignUp)=>{
         try{
             const result = await agent.Users.create(creds);

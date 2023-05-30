@@ -62,13 +62,13 @@ export default observer(function App() {
   const{getNumberOfItemsInCart} = cartStore;
   const cookies = commonStore.getCookies();
   const [loading, setLoading] = useState(false);
-  const [isUserLoaded, setIsUserLoaded] = useState(false);
 
 
   let token = "";
   if (cookies) {
     token = cookies.token;
   }
+  
   useEffect(() => {
     const fetchUserAndCart = async () => {
       try {
@@ -76,7 +76,7 @@ export default observer(function App() {
         const token = commonStore.getToken;
   
         if (token) {
-          await userStore.getCurrentUser(token);
+          await getCurrentUser(token);
         }
         await getNumberOfItemsInCart(userStore.user?.id!);
       } catch (error) {

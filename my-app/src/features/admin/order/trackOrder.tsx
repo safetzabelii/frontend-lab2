@@ -6,11 +6,12 @@ interface TrackOrderProps {
   }
 export default observer(function TrackOrder({ destination }:TrackOrderProps) {
   const [currentPosition, setCurrentPosition] = useState<google.maps.LatLngLiteral | null>(null);
-  const [from, setFrom] = useState('');
   const [to, setTo] = useState(destination);
   const [directions, setDirections] = useState<google.maps.DirectionsResult | null>(null);
 
   useEffect(() => {
+   
+    
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         position => {
