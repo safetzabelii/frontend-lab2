@@ -10,7 +10,7 @@ export default observer(function MostOrderedItems() {
     },[menuItemStore])
 return(
 <div className="min-h-screen bg-white-900 text-black py-20">
-      <h1 className="text-3xl text-center mb-10">Most ordered items</h1>
+      <h1 className="text-3xl font-bold text-center mb-4">Most ordered items</h1>
       <div className="flex flex-wrap justify-center mx-auto max-w-screen-lg">
       {getMenuItems.slice(0, 3).map((menuItem) => (
   

@@ -1,8 +1,13 @@
 import {  makeAutoObservable, runInAction} from "mobx"
 import agent from "../api/agent";
 import { Role } from "../models/Role/Role";
+import { useQuery } from "@tanstack/react-query";
 
 
+export const useGetRoles = ()=>{
+    const{data:roles,refetch,isLoading} = useQuery(['role/get'],agent.Roles.list);
+    return {roles,refetch,isLoading};
+};
 
 export default class roleStore{
     roleRegistry = new Map<string,Role>();
@@ -15,6 +20,7 @@ export default class roleStore{
     constructor(){
         makeAutoObservable(this)
     }
+
     get RoleByName(){
         return Array.from(this.roleRegistry.values()).sort((a,b) =>{
             let fa = a.name.toLowerCase(),

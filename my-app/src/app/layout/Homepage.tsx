@@ -35,11 +35,25 @@ export default observer(function HomePage() {
           
         </div>
     </div>
+    <div className="flex">
+      <div>
+        <Slider />
+        </div>
+        <div className="mt-20">
+        <MostOrderedItems />
+        </div>
+      </div>
 
-    <Slider/>
-
-    <MostOrderedItems/>
-    <Footer/>
+      <Footer />
+      <style>
+        {`
+          @media (max-width: 1400px) {
+            .flex {
+              flex-direction: column;
+            }
+          }
+        `}
+      </style>
     </div>
     
 
