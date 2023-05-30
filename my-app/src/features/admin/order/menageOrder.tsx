@@ -1,6 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import { useEffect } from 'react';
 import { useStore } from '../../../app/stores/store';
+import TrackOrder from './trackOrder';
 
 
 export default observer(function MenageOrder() {
@@ -24,6 +25,7 @@ export default observer(function MenageOrder() {
     // Add more options as needed
   ];
   return (
+    <>
     <div className="bg-white shadow-lg rounded-lg overflow-hidden">
     <div className="bg-gray-100 px-4 py-3">
       <h2 className="text-xl font-medium text-gray-800">Order Details</h2>
@@ -64,8 +66,8 @@ export default observer(function MenageOrder() {
     </div>
   </div>
  
-   
+   <TrackOrder destination={selectedOrder?.deliveryAddress!}/>
 
-  
+  </>
   );
 });

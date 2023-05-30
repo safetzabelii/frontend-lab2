@@ -52,9 +52,10 @@ import Wrapper from '../../features/user/Cart/checkoutPage';
 import ListOrders from '../../features/admin/order/listOrders';
 import MenageOrder from '../../features/admin/order/menageOrder';
 import TrackOrder from '../../features/admin/order/trackOrder';
+import { observer } from 'mobx-react';
 
 
-function App() {
+export default observer(function App() {
   const verificationToken = store.commonStore.verificationToken;
   const { commonStore, userStore,cartStore } = useStore();
   const {getCurrentUser} = userStore;
@@ -68,64 +69,27 @@ function App() {
   if (cookies) {
     token = cookies.token;
   }
-  // useEffect(()=>{
-  //   setLoading(true);
-  //   if(token.length >0){
-  //     getCurrentUser(token);
-  //   }
-  //   getNumberOfItemsInCart(userStore.user?.id!).then(()=>{
-  //     setLoading(false);
-  //   });
-  // },[getNumberOfItemsInCart,userStore.user?.id]);
-  // useEffect(() => {
-  //   const token = commonStore.getToken;
+  useEffect(() => {
+    const fetchUserAndCart = async () => {
+      try {
+        setLoading(true);
+        const token = commonStore.getToken;
+  
+        if (token) {
+          await userStore.getCurrentUser(token);
+        }
+        await getNumberOfItemsInCart(userStore.user?.id!);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    fetchUserAndCart();
+  }, [commonStore, userStore, getNumberOfItemsInCart]);
 
-  //   if (token) {
-  //     userStore
-  //       .getCurrentUser(token)
-  //       .then(() => {
-  //         setLoading(false);
-  //         setIsUserLoaded(true);
-  //       })
-  //       .catch((error) => {
-  //         console.log(error);
-  //         setLoading(false);
-  //         setIsUserLoaded(true);
-  //       });
-  //   } else {
-  //     setLoading(false);
-  //     setIsUserLoaded(true);
-  //   }
-  // }, [commonStore, userStore]);
 
-  // useEffect(() => {
-  //   if (isUserLoaded && (userStore.user?.role === 'Admin'|| userStore.user?.role ==="Agent")) {
-  //     const allContents = document.getElementById('allContents') as HTMLDivElement;
-  //     if (allContents) {
-  //       allContents.className = 'h-screen';
-  //       allContents.style.display = 'flex';
-  //       allContents.style.justifyContent = 'space-evenly';
-  //     }
-
-  //     const contentContainerWrapper = document.getElementById('contentContainerWrapper') as HTMLDivElement;
-  //     if (contentContainerWrapper) {
-  //       contentContainerWrapper.className = 'flex-1';
-  //     }
-
-  //     const contentContainer = document.querySelector('.contentContainer') as HTMLDivElement;
-  //     if (contentContainer) {
-  //       contentContainer.style.display = 'flex';
-  //       contentContainer.style.justifyContent = 'space-evenly';
-  //     }
-  //   }
-  // }, [isUserLoaded, userStore.user?.role]);
-
-  const override = css`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 50px;
-`
 
   return (
     <>
@@ -146,13 +110,11 @@ function App() {
             <div className='scroll-container'>
             <ModalContainer />
 
-            <div id="allContents">
-        <Routes>
-          <Route path={'/*'} element={<>
-            {/* Render the appropriate navbar based on the user role */}
-            {userStore.user?.role === 'Admin'||userStore.user?.role ==='Agent' ? <AdminNavbar /> : <Navbar />}
-            <div id="contentContainerWrapper">
-              <div className="contentContainer">
+            {userStore.user?.role === 'Admin' || userStore.user?.role === 'Agent' ? (
+                <div id="allContents" className="h-screen flex">
+                  <AdminNavbar />
+                  <div id="contentContainerWrapper" className="flex-1 content-margin-left" style={{marginLeft:"150px"}}>
+                    <div className="contentContainer">
                       <Routes>
                       <Route path="/" element={<HomePage />} />
                         {/* Routes for all users */}
@@ -206,16 +168,77 @@ function App() {
                           <Route path="/dashboard/offerEditForm" element={<OfferEditForm />} />
                           <Route path="/dashboard/listOrders" element={<ListOrders/>}/>
                           <Route path="/dashboard/menageOrder" element={<MenageOrder/>}/>
-                          <Route path="/dashboard/trackOrder" element={<TrackOrder to={"Prishtine"}/>}/>
-
                           <Route path="/dashboard" element={<AdminDashboard />} />
                         </Route>
                       </Routes>
                     </div>
                   </div>
-                </>} />
-              </Routes>
-            </div>
+                </div>
+              ) : (
+                <div id="allContents">
+                  <Navbar />
+                  <div id="contentContainerWrapper">
+                    <div className="contentContainer">
+                      <Routes>
+                      <Route path="/" element={<HomePage />} />
+                        {/* Routes for all users */}
+                        <Route element={<UserAlreadyLoggedInRoute />}>
+                          <Route path="/login" element={<LoginForm />} />
+                          <Route path="/signup" element={<Signup />} />
+                        </Route>
+
+                        {/* Routes common for all users */}
+                        
+                        <Route path="/aboutus" element={<AboutUs />} />
+                        <Route path="/contactus" element={<ContactUs />} />
+                        <Route path="/menu" element={<MenuItem />} />
+                        <Route path="/restaurants" element={<Restaurants />} />
+                        <Route path="/cartDetails/:id" element={<CartDetails/>}/>
+                        <Route path="/orders" element={<Orders/>} />
+                        <Route path="/checkout/:id" element={<Wrapper/>}/>
+                        {/* Routes continued */}
+                        <Route path="/verifyaccount" element={<VerifyAccount />} />
+
+
+                        {verificationToken ? (
+                          <Route
+                            path={`/verifyAccount/${verificationToken}`}
+                            element={<AccountVerified verificationToken={verificationToken} />}
+                          />
+                        ) :null}
+                        <Route path="/sendEmail" element={<SendEmailForgetPassword />} />
+                        <Route path="/changepw" element={<ChangePassword />} />
+                        {token ? (
+                          <Route path={`/forgotPassword/${token}`} element={<ForgotPassword />} />
+                        ) : null}
+
+                        {/* Routes for authenticated users */}
+                        <Route element={<LoggedInUserRoute />}>
+                          <Route path="/dashboard/listRoles" element={<ListRoles />} />
+                          <Route path="/dashboard/roleCreateForm" element={<RoleCreateForm />} />
+                          <Route path="/dashboard/roleEditForm" element={<RoleEditForm />} />
+                          <Route path="/dashboard/listRestaurants" element={<ListRestaurants />} />
+                          <Route path="/dashboard/listOffers" element={<ListOffers />} />
+                          <Route path="/dashboard/userDetails/:id" element={<UserDetails />} />
+                          <Route path="/dashboard/listUsers" element={<ListUsers />} />
+                          <Route path="/dashboard/listMenus" element={<ListMenus />} />
+                          <Route path="/dashboard/restaurantEditForm" element={<RestaurantEditForm />} />
+                          <Route path="/dashboard/menuCreateForm" element={<MenuCreateForm />} />
+                          <Route path="/dashboard/menuItemCreateForm" element={<MenuItemCreateForm />} />
+                          <Route path="/dashboard/menuItemEditForm" element={<MenuItemEditForm />} />
+                          <Route path="/dashboard/listMenuItems" element={<ListMenuItems />} />
+                          <Route path="/dashboard/listOffers" element={<ListOffers />} />
+                          <Route path="/dashboard/offerCreateForm" element={<OfferCreateForm />} />
+                          <Route path="/dashboard/offerEditForm" element={<OfferEditForm />} />
+                          <Route path="/dashboard/listOrders" element={<ListOrders/>}/>
+                          <Route path="/dashboard/menageOrder" element={<MenageOrder/>}/>
+                          <Route path="/dashboard" element={<AdminDashboard />} />
+                        </Route>
+                      </Routes>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
             </PerfectScrollbar>
           </BrowserRouter>
@@ -229,6 +252,5 @@ function App() {
     
   );
   
-}
+});
 
-export default App;
