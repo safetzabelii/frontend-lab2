@@ -68,29 +68,24 @@ export default observer(function App() {
   if (cookies) {
     token = cookies.token;
   }
-  
-  // useEffect(() => {
-  //   const fetchUserAndCart = async () => {
-  //     try {
-  //       setLoading(true);
-  //       const token = commonStore.getToken;
-  
-  //       if (token) {
-  //         await getCurrentUser(token);
-  //       }
-  //       await getNumberOfItemsInCart(userStore.user?.id!);
-  //     } catch (error) {
-  //       console.error(error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  
-  //   fetchUserAndCart();
-  // }, [commonStore, userStore, getNumberOfItemsInCart]);
+  const fetchUserAndCart = async () => {
+    try {
+      setLoading(true);
+      const token = commonStore.getToken;
 
-
-
+      if (token) {
+        await getCurrentUser(token);
+      }
+      await getNumberOfItemsInCart(userStore.user?.id!);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(()=>{
+    fetchUserAndCart();
+  },[])
   return (
     <>
     {/* <div className='App flex'> */}
@@ -124,9 +119,10 @@ export default observer(function App() {
                         </Route>
 
                         {/* Routes common for all users */}
-                        
+                       
                         <Route path="/aboutus" element={<AboutUs />} />
                         <Route path="/contactus" element={<ContactUs />} />
+                        <Route element={<LoggedInUserRoute />}>
                         <Route path="/menu" element={<MenuItem />} />
                         <Route path="/restaurants" element={<Restaurants />} />
                         <Route path="/cartDetails/:id" element={<CartDetails/>}/>
@@ -149,7 +145,7 @@ export default observer(function App() {
                         ) : null}
 
                         {/* Routes for authenticated users */}
-                        <Route element={<LoggedInUserRoute />}>
+                        
                           <Route path="/dashboard/listRoles" element={<ListRoles />} />
                           <Route path="/dashboard/roleCreateForm" element={<RoleCreateForm />} />
                           <Route path="/dashboard/roleEditForm" element={<RoleEditForm />} />
@@ -167,7 +163,8 @@ export default observer(function App() {
                           <Route path="/dashboard/offerCreateForm" element={<OfferCreateForm />} />
                           <Route path="/dashboard/offerEditForm" element={<OfferEditForm />} />
                           <Route path="/dashboard/listOrders" element={<ListOrders/>}/>
-                          <Route path="/dashboard/menageOrder" element={<MenageOrder/>}/>
+                          <Route path="/dashboard/menageOrder/:id" element={<MenageOrder/>}/>
+
                           <Route path="/dashboard" element={<AdminDashboard />} />
                         </Route>
                       </Routes>
@@ -253,4 +250,8 @@ export default observer(function App() {
   );
   
 });
+
+function componentDidMount() {
+  throw new Error('Function not implemented.');
+}
 
