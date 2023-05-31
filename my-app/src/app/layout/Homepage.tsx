@@ -52,25 +52,19 @@ export default observer(function HomePage() {
           
         </div>
     </div>
-    <div className="flex">
-      <div>
-        <Slider />
-        </div>
-        <div className="mt-20">
-        <MostOrderedItems />
+    <div className="flex justify-center">
+        <div className=" flex flex-wrap ">
+          
+          <Slider />
+          <div className=" flex flex-wrap">
+            <MostOrderedItems />
+            <MostOrderedItems />
+          </div>
         </div>
       </div>
-
+      
       <Footer />
-      <style>
-        {`
-          @media (max-width: 1400px) {
-            .flex {
-              flex-direction: column;
-            }
-          }
-        `}
-      </style>
+      
     </div>
     
 
