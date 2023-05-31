@@ -68,7 +68,7 @@ export default observer(function MenageOrder() {
   </div>
  
   {selectedOrder && (
-        <TrackOrder destination={selectedOrder.deliveryAddress!} />
+        <TrackOrder destination={selectedOrder.deliveryAddress!} orderId={selectedOrder.id!}/>
       )}
 
   </>
