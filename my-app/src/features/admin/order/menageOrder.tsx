@@ -8,18 +8,22 @@ import { useNavigate, useParams } from 'react-router-dom';
 export default observer(function MenageOrder() {
   const { orderStore} = useStore();
   const {id} = useParams();
-  const {getActiveOrderForAgent,selectedOrder,updateOrderStatus} = orderStore;
+  const {getActiveOrderForAgent,selectedOrder,updateOrderStatus,loadOrders} = orderStore;
   const navigate = useNavigate();
 
   useEffect(() => {
     getActiveOrderForAgent(id!);
   }, [getActiveOrderForAgent,id]);
+
   const handleStatusChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newStatus = parseInt(event.target.value);
-    updateOrderStatus(selectedOrder?.id!, newStatus);
-    if(newStatus === 4){
-      navigate('/dashboard/listOrders');
-    }
+    updateOrderStatus(selectedOrder?.id!, newStatus).then(()=>{
+      if(newStatus === 4){
+        navigate('/dashboard/listOrders');
+        loadOrders();
+      }
+    });
+   
   }
   const badgeOptions = [
     { id: 1, text: 'Order Selected' },
