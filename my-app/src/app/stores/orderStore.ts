@@ -129,6 +129,19 @@ orderRegistry = new Map<string,OrderForDisplayDto>();
             this.setLoadingInitial(false);
         }
     }
+    sendEmailForOrderStatusToCustomer = async (orderId:string,distance:number)=>{
+        try{
+            const result = await agent.Orders.sendEmailForOrderStatusToCustomer(orderId,distance);
+            if(result.data != null){
+                console.log(result.data);
+            }
+            
+        }
+        catch(error){
+            console.log(error);
+            throw error;
+        }
+    }
     private getOrder = (id:string)=>{
         return this.orderRegistry.get(id);
     }

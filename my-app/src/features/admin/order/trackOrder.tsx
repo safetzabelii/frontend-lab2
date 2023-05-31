@@ -2,18 +2,23 @@
 
 import { useState, useEffect } from 'react';
 import { GoogleMap, LoadScript, Marker, DirectionsRenderer } from '@react-google-maps/api';
+import { observer } from 'mobx-react';
+import { useStore } from '../../../app/stores/store';
 
 interface TrackOrderProps {
   destination: string;
   orderId:string
 }
 
-export default function TrackOrder({ destination,orderId }: TrackOrderProps) {
+export default observer(function TrackOrder({ destination,orderId }: TrackOrderProps) {
     const [currentPosition, setCurrentPosition] = useState<google.maps.LatLngLiteral | null>(null);
     const [to, setTo] = useState(destination);
     const [directions, setDirections] = useState<google.maps.DirectionsResult | null>(null);
     const [trackingEnabled, setTrackingEnabled] = useState(false);
-  
+    const [firstEmailSent, setFirstEmailSent] = useState(false);
+    const [secondEmailSent, setSecondEmailSent] = useState(false);
+    const {orderStore} = useStore();
+    const {sendEmailForOrderStatusToCustomer} = orderStore;
     const handlePositionUpdate = (position: GeolocationPosition) => {
       setCurrentPosition({
         lat: position.coords.latitude,
@@ -110,15 +115,19 @@ export default function TrackOrder({ destination,orderId }: TrackOrderProps) {
         );
         const distanceToDestinationMeters = distanceToDestination * 1000;
   
-        if (distanceToDestinationMeters <= 1000) {
-          // Do something when the current location is 1 kilometer or less from the destination
-          console.log('Current location is 1 kilometer or less from the destination');
-        }
-        if (distanceToDestinationMeters <= 20) {
-          console.log('Current location is 20 meters or less from the destination');
-        }
+        if (distanceToDestinationMeters <= 1000 && !firstEmailSent) {
+            // Send email only if it hasn't been sent before
+            console.log('Current location is 1 kilometer or less from the destination');
+            sendEmailForOrderStatusToCustomer(orderId,distanceToDestinationMeters);
+            setFirstEmailSent(true);
+          }
+          if (distanceToDestinationMeters <= 20 && !secondEmailSent) {
+            console.log('Current location is 20 meters or less from the destination');
+            sendEmailForOrderStatusToCustomer(orderId,distanceToDestinationMeters)
+            setSecondEmailSent(true);
+          }
       }
-    }, [directions, currentPosition]);
+    }, [directions, currentPosition,firstEmailSent,secondEmailSent]);
   
     return (
       <div>
@@ -146,4 +155,4 @@ export default function TrackOrder({ destination,orderId }: TrackOrderProps) {
         </LoadScript>
       </div>
     );
-  };
+  });

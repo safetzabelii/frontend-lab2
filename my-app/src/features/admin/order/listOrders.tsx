@@ -14,7 +14,7 @@ export default observer(function ListOrders() {
 
   useEffect(() => {
     loadOrders();
-    console.log(userStore.user);
+    console.log(orders);
   }, [loadOrders]);
   const handleRowClick = (orderId: string) => {
     const orderIdNumber = Number(orderId); // Convert orderId to number

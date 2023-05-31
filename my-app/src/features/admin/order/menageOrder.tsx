@@ -2,14 +2,14 @@ import { observer } from 'mobx-react-lite';
 import { useEffect } from 'react';
 import { useStore } from '../../../app/stores/store';
 import TrackOrder from './trackOrder';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 
 export default observer(function MenageOrder() {
   const { orderStore} = useStore();
   const {id} = useParams();
   const {getActiveOrderForAgent,selectedOrder,updateOrderStatus} = orderStore;
-
+  const navigate = useNavigate();
 
   useEffect(() => {
     getActiveOrderForAgent(id!);
@@ -17,7 +17,10 @@ export default observer(function MenageOrder() {
   const handleStatusChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newStatus = parseInt(event.target.value);
     updateOrderStatus(selectedOrder?.id!, newStatus);
-  };  
+    if(newStatus === 4){
+      navigate('/dashboard/listOrders');
+    }
+  }
   const badgeOptions = [
     { id: 1, text: 'Order Selected' },
     { id: 2, text: 'Order On Its Way' },

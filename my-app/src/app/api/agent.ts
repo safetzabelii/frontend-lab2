@@ -35,7 +35,6 @@ axios.interceptors.response.use(async (response) => {
   return response;
 },(error:AxiosError<ServerError>)=>{
 const {data,status,config}= error.response! 
-console.log(data);
 switch(status){
   case 400:
     if(typeof data === 'object'){
@@ -146,8 +145,10 @@ const Orders = {
       acceptOrder: (orderId: number, userId: string) => axios.put<ServerError<string>>(`/Order/AcceptOrder?orderId=${orderId}&userId=${userId}`)
   .then((response) => response.data),
       getActiveOrderForAgent: (agentId: string) => axios.get<ServerError<OrderForDisplayDto>>(`/Order/GetActiveOrderForAgent/${agentId}`),
-      updateOrderStatus: (orderId:string,orderStatus:number) => axios.put<ServerError<OrderForDisplayDto>>(`/Order/UpdateOrderStatus/${orderId}/${orderStatus}`)
+      updateOrderStatus: (orderId:string,orderStatus:number) => axios.put<ServerError<OrderForDisplayDto>>(`/Order/UpdateOrderStatus/${orderId}/${orderStatus}`),
+      sendEmailForOrderStatusToCustomer: (orderId:string,distance:number) =>axios.put<void>(`/Orders/SendOrderStatusToCustomer/${orderId}/${distance}`)
       };
+
 
   
 

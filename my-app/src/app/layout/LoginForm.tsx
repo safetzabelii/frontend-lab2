@@ -34,7 +34,7 @@ export default observer(function LoginForm(){
       const token = commonStore.getToken;
       userStore.getCurrentUser(token!);
         
-      navigate('/homepage');    
+      navigate('/');    
       });
       
     } catch (error) {
