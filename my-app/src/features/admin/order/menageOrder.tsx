@@ -2,17 +2,18 @@ import { observer } from 'mobx-react-lite';
 import { useEffect } from 'react';
 import { useStore } from '../../../app/stores/store';
 import TrackOrder from './trackOrder';
+import { useParams } from 'react-router-dom';
 
 
 export default observer(function MenageOrder() {
-  const { orderStore, userStore } = useStore();
-
+  const { orderStore} = useStore();
+  const {id} = useParams();
   const {getActiveOrderForAgent,selectedOrder,updateOrderStatus} = orderStore;
 
 
   useEffect(() => {
-    getActiveOrderForAgent(userStore.user?.id!);
-  }, [getActiveOrderForAgent,userStore.user?.id]);
+    getActiveOrderForAgent(id!);
+  }, [getActiveOrderForAgent,id]);
   const handleStatusChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newStatus = parseInt(event.target.value);
     updateOrderStatus(selectedOrder?.id!, newStatus);
@@ -66,7 +67,9 @@ export default observer(function MenageOrder() {
     </div>
   </div>
  
-   <TrackOrder destination={selectedOrder?.deliveryAddress!}/>
+  {selectedOrder && (
+        <TrackOrder destination={selectedOrder.deliveryAddress!} />
+      )}
 
   </>
   );

@@ -127,7 +127,7 @@ export default observer(function AdminNavbar() {
               </li>
               <li className="px-4 py-2 rounded">
                 <a
-                  href='/dashboard/menageOrder'
+                  href={`/dashboard/menageOrder/${userStore.user?.id}`}
                   className="flex items-center space-x-2 text-gray-300 hover:text-white"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
