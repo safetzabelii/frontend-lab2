@@ -69,25 +69,25 @@ export default observer(function App() {
     token = cookies.token;
   }
   
-  useEffect(() => {
-    const fetchUserAndCart = async () => {
-      try {
-        setLoading(true);
-        const token = commonStore.getToken;
+  // useEffect(() => {
+  //   const fetchUserAndCart = async () => {
+  //     try {
+  //       setLoading(true);
+  //       const token = commonStore.getToken;
   
-        if (token) {
-          await getCurrentUser(token);
-        }
-        await getNumberOfItemsInCart(userStore.user?.id!);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  //       if (token) {
+  //         await getCurrentUser(token);
+  //       }
+  //       await getNumberOfItemsInCart(userStore.user?.id!);
+  //     } catch (error) {
+  //       console.error(error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
   
-    fetchUserAndCart();
-  }, [commonStore, userStore, getNumberOfItemsInCart]);
+  //   fetchUserAndCart();
+  // }, [commonStore, userStore, getNumberOfItemsInCart]);
 
 
 
