@@ -105,6 +105,11 @@ const CartDetails: React.FC = observer(() => {
     type: "menuItems" | "offers",
     quantity: number
   ) => {
+    // Ensure quantity is not below 1
+    if (quantity < 1) {
+      quantity = 1;
+    }
+  
     if (type === "menuItems") {
       const updatedMenuItems = [...menuItems];
       updatedMenuItems[index].quantity = quantity;
@@ -115,7 +120,7 @@ const CartDetails: React.FC = observer(() => {
       setOffers(updatedOffers);
     }
   };
-
+  
   const navigate = useNavigate();
 
   const isCartEmpty = !selectedCart || (selectedCart.menuItems.length === 0 && selectedCart.offers.length === 0);

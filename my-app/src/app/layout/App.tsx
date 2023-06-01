@@ -98,7 +98,7 @@ export default observer(function App() {
       ) : (
         <>
        
-          <ToastContainer position="top-right" hideProgressBar autoClose={2000} />
+          <ToastContainer position="bottom-right" hideProgressBar autoClose={2000} />
 
           <BrowserRouter>
           <PerfectScrollbar>

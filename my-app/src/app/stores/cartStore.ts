@@ -62,6 +62,7 @@ export default class CartStore{
                 if(response.data.data != null){
                     this.createdCart = response.data.data as Cart;
                 this.cartReqistry.set( this.createdCart.id!, this.createdCart);
+                this.selectedCart = response.data.data;
                 //this.createdCart= this.createdCart;
                 }
                 this.editMode=false;

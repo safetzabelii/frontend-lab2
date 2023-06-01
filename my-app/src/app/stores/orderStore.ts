@@ -3,6 +3,7 @@ import agent from "../api/agent";
 import { off } from "process";
 import { Order } from "../models/Order/Order";
 import { OrderForDisplayDto } from "../models/Order/OrderForDisplayDto";
+import { useNavigate } from "react-router-dom";
 
 export default class OrderStore{
 orderRegistry = new Map<string,OrderForDisplayDto>();
@@ -57,24 +58,28 @@ orderRegistry = new Map<string,OrderForDisplayDto>();
             })
         }
     }
-    getActiveOrderForAgent = async(agentId:string)=>{
-        try{
-            var response = await agent.Orders.getActiveOrderForAgent(agentId); 
-            if(response){
+    getActiveOrderForAgent = async (agentId: string) => {
+        try {
+          var response = await agent.Orders.getActiveOrderForAgent(agentId);
+          if (response) {
             this.setOrder(response.data.data!);
-            runInAction(()=>{
-                this.selectedOrder=response.data.data;
-            })
+            runInAction(() => {
+              this.selectedOrder = response.data.data;
+              if (this.selectedOrder === undefined) {
+                window.location.href = '/dashboard/listOrders'; // Navigate to the desired URL
+              }
+            });
             this.setLoadingInitial(false);
             return response.data;
-        }else{
+          } else {
             return null;
+          }
+        } catch (error) {
+          console.log(error);
+          this.setLoadingInitial(false);
         }
-        }catch(error){
-            console.log(error);
-            this.setLoadingInitial(false);
-        }
-    }
+      };
+      
     loadOrder = async (id:string)=>{
         let order = this.getOrder(id);
         if(order){

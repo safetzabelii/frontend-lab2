@@ -33,6 +33,8 @@ export default observer(function MenageOrder() {
     // Add more options as needed
   ];
   return (
+  <>
+  {selectedOrder ? (
     <>
     <div className="bg-white shadow-lg rounded-lg overflow-hidden">
     <div className="bg-gray-100 px-4 py-3">
@@ -74,10 +76,12 @@ export default observer(function MenageOrder() {
     </div>
   </div>
  
-  {selectedOrder && (
+  
         <TrackOrder destination={selectedOrder.deliveryAddress!} orderId={selectedOrder.id!}/>
+        </>
+      ):(
+        <h1>You have to accept an order to be able to track it.</h1>
       )}
-
-  </>
+      </>
   );
 });
