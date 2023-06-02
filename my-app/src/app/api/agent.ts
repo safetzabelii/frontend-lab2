@@ -24,7 +24,7 @@ import MostOrderedItems from "../layout/MostOrderedItems";
 
 
 
-axios.defaults.baseURL = "http://localhost:7017/api";
+axios.defaults.baseURL = "http://localhost:7108/gateway";
 
 const responseBody = (response: AxiosResponse) => response.data;
 
