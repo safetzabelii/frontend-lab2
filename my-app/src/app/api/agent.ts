@@ -146,7 +146,8 @@ const Orders = {
   .then((response) => response.data),
       getActiveOrderForAgent: (agentId: string) => axios.get<ServerError<OrderForDisplayDto>>(`/Order/GetActiveOrderForAgent/${agentId}`),
       updateOrderStatus: (orderId:string,orderStatus:number) => axios.put<ServerError<OrderForDisplayDto>>(`/Order/UpdateOrderStatus/${orderId}/${orderStatus}`),
-      sendEmailForOrderStatusToCustomer: (orderId:string,distance:number) =>axios.put<void>(`/Orders/SendOrderStatusToCustomer/${orderId}/${distance}`)
+      sendEmailForOrderStatusToCustomer: (orderId:string,distance:number) =>axios.put<void>(`/Orders/SendOrderStatusToCustomer/${orderId}/${distance}`),
+      getTopSellers: () => request.get<Order[]>(`/Order/TopSellingOrders`),
       };
 
 
