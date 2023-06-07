@@ -154,4 +154,13 @@ orderRegistry = new Map<string,OrderForDisplayDto>();
     private setOrder = (order:OrderForDisplayDto)=>{
         this.orderRegistry.set(order.id!,order);
     }
+
+    loadTopSellers = async () => {
+        try {
+          const topSellers = await agent.Orders.getTopSellers();
+          console.log(topSellers);
+        } catch (error) {
+          console.log(error);
+        }
+      }
 }

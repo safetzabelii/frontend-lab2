@@ -25,6 +25,7 @@ import MostOrderedItems from "../layout/MostOrderedItems";
 
 
 axios.defaults.baseURL = "http://localhost:7108/gateway";
+// axios.defaults.baseURL = "http://localhost:7017/api";
 
 const responseBody = (response: AxiosResponse) => response.data;
 
@@ -147,7 +148,7 @@ const Orders = {
       getActiveOrderForAgent: (agentId: string) => axios.get<ServerError<OrderForDisplayDto>>(`/Order/GetActiveOrderForAgent/${agentId}`),
       updateOrderStatus: (orderId:string,orderStatus:number) => axios.put<ServerError<OrderForDisplayDto>>(`/Order/UpdateOrderStatus/${orderId}/${orderStatus}`),
       sendEmailForOrderStatusToCustomer: (orderId:string,distance:number) =>axios.put<void>(`/Orders/SendOrderStatusToCustomer/${orderId}/${distance}`),
-      getTopSellers: () => request.get<Order[]>(`/Order/TopSellingOrders`),
+      getTopSellers: () => request.get<ServerError<OrderForDisplayDto[]>>("/Order/TopSellingOrders"),
       };
 
 
