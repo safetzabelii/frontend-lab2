@@ -2,19 +2,35 @@ import React, { useEffect, useState } from "react";
 import { FaHome, FaEllipsisV, FaSignInAlt, FaUserPlus, FaLanguage, FaListAlt } from "react-icons/fa";
 import { useStore } from "../stores/store";
 import { useNavigate } from "react-router-dom";
+import { BellIcon } from "@heroicons/react/24/outline";
+import { NotificationModel } from "../models/Notification/NotificationModel";
+
 
 const Navbar = () => {
-  const [isLanguageOpen, setIsLanguageOpen] = useState(false);
-  const {userStore,cartStore} = useStore();
+  const {userStore,cartStore,notificationStore} = useStore();
+  const [showNotifications, setShowNotifications] = useState(false);
   const {logout,user} = userStore;
-  const{getNumberOfItemsInCart,numberOfItemInCart} = cartStore;
+  const{numberOfItemInCart} = cartStore;
+  const {notifications,markNotificationAsRead,notificationReqistry,markAllNotificationsAsRead,loadNotifications} = notificationStore;
   const [isMoreOpen, setIsMoreOpen] = useState(false);
   const navigate = useNavigate();
  
   const handleLogout = () => {
-    logout()
+    logout();
+    notificationReqistry.clear();
     navigate("/login");
   };
+  const handleToggleNotifications = () => {
+    setShowNotifications(!showNotifications);
+  };
+  const handleNotificationClick = (notification:NotificationModel)=>{
+    if(notification.isRead === false){
+      markNotificationAsRead(notification.id,user?.id!);
+    }
+  }
+  const handleMarkAllAsRead= ()=>{
+    markAllNotificationsAsRead(user?.id!);
+  }
   
 
   return (
@@ -81,6 +97,40 @@ const Navbar = () => {
           )}
           </a>
           </div>
+          <div className="relative">
+  <button
+    className="p-2 rounded-full bg-gray-200 text-gray-800 hover:bg-gray-300 focus:outline-none"
+    onClick={handleToggleNotifications}
+  >
+    <BellIcon className="h-6 w-6" />
+    {notifications.some((notification) => !notification.isRead) && (
+      <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"></span>
+    )}
+  </button>
+
+  {showNotifications && (
+    <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-md w-300px" style={{ width: "300px" }}>
+      <div className="p-4 border-b border-gray-200">
+        <a href="/NotificationCenter"><h2 className="text-lg font-semibold">Notifications</h2></a>
+        <button className="mt-2 bg-blue-500 text-white px-4 py-2 rounded-md" onClick={handleMarkAllAsRead}>Mark All as Read</button>
+      </div>
+      <ul className="divide-y divide-gray-200">
+        {notifications.map((notification, index) => (
+          <li
+            key={index}
+            className={`p-4 ${!notification.isRead ? 'font-bold' : ''}`}
+            onClick={() => handleNotificationClick(notification)}
+          >
+            <a href={notification.link} className="text-blue-500 hover:underline">
+              <h3 className="text-base font-semibold">{notification.title}</h3>
+            </a>
+            <p className="text-sm text-gray-600">{notification.message}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )}
+</div>
         {userStore.isLoggedIn ? (
   <>
     <button onClick={handleLogout} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-8">

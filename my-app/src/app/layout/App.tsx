@@ -53,16 +53,19 @@ import ListOrders from '../../features/admin/order/listOrders';
 import MenageOrder from '../../features/admin/order/menageOrder';
 import TrackOrder from '../../features/admin/order/trackOrder';
 import { observer } from 'mobx-react';
+import SignalRService from '../SignalR/SignalRService';
+import NotificationCenter from '../../features/admin/assets/NotificationCenter';
 
 
 export default observer(function App() {
   const verificationToken = store.commonStore.verificationToken;
-  const { commonStore, userStore,cartStore } = useStore();
+  const { commonStore, userStore,cartStore,notificationStore } = useStore();
   const {getCurrentUser} = userStore;
   const{getNumberOfItemsInCart} = cartStore;
+  const {loadNotifications}= notificationStore;
   const cookies = commonStore.getCookies();
   const [loading, setLoading] = useState(false);
-
+  const signalRService = new SignalRService();
 
   let token = "";
   if (cookies) {
@@ -77,6 +80,7 @@ export default observer(function App() {
         await getCurrentUser(token);
       }
       await getNumberOfItemsInCart(userStore.user?.id!);
+      await loadNotifications(userStore.user?.id!);
     } catch (error) {
       console.error(error);
     } finally {
@@ -84,8 +88,23 @@ export default observer(function App() {
     }
   };
   useEffect(()=>{
-    fetchUserAndCart();
-  },[])
+    
+     fetchUserAndCart();
+      
+      signalRService.startConnection();
+    
+      // Register event handler for notifications
+        signalRService.listenForNotifications(() => {
+          loadNotifications(userStore.user?.id!);
+      });
+      // Log connection status
+      console.log("SignalR connection started");
+    
+      return () => {
+        signalRService.stopConnection();
+      };
+  },[]);
+
   return (
     <>
     {/* <div className='App flex'> */}
@@ -128,6 +147,7 @@ export default observer(function App() {
                         <Route path="/cartDetails/:id" element={<CartDetails/>}/>
                         <Route path="/orders" element={<Orders/>} />
                         <Route path="/checkout/:id" element={<Wrapper/>}/>
+                        <Route path="/NotificationCenter" element={<NotificationCenter/>}/>
                         {/* Routes continued */}
                         <Route path="/verifyaccount" element={<VerifyAccount />} />
 
@@ -193,6 +213,7 @@ export default observer(function App() {
                         <Route path="/cartDetails/:id" element={<CartDetails/>}/>
                         <Route path="/orders" element={<Orders/>} />
                         <Route path="/checkout/:id" element={<Wrapper/>}/>
+                        <Route path="/NotificationCenter" element={<NotificationCenter/>}/>
                         {/* Routes continued */}
                         <Route path="/verifyaccount" element={<VerifyAccount />} />
 

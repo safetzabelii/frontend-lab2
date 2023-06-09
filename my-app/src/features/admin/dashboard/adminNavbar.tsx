@@ -7,21 +7,37 @@ import { AiOutlineUser } from "react-icons/ai";
 import { RiDashboardLine } from "react-icons/ri";
 import { HiMenuAlt2 } from "react-icons/hi";
 import { observer } from "mobx-react";
+import { BellIcon } from "@heroicons/react/24/outline";
+import { NotificationModel } from "../../../app/models/Notification/NotificationModel";
 
 export default observer(function AdminNavbar() {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
-  const { userStore } = useStore();
+  const { userStore ,notificationStore} = useStore();
   const { logout, user } = userStore;
+  const {notifications,notificationReqistry,markNotificationAsRead,markAllNotificationsAsRead,loadNotifications} = notificationStore;
   const navigate = useNavigate();
+  const [showNotifications, setShowNotifications] = useState(false);
+
   const handleLogout = () => {
     logout();
+    notificationReqistry.clear();
     navigate("/login");
     window.location.reload();
   };
   const handleToggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
   };
-
+  const handleToggleNotifications = () => {
+    setShowNotifications(!showNotifications);
+  };
+  const handleNotificationClick = (notification:NotificationModel)=>{
+    if(notification.isRead === false){
+      markNotificationAsRead(notification.id,user?.id!);
+    }
+  }
+  const handleMarkAllAsRead= ()=>{
+    markAllNotificationsAsRead(user?.id!);
+  }
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth <= 900) {
@@ -37,7 +53,7 @@ export default observer(function AdminNavbar() {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-
+  
   return (
     
     
@@ -139,6 +155,42 @@ export default observer(function AdminNavbar() {
               </li>
             </ul>
           </nav>
+          
+          <div className="relative">
+  <button
+    className="p-2 rounded-full bg-gray-200 text-gray-800 hover:bg-gray-300 focus:outline-none"
+    onClick={handleToggleNotifications}
+  >
+    <BellIcon className="h-6 w-6" />
+    {notifications.some((notification) => !notification.isRead) && (
+      <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"></span>
+    )}
+  </button>
+
+  {showNotifications && (
+    <div className="absolute left-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-md w-300px" style={{ width: "300px" }}>
+      <div className="p-4 border-b border-gray-200">
+        <a href="/NotificationCenter"><h2 className="text-lg font-semibold">Notifications</h2></a>
+        <button className="mt-2 bg-blue-500 text-white px-4 py-2 rounded-md" onClick={handleMarkAllAsRead}>Mark All as Read</button>
+      </div>
+      <ul className="divide-y divide-gray-200">
+        {notifications.map((notification, index) => (
+          <li
+            key={index}
+            className={`p-4 ${!notification.isRead ? 'font-bold' : ''}`}
+            onClick={() => handleNotificationClick(notification)}
+          >
+            <a href={notification.link} className="text-blue-500 hover:underline">
+              <h3 className="text-base font-semibold">{notification.title}</h3>
+            </a>
+            <p className="text-sm text-gray-600">{notification.message}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )}
+</div>
+
           <button
             onClick={handleLogout}
             className="flex items-center justify-center w-full bg-slate-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mt-4"

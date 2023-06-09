@@ -21,11 +21,12 @@ import { CartForEditDto } from "../models/Cart/CartForEditDto";
 import { PaymentProcess } from "../models/Stripe/PaymentProcess";
 import { OrderForDisplayDto } from "../models/Order/OrderForDisplayDto";
 import MostOrderedItems from "../layout/MostOrderedItems";
+import { NotificationModel } from "../models/Notification/NotificationModel";
 
 
 
-axios.defaults.baseURL = "http://localhost:7108/gateway";
-// axios.defaults.baseURL = "http://localhost:7017/api";
+axios.defaults.baseURL = "http://localhost:5139/api";
+
 
 const responseBody = (response: AxiosResponse) => response.data;
 
@@ -183,6 +184,14 @@ const Roles = {
         getAllUsersForAdminDashboardDisplay: () => request.get<User[]>("/User/GetAllUsersForAdminDashboardDisplay"),
         getUserByIdForEdit: (id:string) => request.get<UserEditDto>(`/User/GetUserForEdit/${id}`),
         getCurrentUser:(token: string) => axios.post<ServerError<User>>(`/User/GetCurrentUser/${token}`),
+    };
+    const Notifications ={
+      list:(id:string)=> request.get<NotificationModel[]>(`/Notifications/GetNotifications/${id}`),
+      update:(userId:string,notification:NotificationModel)=>axios.put<ServerError<NotificationModel>>(`/Notifications/UpdateNotification/${userId}`,notification),
+      clearAllNotificationsForUser:(userId:string)=>axios.put<ServerError<NotificationModel>>(`/Notifications/ClearAllNotificationsForUser/${userId}`),
+      markNotificationAsRead:(notificationId:string,userId:string) => axios.put<ServerError<NotificationModel>>(`/Notifications/MarkNotificationAsRead/${notificationId}/${userId}`),
+      markAllNotificationsAsRead:(userId:string)=>axios.put<ServerError<NotificationModel>>(`/Notifications/MarkAllNotificationsAsRead/${userId}`),
+      
     }
         
   const agent = {
@@ -194,7 +203,7 @@ const Roles = {
     Users,
     Orders,
     Carts,
-
+    Notifications,
   };
   
   export default agent;
