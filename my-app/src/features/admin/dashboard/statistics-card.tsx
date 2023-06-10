@@ -17,7 +17,7 @@ interface props {
 
 export function StatisticsCard({ color, icon, title, value, footer }: props) {
   return (
-    <Card>
+    <Card className="bg-gradient-to-br from-gray-300 to-white-500 border-t border-blue-gray-50 p-4">
       <CardHeader
         variant="gradient"
         color={color}

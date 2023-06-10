@@ -19,12 +19,12 @@ interface props {
 
 export function StatisticsChart({ chart, title, description, footer } : props) {
   return (
-    <Card>
-      <CardHeader variant="gradient" color="blue">
+    <Card className="bg-gradient-to-br from-gray-300 to-white-500">
+      <CardHeader variant="gradient" color="blue" className="bg-gradient-to-br from-gray-300 to-blue-500">
         <Chart {...chart}/>
 
       </CardHeader>
-      <CardBody className="p-6">
+      <CardBody className="p-6 bg-gradient-to-br from-gray-300 to-white-500">
         <Typography variant="h6" color="blue-gray">
           {title}
         </Typography>

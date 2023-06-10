@@ -100,3 +100,8 @@
 .full-height-map {
   height: 100vh;
 }
+
+.admin-dashboard-container{
+  margin-left: -60px; /* Adjust the value as needed */
+  margin-right: 60px;
+}

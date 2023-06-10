@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Typography,
   Card,
@@ -27,19 +27,14 @@ import StatisticsChart from "./statistics-chart";
 import { Link } from "react-router-dom";
 
 
-
 export default observer(function AdminDashboard(){
 
-    
-
-    
     return (
-        <div className="mt-12">
+        <div className="admin-dashboard-container mt-12">
           <div className="mb-12 grid gap-y-10 gap-x-6 md:grid-cols-2 xl:grid-cols-4">
-              // eslint-disable-next-line react/jsx-no-undef
               <Link to="/dashboard/topOrders">
-                <Card className="bg-gradient-to-br from-gray-500 to-black-500">
-                <CardHeader className="bg-gray-200 border-b-2 border-black-500">
+                <Card className="bg-gradient-to-br from-gray-300 to-blue-500">
+                <CardHeader className="bg-gray-200 border-b-2 border-white-500">
                   <Typography color="indigo-500" className="text-lg font-medium">
                     Top Sellers
                   </Typography>
@@ -52,20 +47,20 @@ export default observer(function AdminDashboard(){
                 </Card>
               </Link>
               <StatisticsCard
-                    key={"title"}
+                key={"title"}
 
-                    icon={React.createElement(UserIcon, {
-                        className: "w-6 h-6 text-white",
-                    })}
-                    footer={<Typography className="font-normal text-blue-gray-600">
-                        <strong className="text-green-500">1</strong>
-                        &nbsp;"Verfied users"
-                        <strong className="text-red-500">1</strong>
-                        &nbsp;"Unverfied users"
-                    </Typography>}
-                     title={"Users"}
-                     value={"total"}
 
+                icon={React.createElement(UserIcon, {
+                      className: "w-6 h-6 text-white",
+                  })}
+                  footer={<Typography className="font-normal text-blue-gray-600">
+                      <strong className="text-green-500">1</strong>
+                      &nbsp;"Verfied users"
+                      <strong className="text-red-500">1</strong>
+                      &nbsp;"Unverfied users"
+                  </Typography>}
+                   title={"Users"}
+                   value={"total"}
                 />
                     
           </div>
