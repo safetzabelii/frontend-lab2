@@ -27,6 +27,8 @@ import { NotificationModel } from "../models/Notification/NotificationModel";
 
 axios.defaults.baseURL = "http://localhost:5139/api";
 
+// axios.defaults.baseURL = "http://localhost:7017/api";
+
 
 const responseBody = (response: AxiosResponse) => response.data;
 
