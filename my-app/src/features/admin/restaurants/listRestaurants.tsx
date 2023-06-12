@@ -34,7 +34,7 @@ export default observer(function ListRestaurants() {
                     <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
                         <div className="flex justify-center mt-4 mb-5">
                             <button
-                            className="bg-[#111827] text-white active:bg-green-800 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                            className="bg-[#111827] text-white active:bg-[#0D0E12] font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                             type="button"
                             onClick={openCreateForm}
                             >

@@ -45,7 +45,7 @@ export default observer(function ListOrders() {
                         <div className="flex justify-center mt-4 mb-5">
                         </div>
                         <table className="min-w-full divide-y divide-gray-200">
-                                <thead className="bg-green-800">
+                                <thead className="bg-[#111827]">
                                     <tr>
                                     <th
                                         scope="col"

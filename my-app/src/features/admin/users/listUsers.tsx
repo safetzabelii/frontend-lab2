@@ -30,7 +30,7 @@ function handleUserDelete(e:SyntheticEvent<HTMLButtonElement>,id:string){
     </div>
             <table className="min-w-full divide-y  divide-gray-200">
               
-              <thead className="bg-green-800">
+              <thead className="bg-[#111827]">
                 <tr>
                   <th
                     scope="col"
