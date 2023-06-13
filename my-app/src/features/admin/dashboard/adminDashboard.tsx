@@ -25,9 +25,30 @@ import StatisticsCard from "./statistics-card";
 import statisticsChartsData from "./statistics-charts-data";
 import StatisticsChart from "./statistics-chart";
 import { Link } from "react-router-dom";
+import agent from "../../../app/api/agent";
 
 
 export default observer(function AdminDashboard(){
+
+    const [totalUsers, setTotalUsers] = useState(0);
+    const [verifiedUsers, setVerifiedUsers] = useState(0);
+    const [unverifiedUsers, setUnverifiedUsers] = useState(0);
+
+    useEffect(() => {
+      const fetchUserStats = async () => {
+        try {
+          const response = await agent.Users.getAllUsersForAdminDashboardDisplay();
+          const users = response.data;
+          setTotalUsers(users.length);
+          setVerifiedUsers(users.filter((user: { isEmailVerified: any; }) => user.isEmailVerified).length);
+          setUnverifiedUsers(users.filter((user: { isEmailVerified: any; }) => !user.isEmailVerified).length);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+
+      fetchUserStats();
+    }, []);
 
     return (
         <div className="admin-dashboard-container mt-12">
@@ -48,19 +69,17 @@ export default observer(function AdminDashboard(){
               </Link>
               <StatisticsCard
                 key={"title"}
-
-
                 icon={React.createElement(UserIcon, {
-                      className: "w-6 h-6 text-white",
+                      className: "bg-gradient-to-br from-gray-500 to-blue-300 border-t border-blue-gray-50 p-3",
                   })}
                   footer={<Typography className="font-normal text-blue-gray-600">
-                      <strong className="text-green-500">1</strong>
+                      <strong className="text-green-500">{verifiedUsers}</strong>
                       &nbsp;"Verfied users"
-                      <strong className="text-red-500">1</strong>
+                      <strong className="text-red-500">{unverifiedUsers}</strong>
                       &nbsp;"Unverfied users"
                   </Typography>}
                    title={"Users"}
-                   value={"total"}
+                   value={totalUsers.toString()}
                 />
                     
           </div>
