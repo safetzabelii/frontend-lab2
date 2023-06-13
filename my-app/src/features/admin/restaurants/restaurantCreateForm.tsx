@@ -121,18 +121,18 @@ export default observer(function RestaurantCreateForm(){
               component="div"
               className="text-red-500 text-sm mt-1"
             />
+
+
               </div>
-              <div className="flex justify-end space-x-4">
-                <button
-                  className="bg-green-700 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors duration-300 ease-in-out"
-                  type="submit"
-                  disabled={!formik.isValid || formik.isSubmitting}
-                >
+                <div className="flex justify-end space-x-4">
+                  <button
+                    className="bg-[#111827] text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors duration-300 ease-in-out"
+                    type="submit"
+                    disabled={!formik.isValid || formik.isSubmitting}
+                  >
                   {formik.isSubmitting ? 'Submitting...' : 'Submit'}
                 </button>
               </div>
-
-              
             </Form>
           )}
         </Formik>

@@ -355,7 +355,7 @@ export default observer(function OfferCreateForm() {
               <div className="flex items-center justify-end mt-6">
                 <button
                   type="submit"
-                  className="bg-green-700 hover:bg-green-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  className="bg-[#111827] hover:bg-[#111827] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                 >
                   Create Offer
                 </button>

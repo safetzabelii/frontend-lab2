@@ -65,7 +65,7 @@ export default observer(function RoleEditForm(props: Props) {
           </div>
           <div className="flex justify-end space-x-4">
             <button
-              className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors duration-300 ease-in-out"
+              className="bg-[#111827] text-white px-4 py-2 rounded-md hover:bg-[#111827] transition-colors duration-300 ease-in-out"
               type="submit"
               disabled={!isValid || isSubmitting}
             >
