@@ -8,6 +8,7 @@ import { PaymentProcess } from '../../../app/models/Stripe/PaymentProcess';
 import { useStripe, Elements, useElements, CardElement } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import axios from 'axios';
+import LocationAutocomplete from './LocationAutoComplete';
 
 const stripePromise = loadStripe('pk_test_51NByv0LIvU3mbLX7aWldO7KAtClxzQGp9QZTxf4hWm3fv9BMUBMCnGfGIJGDieBi6ddmT8g1DjwhCibZwnvaoJYi00TJeg65Ve');
 
@@ -134,6 +135,13 @@ const CheckoutPage = () => {
                     id="deliveryAddress"
                     placeholder="Enter the delivery address"
                   />
+                  {/* <Field
+                    component={LocationAutocomplete}
+                    className="border border-gray-400 p-2 w-full rounded-md focus:outline-none"
+                    name="paymentIntent.deliveryAddress"
+                    id="deliveryAddress"
+                    placeholder="Enter the delivery address"
+                  /> */}
                   <ErrorMessage
                     name="paymentIntent.deliveryAddress"
                     component="div"
