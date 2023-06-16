@@ -52,6 +52,12 @@
   flex-direction: column;
   margin-left: 400px;
 }
+
+.contentContainer{
+  display: flex !important;
+  justify-content: center !important;
+}
+
 :root {
   --toastify-color-light: #fff;
   --toastify-color-dark: #121212;
@@ -101,7 +107,7 @@
   height: 100vh;
 }
 
-.admin-dashboard-container{
-  margin-left: -60px; /* Adjust the value as needed */
+/* .admin-dashboard-container{
+  margin-left: -60px; 
   margin-right: 60px;
-}
+} */

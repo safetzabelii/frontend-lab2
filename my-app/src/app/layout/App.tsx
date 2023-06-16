@@ -127,7 +127,8 @@ export default observer(function App() {
             {userStore.user?.role === 'Admin' || userStore.user?.role === 'Agent' ? (
                 <div id="allContents" className="h-screen flex">
                   <AdminNavbar />
-                  <div id="contentContainerWrapper" className="flex-1 content-margin-left" style={{marginLeft:"150px"}}>
+                  <div id="contentContainerWrapper" className="flex-1 content-margin-left" style={{marginLeft: "20px", marginRight: "20px"}}
+>
                     <div className="contentContainer">
                       <Routes>
                       <Route path="/" element={<HomePage />} />
