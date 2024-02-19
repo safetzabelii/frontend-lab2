@@ -12,7 +12,11 @@ import { NavigateFunction } from "react-router-dom";
 import CartStore from "./cartStore";
 import NotificationStore from "./notificationStore";
 
+import ParentStore from "./parentStore"; // Import ParentStore
+import ChildStore from "./childStore"; // Import ChildStore
 
+import EmployeeStore from "./employeeStore"; // Import ParentStore
+import ContractStore from "./contractStore"; // Import ChildStore
 
 
 interface Store{
@@ -29,6 +33,12 @@ interface Store{
     cartStore: CartStore;
     notificationStore:NotificationStore;
 
+    parentStore: ParentStore; // Add AuthorStore
+    childStore: ChildStore; // Add BookStore
+
+    //employeeStore : EmployeeStore;
+    //contractStore: ContractStore;
+
 }
 
 export const store:Store={
@@ -44,6 +54,13 @@ export const store:Store={
     modalStore: new ModalStore(),
     cartStore: new CartStore(),
     notificationStore:new NotificationStore(),
+
+    parentStore: new ParentStore(), // Initialize ParentStore
+    childStore: new ChildStore(), // Initialize ChildStore
+
+    //employeeStore: new EmployeeStore(),
+    //contractStore: new ContractStore(),
+
 }
 
 export const StoreContext = createContext(store);

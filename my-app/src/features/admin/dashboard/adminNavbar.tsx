@@ -141,6 +141,91 @@ export default observer(function AdminNavbar() {
                   <span>Orders</span>
                 </a>
               </li>
+              {/* <li className="px-4 py-2 rounded">
+                <a
+                  href="/dashboard/listSmundjet"
+                  className="flex items-center space-x-2 text-gray-300 hover:text-white"
+                >
+                  <FaPizzaSlice className="w-5 h-5" />
+                  <span>Smundjet</span>
+                </a>
+              </li> */}
+              {/* <li className="px-4 py-2 rounded">
+                <a
+                  href="/dashboard/listSpecializimet"
+                  className="flex items-center space-x-2 text-gray-300 hover:text-white"
+                >
+                  <FaPizzaSlice className="w-5 h-5" />
+                  <span>Specializimet</span>
+                </a>
+              </li> */}
+
+              {/* <li className="px-4 py-2 rounded">
+                <a
+                  href="/dashboard/listAuthors"
+                  className="flex items-center space-x-2 text-gray-300 hover:text-white"
+                >
+                  <FaPizzaSlice className="w-5 h-5" />
+                  <span>Authors</span>
+                </a>
+              </li> */}
+
+              {/* <li className="px-4 py-2 rounded">
+                <a
+                  href="/dashboard/listBooks"
+                  className="flex items-center space-x-2 text-gray-300 hover:text-white"
+                >
+                  <FaPizzaSlice className="w-5 h-5" />
+                  <span>Books</span>
+                </a>
+              </li> */}
+
+              <li className="px-4 py-2 rounded">
+                <a
+                  href="/dashboard/listParents"
+                  className="flex items-center space-x-2 text-gray-300 hover:text-white"
+                >
+                  <FaPizzaSlice className="w-5 h-5" />
+                  <span>Chefs</span>
+                </a>
+              </li>
+
+              <li className="px-4 py-2 rounded">
+                <a
+                  href="/dashboard/listChildren"
+                  className="flex items-center space-x-2 text-gray-300 hover:text-white"
+                >
+                  <FaPizzaSlice className="w-5 h-5" />
+                  <span>Recipes</span>
+                </a>
+              </li>
+
+
+
+              
+              {/* <li className="px-4 py-2 rounded">
+                <a
+                  href="/dashboard/listEmployees"
+                  className="flex items-center space-x-2 text-gray-300 hover:text-white"
+                >
+                  <FaPizzaSlice className="w-5 h-5" />
+                  <span>Employees</span>
+                </a>
+              </li>
+
+              <li className="px-4 py-2 rounded">
+                <a
+                  href="/dashboard/listContracts"
+                  className="flex items-center space-x-2 text-gray-300 hover:text-white"
+                >
+                  <FaPizzaSlice className="w-5 h-5" />
+                  <span>Contracts</span>
+                </a>
+              </li> */}
+
+
+
+
               <li className="px-4 py-2 rounded">
                 <a
                   href={`/dashboard/menageOrder/${userStore.user?.id}`}

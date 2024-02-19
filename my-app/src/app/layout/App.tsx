@@ -55,6 +55,12 @@ import TrackOrder from '../../features/admin/order/trackOrder';
 import { observer } from 'mobx-react';
 import SignalRService from '../SignalR/SignalRService';
 import NotificationCenter from '../../features/admin/assets/NotificationCenter';
+import ListParents from '../../features/admin/parents/listParents';
+import ListChildren from '../../features/admin/children/listChildren';
+import ListContracts from '../../features/admin/contracts/listContracts';
+import ListEmployees from '../../features/admin/employees/listEmployees';
+
+
 
 
 export default observer(function App() {
@@ -187,6 +193,13 @@ export default observer(function App() {
                           <Route path="/dashboard/menageOrder/:id" element={<MenageOrder/>}/>
 
                           <Route path="/dashboard" element={<AdminDashboard />} />
+
+                          <Route path="/dashboard/listParents" element={<ListParents/>}/>
+                          <Route path="/dashboard/listChildren" element={<ListChildren/>}/>
+
+                          {/* <Route path="/dashboard/listContracts" element={<ListContracts/>}/> */}
+                          {/* <Route path="/dashboard/listEmployees" element={<ListEmployees/>}/> */}
+
                         </Route>
                       </Routes>
                     </div>
@@ -252,6 +265,17 @@ export default observer(function App() {
                           <Route path="/dashboard/listOrders" element={<ListOrders/>}/>
                           <Route path="/dashboard/menageOrder" element={<MenageOrder/>}/>
                           <Route path="/dashboard" element={<AdminDashboard />} />
+
+                          <Route path="/dashboard/listParents" element={<ListParents/>}/>
+                          <Route path="/dashboard/listChildren" element={<ListChildren/>}/>
+
+                          {/* <Route path="/dashboard/listEmployees" element={<ListEmployees/>}/> */}
+                          
+
+                          {/* <Route path="/dashboard/listContracts" element={<ListContracts/>}/> */}
+                          
+
+
                         </Route>
                       </Routes>
                     </div>

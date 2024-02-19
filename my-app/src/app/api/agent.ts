@@ -22,12 +22,20 @@ import { PaymentProcess } from "../models/Stripe/PaymentProcess";
 import { OrderForDisplayDto } from "../models/Order/OrderForDisplayDto";
 import MostOrderedItems from "../layout/MostOrderedItems";
 import { NotificationModel } from "../models/Notification/NotificationModel";
+import { ParentCreateDto } from "../models/ParentCreateDto";
+import { ChildCreateDto } from "../models/ChildCreateDto";
+import { Parent } from "../models/Parent";
+import { Child } from "../models/Child";
+import { Employee } from "../models/Employee";
+import { Contract } from "../models/Contract";
+import { ContractCreateDto } from "../models/ContractCreateDto";
+import { EmployeeCreateDto } from "../models/EmployeeCreateDto";
 
 
 
-axios.defaults.baseURL = "http://localhost:5139/api";
+//axios.defaults.baseURL = "http://localhost:5139/api";
 
-// axios.defaults.baseURL = "http://localhost:7017/api";
+axios.defaults.baseURL = "http://localhost:7017/api";
 
 
 const responseBody = (response: AxiosResponse) => response.data;
@@ -60,16 +68,7 @@ switch(status){
           toast.error("Unauthorized");
         }
       break;
-      case 404:
-        if(typeof data === 'object'){
-          if(data.errors){
-          toast.error(data.errors[0]);
-          }
-        }
-        else{
-          toast.error("Not Found");
-        }
-      break;
+
       case 500:
         if(typeof data === 'object'){
 
@@ -194,7 +193,49 @@ const Roles = {
       markNotificationAsRead:(notificationId:string,userId:string) => axios.put<ServerError<NotificationModel>>(`/Notifications/MarkNotificationAsRead/${notificationId}/${userId}`),
       markAllNotificationsAsRead:(userId:string)=>axios.put<ServerError<NotificationModel>>(`/Notifications/MarkAllNotificationsAsRead/${userId}`),
       
-    }
+    };
+
+    
+    const Parents = {
+      list: () => request.get<Parent[]>("/Parent/GetAllParents"),
+      details: (id: string) => request.get<Parent>(`/Parent/GetParent/${id}`),
+      create: (parent: ParentCreateDto) => axios.post<ServerError<Parent>>("/Parent/CreateParent", parent),
+      update: (id: string, parent: Parent) => axios.put<ServerError<Parent>>(`/Parent/UpdateParent/${id}`, parent),
+      delete: (id: string) => axios.delete<void>(`/Parent/DeleteParent/${id}`),
+      searchByName: (name: string) => request.get<Parent[]>(`/Parent/SearchParentsByName/${name}`),
+    };
+    
+    const Children = {
+      list: () => request.get<Child[]>("/Child/GetAllChildren"),
+      details: (id: string) => request.get<Child>(`/Child/GetChild/${id}`),
+      create: (child: ChildCreateDto) => axios.post<ServerError<Child>>("/Child/CreateChild", child),
+      update: (id: string, child: Child) => axios.put<ServerError<Child>>(`/Child/UpdateChild/${id}`, child),
+      delete: (id: string) => axios.delete<void>(`/Child/DeleteChild/${id}`),
+      searchByName: (difficulty: string) => request.get<Child[]>(`/Child/SearchChildrenByDifficulty/${difficulty}`),
+      searchByParentName: (difficulty: string) => request.get<Parent[]>(`/Child/SearchChildrenByDifficulty/${difficulty}`),
+    
+    };
+
+    // const Employees = {
+    //   list: () => request.get<Employee[]>("/Employee/GetAllEmployees"),
+    //   details: (id: string) => request.get<Employee>(`/Employee/GetEmployee/${id}`),
+    //   create: (employee: EmployeeCreateDto) => axios.post<ServerError<Employee>>("/Employee/CreateEmployee", employee),
+    //   update: (id: string, employee: Employee) => axios.put<ServerError<Employee>>(`/Employee/UpdateEmployee/${id}`, employee),
+    //   delete: (id: string) => axios.delete<void>(`/Employee/DeleteEmployee/${id}`),
+    //   searchByName: (name: string) => request.get<Employee[]>(`/Employee/SearchEmployeesByName/${name}`),
+    // };
+    
+    // const Contracts = {
+    //   list: () => request.get<Contract[]>("/Contract/GetAllContracts"),
+    //   details: (id: string) => request.get<Contract>(`/Contract/GetBook/${id}`),
+    //   create: (contract: ContractCreateDto) => axios.post<ServerError<Contract>>("/Contract/CreateContract", contract),
+    //   update: (id: string, contract: Contract) => axios.put<ServerError<Contract>>(`/Contract/UpdateContract/${id}`, contract),
+    //   delete: (id: string) => axios.delete<void>(`/Contract/DeleteContract/${id}`),
+    //   searchByStartDate: (startDate: Date) => request.get<Contract[]>(`/Contract/SearchContractsByStartDate/${startDate}`),
+    //   searchByEmployeeName: (employeeName: string) => request.get<Parent[]>(`/Child/SearchContractsByEmployeeName/${employeeName}`),
+    
+    //};
+  
         
   const agent = {
     Menus,
@@ -206,6 +247,10 @@ const Roles = {
     Orders,
     Carts,
     Notifications,
+    Parents,
+    Children,
+    //Employees,
+    //Contracts
   };
   
   export default agent;
